@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.input;
 
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 /**
  * {@link TailerListener} Adapter.
  *
@@ -29,7 +30,7 @@ public class TailerListenerAdapter implements TailerListener {
      * @param tailer the tailer.
      */
     @Override
-    public void init(final Tailer tailer) {
+    public void init(final @UnderInitialization(java.lang.Object.class) Tailer tailer) {
     }
 
     /**

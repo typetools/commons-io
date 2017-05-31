@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 /**
  * A {@link java.io.FileFilter} providing conditional AND logic across a list of
  * file filters. This filter returns {@code true} if all filters in the
@@ -90,7 +91,7 @@ public class AndFileFilter
      * {@inheritDoc}
      */
     @Override
-    public void addFileFilter(final IOFileFilter ioFileFilter) {
+    public void addFileFilter(@UnderInitialization(java.lang.Object.class) AndFileFilter this, final IOFileFilter ioFileFilter) {
         this.fileFilters.add(ioFileFilter);
     }
 

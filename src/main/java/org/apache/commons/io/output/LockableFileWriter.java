@@ -28,6 +28,7 @@ import org.apache.commons.io.FileUtils;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 /**
  * FileWriter that will create and honor lock files to allow simple
  * cross thread file lock handling.
@@ -229,7 +230,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException if we cannot write to the lock directory
      * @throws IOException if we cannot find the lock file
      */
-    private void testLockDir(final File lockDir) throws IOException {
+    private void testLockDir(@UnderInitialization(java.io.Writer.class) LockableFileWriter this, final File lockDir) throws IOException {
         if (!lockDir.exists()) {
             throw new IOException(
                     "Could not find lockDir: " + lockDir.getAbsolutePath());
@@ -245,7 +246,7 @@ public class LockableFileWriter extends Writer {
      *
      * @throws IOException if we cannot create the file
      */
-    private void createLock() throws IOException {
+    private void createLock(@UnderInitialization(java.io.Writer.class) LockableFileWriter this) throws IOException {
         synchronized (LockableFileWriter.class) {
             if (!lockFile.createNewFile()) {
                 throw new IOException("Can't write file, lock " +
@@ -265,7 +266,7 @@ public class LockableFileWriter extends Writer {
      * @return The initialised writer
      * @throws IOException if an error occurs
      */
-    private Writer initWriter(final File file, final Charset encoding, final boolean append) throws IOException {
+    private Writer initWriter(@UnderInitialization(java.io.Writer.class) LockableFileWriter this, final File file, final Charset encoding, final boolean append) throws IOException {
         final boolean fileExistedAlready = file.exists();
         try {
             return new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath(), append),

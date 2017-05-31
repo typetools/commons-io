@@ -37,6 +37,7 @@ import org.apache.commons.io.ByteOrderMark;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 /**
  * Character stream that handles all the necessary Voodoo to figure out the
  * charset encoding of the XML document within the stream.
@@ -423,7 +424,7 @@ public class XmlStreamReader extends Reader {
      * @return the encoding to be used
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String doRawStream(final BOMInputStream bom, final BOMInputStream pis, final boolean lenient)
+    private String doRawStream(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final BOMInputStream bom, final BOMInputStream pis, final boolean lenient)
             throws IOException {
         final String bomEnc      = bom.getBOMCharsetName();
         final String xmlGuessEnc = pis.getBOMCharsetName();
@@ -450,7 +451,7 @@ public class XmlStreamReader extends Reader {
      * @return the encoding to be used
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String doHttpStream(final BOMInputStream bom, final BOMInputStream pis, final String httpContentType,
+    private String doHttpStream(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final BOMInputStream bom, final BOMInputStream pis, final String httpContentType,
             final boolean lenient) throws IOException {
         final String bomEnc      = bom.getBOMCharsetName();
         final String xmlGuessEnc = pis.getBOMCharsetName();
@@ -476,7 +477,7 @@ public class XmlStreamReader extends Reader {
      * @return the encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String doLenientDetection(String httpContentType,
+    private String doLenientDetection(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, String httpContentType,
             XmlStreamReaderException ex) throws IOException {
         if (httpContentType != null && httpContentType.startsWith("text/html")) {
             httpContentType = httpContentType.substring("text/html".length());
@@ -507,7 +508,7 @@ public class XmlStreamReader extends Reader {
      * @return the raw encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    String calculateRawEncoding(final String bomEnc, final String xmlGuessEnc,
+    String calculateRawEncoding(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final String bomEnc, final String xmlGuessEnc,
             final String xmlEnc) throws IOException {
 
         // BOM is Null
@@ -579,7 +580,7 @@ public class XmlStreamReader extends Reader {
      * @return the HTTP encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    String calculateHttpEncoding(final String httpContentType,
+    String calculateHttpEncoding(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final String httpContentType,
             final String bomEnc, final String xmlGuessEnc, final String xmlEnc,
             final boolean lenient) throws IOException {
 
