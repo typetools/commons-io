@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * A {@link java.io.FileFilter} providing conditional AND logic across a list of
  * file filters. This filter returns {@code true} if all filters in the
@@ -34,6 +36,7 @@ import java.util.List;
  *
  * @see FileFilterUtils#and(IOFileFilter...)
  */
+@AnnotatedFor({"nullness"})
 public class AndFileFilter
         extends AbstractFileFilter
         implements ConditionalFileFilter, Serializable {
@@ -59,7 +62,7 @@ public class AndFileFilter
      * @param fileFilters  a List of IOFileFilter instances, copied, null ignored
      * @since 1.1
      */
-    public AndFileFilter(final List<IOFileFilter> fileFilters) {
+    public AndFileFilter(final @Nullable List<IOFileFilter> fileFilters) {
         if (fileFilters == null) {
             this.fileFilters = new ArrayList<>();
         } else {

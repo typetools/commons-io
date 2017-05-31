@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,8 @@ import java.util.Comparator;
 
 import org.apache.commons.io.IOCase;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Compare the <b>names</b> of two files for order (see {@link File#getName()}).
  * <p>
@@ -48,6 +50,7 @@ import org.apache.commons.io.IOCase;
  *
  * @since 1.4
  */
+@AnnotatedFor({"nullness"})
 public class NameFileComparator extends AbstractFileComparator implements Serializable {
 
     private static final long serialVersionUID = 8397947749814525798L;
@@ -85,13 +88,13 @@ public class NameFileComparator extends AbstractFileComparator implements Serial
      *
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      */
-    public NameFileComparator(final IOCase caseSensitivity) {
+    public NameFileComparator(final @Nullable IOCase caseSensitivity) {
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**
      * Compare the names of two files with the specified case sensitivity.
-     * 
+     *
      * @param file1 The first file to compare
      * @param file2 The second file to compare
      * @return a negative value if the first file's name

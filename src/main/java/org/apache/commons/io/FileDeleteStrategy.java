@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,8 @@ package org.apache.commons.io;
 import java.io.File;
 import java.io.IOException;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Strategy for deleting files.
  * <p>
@@ -30,6 +32,7 @@ import java.io.IOException;
  *
  * @since 1.3
  */
+@AnnotatedFor({"nullness"})
 public class FileDeleteStrategy {
 
     /**
@@ -67,7 +70,7 @@ public class FileDeleteStrategy {
      * @param fileToDelete  the file to delete, null returns true
      * @return true if the file was deleted, or there was no such file
      */
-    public boolean deleteQuietly(final File fileToDelete) {
+    public boolean deleteQuietly(final @Nullable File fileToDelete) {
         if (fileToDelete == null || fileToDelete.exists() == false) {
             return true;
         }

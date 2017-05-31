@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,6 +25,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Keeps track of files awaiting deletion, and deletes them when an associated
  * marker object is reclaimed by the garbage collector.
@@ -40,6 +42,7 @@ import java.util.List;
  * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)} or similar.
  *
  */
+@AnnotatedFor({"nullness"})
 public class FileCleaningTracker {
 
     // Note: fields are package protected to allow use by test cases
@@ -89,7 +92,7 @@ public class FileCleaningTracker {
      * @param deleteStrategy  the strategy to delete the file, null means normal
      * @throws NullPointerException if the file is null
      */
-    public void track(final File file, final Object marker, final FileDeleteStrategy deleteStrategy) {
+    public void track(final File file, final Object marker, final @Nullable FileDeleteStrategy deleteStrategy) {
         if (file == null) {
             throw new NullPointerException("The file must not be null");
         }
@@ -119,7 +122,7 @@ public class FileCleaningTracker {
      * @param deleteStrategy  the strategy to delete the file, null means normal
      * @throws NullPointerException if the path is null
      */
-    public void track(final String path, final Object marker, final FileDeleteStrategy deleteStrategy) {
+    public void track(final String path, final Object marker, final @Nullable FileDeleteStrategy deleteStrategy) {
         if (path == null) {
             throw new NullPointerException("The path must not be null");
         }
@@ -133,7 +136,7 @@ public class FileCleaningTracker {
      * @param marker  the marker object used to track the file, not null
      * @param deleteStrategy  the strategy to delete the file, null means normal
      */
-    private synchronized void addTracker(final String path, final Object marker, final FileDeleteStrategy
+    private synchronized void addTracker(final String path, final Object marker, final @Nullable FileDeleteStrategy
             deleteStrategy) {
         // synchronized block protects reaper
         if (exitWhenFinished) {
@@ -257,7 +260,7 @@ public class FileCleaningTracker {
          * @param marker  the marker object used to track the file, not null
          * @param queue  the queue on to which the tracker will be pushed, not null
          */
-        Tracker(final String path, final FileDeleteStrategy deleteStrategy, final Object marker,
+        Tracker(final String path, final @Nullable FileDeleteStrategy deleteStrategy, final Object marker,
                 final ReferenceQueue<? super Object> queue) {
             super(marker, queue);
             this.path = path;

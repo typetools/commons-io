@@ -25,6 +25,8 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Abstract class that walks through a directory hierarchy and provides
  * subclasses with convenient hooks to add specific behaviour.
@@ -248,6 +250,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @since 1.3
  * @version $Id$
  */
+@AnnotatedFor({"nullness"})
 public abstract class DirectoryWalker<T> {
 
     /**
@@ -278,7 +281,7 @@ public abstract class DirectoryWalker<T> {
      * @param depthLimit  controls how <i>deep</i> the hierarchy is
      *  navigated to (less than 0 means unlimited)
      */
-    protected DirectoryWalker(final FileFilter filter, final int depthLimit) {
+    protected DirectoryWalker(final @Nullable FileFilter filter, final int depthLimit) {
         this.filter = filter;
         this.depthLimit = depthLimit;
     }
@@ -297,7 +300,7 @@ public abstract class DirectoryWalker<T> {
      * @param depthLimit  controls how <i>deep</i> the hierarchy is
      *  navigated to (less than 0 means unlimited)
      */
-    protected DirectoryWalker(IOFileFilter directoryFilter, IOFileFilter fileFilter, final int depthLimit) {
+    protected DirectoryWalker( @Nullable IOFileFilter directoryFilter, @Nullable IOFileFilter fileFilter, final int depthLimit) {
         if (directoryFilter == null && fileFilter == null) {
             this.filter = null;
         } else {
@@ -519,7 +522,7 @@ public abstract class DirectoryWalker<T> {
      * @throws IOException if an I/O Error occurs
      * @since 2.0
      */
-    protected File[] filterDirectoryContents(final File directory, final int depth, final File[] files) throws
+    protected File[] filterDirectoryContents(final File directory, final int depth, final @Nullable File[] files) throws
             IOException {
         return files;
     }
@@ -602,7 +605,7 @@ public abstract class DirectoryWalker<T> {
          * @param file  the file when the operation was cancelled, may be null
          * @param depth  the depth when the operation was cancelled, may be null
          */
-        public CancelException(final File file, final int depth) {
+        public CancelException(final @Nullable File file, final int depth) {
             this("Operation Cancelled", file, depth);
         }
 

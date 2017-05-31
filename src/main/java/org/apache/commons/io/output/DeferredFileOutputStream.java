@@ -25,7 +25,8 @@ import java.io.OutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * An output stream which will retain data in memory until a specified
  * threshold is reached, and only then commit it to disk. If the stream is
@@ -38,6 +39,7 @@ import org.apache.commons.io.IOUtils;
  * to store it to file (to avoid memory issues).
  *
  */
+@AnnotatedFor({"nullness"})
 public class DeferredFileOutputStream
     extends ThresholdingOutputStream
 {
@@ -67,17 +69,17 @@ public class DeferredFileOutputStream
     /**
      * The temporary file prefix.
      */
-    private final String prefix;
+    private final @Nullable String prefix;
 
     /**
      * The temporary file suffix.
      */
-    private final String suffix;
+    private final @Nullable String suffix;
 
     /**
      * The directory to use for temporary files.
      */
-    private final File directory;
+    private final @Nullable File directory;
 
 
     /**
@@ -131,7 +133,7 @@ public class DeferredFileOutputStream
      *
      * @since 1.4
      */
-    public DeferredFileOutputStream(final int threshold, final String prefix, final String suffix, final File directory)
+    public DeferredFileOutputStream(final int threshold, final @Nullable String prefix, final @Nullable String suffix, final @Nullable File directory)
     {
         this(threshold, null, prefix, suffix, directory, ByteArrayOutputStream.DEFAULT_SIZE);
         if (prefix == null) {
@@ -151,8 +153,8 @@ public class DeferredFileOutputStream
      *
      * @since 2.5
      */
-    public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final String prefix,
-                                    final String suffix, final File directory)
+    public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final @Nullable String prefix,
+                                    final @Nullable String suffix, final @Nullable File directory)
     {
         this(threshold, null, prefix, suffix, directory, initialBufferSize);
         if (prefix == null) {
@@ -174,8 +176,8 @@ public class DeferredFileOutputStream
      * @param directory Temporary file directory.
      * @param initialBufferSize The initial size of the in memory buffer.
      */
-    private DeferredFileOutputStream(final int threshold, final File outputFile, final String prefix,
-                                     final String suffix, final File directory, final int initialBufferSize) {
+    private DeferredFileOutputStream(final int threshold, final File outputFile, final @Nullable String prefix,
+                                     final @Nullable String suffix, final @Nullable File directory, final int initialBufferSize) {
         super(threshold);
         this.outputFile = outputFile;
         this.prefix = prefix;
@@ -256,7 +258,7 @@ public class DeferredFileOutputStream
      * @return The data for this output stream, or {@code null} if no such
      *         data is available.
      */
-    public byte[] getData()
+    public @Nullable byte[] getData()
     {
         if (memoryOutputStream != null)
         {
@@ -280,7 +282,7 @@ public class DeferredFileOutputStream
      * @return The file for this output stream, or {@code null} if no such
      *         file exists.
      */
-    public File getFile()
+    public @Nullable File getFile()
     {
         return outputFile;
     }

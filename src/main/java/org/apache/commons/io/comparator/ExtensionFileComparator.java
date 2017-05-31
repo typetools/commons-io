@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,8 @@ import java.util.Comparator;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Compare the file name <b>extensions</b> for order
  * (see {@link FilenameUtils#getExtension(String)}).
@@ -50,6 +52,7 @@ import org.apache.commons.io.IOCase;
  *
  * @since 1.4
  */
+@AnnotatedFor({"nullness"})
 public class ExtensionFileComparator extends AbstractFileComparator implements Serializable {
 
     private static final long serialVersionUID = 1928235200184222815L;
@@ -89,20 +92,20 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
      *
      * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
      */
-    public ExtensionFileComparator(final IOCase caseSensitivity) {
+    public ExtensionFileComparator(final @Nullable IOCase caseSensitivity) {
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**
      * Compare the extensions of two files the specified case sensitivity.
-     * 
+     *
      * @param file1 The first file to compare
      * @param file2 The second file to compare
      * @return a negative value if the first file's extension
      * is less than the second, zero if the extensions are the
      * same and a positive value if the first files extension
      * is greater than the second file.
-     * 
+     *
      */
     @Override
     public int compare(final File file1, final File file2) {

@@ -29,6 +29,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.input.XmlStreamReader;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Character stream that handles all the necessary Voodoo to figure out the
  * charset encoding of the XML document written to the stream.
@@ -36,12 +38,13 @@ import org.apache.commons.io.input.XmlStreamReader;
  * @see XmlStreamReader
  * @since 2.0
  */
+@AnnotatedFor({"nullness"})
 public class XmlStreamWriter extends Writer {
     private static final int BUFFER_SIZE = 4096;
 
     private final OutputStream out;
 
-    private final String defaultEncoding;
+    private final @Nullable String defaultEncoding;
 
     private StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
 
@@ -66,7 +69,7 @@ public class XmlStreamWriter extends Writer {
      * @param out The output stream
      * @param defaultEncoding The default encoding if not encoding could be detected
      */
-    public XmlStreamWriter(final OutputStream out, final String defaultEncoding) {
+    public XmlStreamWriter(final OutputStream out, final @Nullable String defaultEncoding) {
         this.out = out;
         this.defaultEncoding = defaultEncoding != null ? defaultEncoding : "UTF-8";
     }
@@ -74,7 +77,7 @@ public class XmlStreamWriter extends Writer {
     /**
      * Constructs a new XML stream writer for the specified file
      * with a default encoding of UTF-8.
-     * 
+     *
      * @param file The file to write to
      * @throws FileNotFoundException if there is an error creating or
      * opening the file
@@ -86,7 +89,7 @@ public class XmlStreamWriter extends Writer {
     /**
      * Constructs a new XML stream writer for the specified file
      * with the specified default encoding.
-     * 
+     *
      * @param file The file to write to
      * @param defaultEncoding The default encoding if not encoding could be detected
      * @throws FileNotFoundException if there is an error creating or
@@ -200,7 +203,7 @@ public class XmlStreamWriter extends Writer {
 
     /**
      * Writes the characters to the underlying writer, detecting encoding.
-     * 
+     *
      * @param cbuf the buffer to write the characters from
      * @param off The start offset
      * @param len The number of characters to write

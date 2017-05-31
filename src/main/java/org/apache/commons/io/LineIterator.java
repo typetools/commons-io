@@ -23,6 +23,8 @@ import java.io.Reader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * An Iterator over the lines in a <code>Reader</code>.
  * <p>
@@ -47,6 +49,7 @@ import java.util.NoSuchElementException;
  *
  * @since 1.2
  */
+@AnnotatedFor({"nullness"})
 public class LineIterator implements Iterator<String>, Closeable {
 
     // N.B. This class deliberately does not implement Iterable, see https://issues.apache.org/jira/browse/IO-181
@@ -187,7 +190,7 @@ public class LineIterator implements Iterator<String>, Closeable {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final LineIterator iterator) {
+    public static void closeQuietly(final @Nullable LineIterator iterator) {
         try {
             if (iterator != null) {
                 iterator.close();

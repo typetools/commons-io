@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,11 +22,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Abstract file {@link Comparator} which provides sorting for file arrays and lists.
  *
  * @since 2.0
  */
+@AnnotatedFor({"nullness"})
 abstract class AbstractFileComparator implements Comparator<File> {
 
     /**
@@ -39,7 +42,7 @@ abstract class AbstractFileComparator implements Comparator<File> {
      * @return The sorted array
      * @since 2.0
      */
-    public File[] sort(final File... files) {
+    public File[] sort(final @Nullable File... files) {
         if (files != null) {
             Arrays.sort(files, this);
         }
@@ -56,7 +59,7 @@ abstract class AbstractFileComparator implements Comparator<File> {
      * @return The sorted list
      * @since 2.0
      */
-    public List<File> sort(final List<File> files) {
+    public List<File> sort(final @Nullable List<File> files) {
         if (files != null) {
             Collections.sort(files, this);
         }

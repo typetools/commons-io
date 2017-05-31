@@ -35,6 +35,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.ByteOrderMark;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Character stream that handles all the necessary Voodoo to figure out the
  * charset encoding of the XML document within the stream.
@@ -62,6 +64,7 @@ import org.apache.commons.io.ByteOrderMark;
  * @see org.apache.commons.io.output.XmlStreamWriter
  * @since 2.0
  */
+@AnnotatedFor({"nullness"})
 public class XmlStreamReader extends Reader {
     private static final int BUFFER_SIZE = 4096;
 
@@ -107,7 +110,7 @@ public class XmlStreamReader extends Reader {
 
     private final String encoding;
 
-    private final String defaultEncoding;
+    private final @Nullable String defaultEncoding;
 
     /**
      * Returns the default encoding to use if none is set in HTTP content-type,
@@ -117,7 +120,7 @@ public class XmlStreamReader extends Reader {
      *
      * @return the default encoding to use.
      */
-    public String getDefaultEncoding() {
+    public @Nullable String getDefaultEncoding() {
         return defaultEncoding;
     }
 
@@ -651,7 +654,7 @@ public class XmlStreamReader extends Reader {
      * @param httpContentType the HTTP content type
      * @return The mime content type
      */
-    static String getContentTypeMime(final String httpContentType) {
+    static @Nullable String getContentTypeMime(final @Nullable String httpContentType) {
         String mime = null;
         if (httpContentType != null) {
             final int i = httpContentType.indexOf(";");
@@ -675,7 +678,7 @@ public class XmlStreamReader extends Reader {
      * @param httpContentType the HTTP content type
      * @return The content type encoding (upcased)
      */
-    static String getContentTypeEncoding(final String httpContentType) {
+    static @Nullable String getContentTypeEncoding(final @Nullable String httpContentType) {
         String encoding = null;
         if (httpContentType != null) {
             final int i = httpContentType.indexOf(";");
@@ -701,7 +704,7 @@ public class XmlStreamReader extends Reader {
      * @return the encoding declared in the <?xml encoding=...?>
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private static String getXmlProlog(final InputStream is, final String guessedEnc)
+    private static @Nullable String getXmlProlog(final InputStream is, final String guessedEnc)
             throws IOException {
         String encoding = null;
         if (guessedEnc != null) {

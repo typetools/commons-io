@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,6 +18,8 @@ package org.apache.commons.io;
 
 import java.io.File;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Keeps track of files awaiting deletion, and deletes them when an associated
  * marker object is reclaimed by the garbage collector.
@@ -35,6 +37,7 @@ import java.io.File;
  * @deprecated Use {@link FileCleaningTracker}
  */
 @Deprecated
+@AnnotatedFor({"nullness"})
 public class FileCleaner {
     /**
      * The instance to use for the deprecated, static methods.
@@ -69,7 +72,7 @@ public class FileCleaner {
      * @deprecated Use {@link FileCleaningTracker#track(File, Object, FileDeleteStrategy)}.
      */
     @Deprecated
-    public static void track(final File file, final Object marker, final FileDeleteStrategy deleteStrategy) {
+    public static void track(final File file, final Object marker, final @Nullable FileDeleteStrategy deleteStrategy) {
         theInstance.track(file, marker, deleteStrategy);
     }
 
@@ -100,7 +103,7 @@ public class FileCleaner {
      * @deprecated Use {@link FileCleaningTracker#track(String, Object, FileDeleteStrategy)}.
      */
     @Deprecated
-    public static void track(final String path, final Object marker, final FileDeleteStrategy deleteStrategy) {
+    public static void track(final String path, final Object marker, final @Nullable FileDeleteStrategy deleteStrategy) {
         theInstance.track(path, marker, deleteStrategy);
     }
 
@@ -135,7 +138,7 @@ public class FileCleaner {
      * posing a memory leak.
      * <p>
      * This method allows the thread to be terminated. Simply call this method
-     * in the resource cleanup code, such as 
+     * in the resource cleanup code, such as
      * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)}.
      * One called, no new objects can be tracked by the file cleaner.
      * @deprecated Use {@link FileCleaningTracker#exitWhenFinished()}.
@@ -150,7 +153,7 @@ public class FileCleaner {
      * This is mainly useful for code, which wants to support the new
      * {@link FileCleaningTracker} class while maintain compatibility with the
      * deprecated {@link FileCleaner}.
-     * 
+     *
      * @return the singleton instance
      */
     public static FileCleaningTracker getInstance() {

@@ -26,6 +26,8 @@ import java.nio.charset.Charset;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * FileWriter that will create and honor lock files to allow simple
  * cross thread file lock handling.
@@ -45,6 +47,7 @@ import org.apache.commons.io.FileUtils;
  * The encoding may also be specified, and defaults to the platform default.
  *
  */
+@AnnotatedFor({"nullness"})
 public class LockableFileWriter extends Writer {
     // Cannot extend ProxyWriter, as requires writer to be
     // known when super() is called
@@ -142,7 +145,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public LockableFileWriter(final File file, final Charset encoding) throws IOException {
+    public LockableFileWriter(final File file, final @Nullable Charset encoding) throws IOException {
         this(file, encoding, false, null);
     }
 
@@ -157,7 +160,7 @@ public class LockableFileWriter extends Writer {
      *             thrown instead of {@link java.io.UnsupportedEncodingException} in version 2.2 if the encoding is not
      *             supported.
      */
-    public LockableFileWriter(final File file, final String encoding) throws IOException {
+    public LockableFileWriter(final File file, final @Nullable String encoding) throws IOException {
         this(file, encoding, false, null);
     }
 
@@ -172,7 +175,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public LockableFileWriter(File file, final Charset encoding, final boolean append,
+    public LockableFileWriter(File file, final @Nullable Charset encoding, final boolean append,
             String lockDir) throws IOException {
         super();
         // init file to create/append
@@ -213,7 +216,7 @@ public class LockableFileWriter extends Writer {
      *             thrown instead of {@link java.io.UnsupportedEncodingException} in version 2.2 if the encoding is not
      *             supported.
      */
-    public LockableFileWriter(final File file, final String encoding, final boolean append,
+    public LockableFileWriter(final File file, final @Nullable String encoding, final boolean append,
             final String lockDir) throws IOException {
         this(file, Charsets.toCharset(encoding), append, lockDir);
     }

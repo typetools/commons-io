@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * A {@link java.io.FileFilter} providing conditional OR logic across a list of
  * file filters. This filter returns {@code true} if any filters in the
@@ -33,6 +35,7 @@ import java.util.List;
  * @version $Id$
  * @see FileFilterUtils#or(IOFileFilter...)
  */
+@AnnotatedFor({"nullness"})
 public class OrFileFilter
         extends AbstractFileFilter
         implements ConditionalFileFilter, Serializable {
@@ -57,7 +60,7 @@ public class OrFileFilter
      * @param fileFilters  the file filters for this filter, copied, null ignored
      * @since 1.1
      */
-    public OrFileFilter(final List<IOFileFilter> fileFilters) {
+    public OrFileFilter(final @Nullable List<IOFileFilter> fileFilters) {
         if (fileFilters == null) {
             this.fileFilters = new ArrayList<>();
         } else {
@@ -67,7 +70,7 @@ public class OrFileFilter
 
     /**
      * Constructs a new file filter that ORs the result of two other filters.
-     * 
+     *
      * @param filter1  the first filter, must not be null
      * @param filter2  the second filter, must not be null
      * @throws IllegalArgumentException if either filter is null

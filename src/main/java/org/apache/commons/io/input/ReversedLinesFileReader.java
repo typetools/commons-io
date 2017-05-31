@@ -27,12 +27,15 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.Charsets;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Reads lines in a file reversely (similar to a BufferedReader, but starting at
  * the last line). Useful for e.g. searching in log files.
  *
  * @since 2.2
  */
+@AnnotatedFor({"nullness"})
 public class ReversedLinesFileReader implements Closeable {
 
     private final int blockSize;
@@ -171,7 +174,7 @@ public class ReversedLinesFileReader implements Closeable {
      * @return the next line or null if the start of the file is reached
      * @throws IOException  if an I/O error occurs
      */
-    public String readLine() throws IOException {
+    public @Nullable String readLine() throws IOException {
 
         String line = currentFilePart.readLine();
         while (line == null) {
@@ -243,11 +246,11 @@ public class ReversedLinesFileReader implements Closeable {
 
         /**
          * Handles block rollover
-         * 
+         *
          * @return the new FilePart or null
          * @throws IOException if there was a problem reading the file
          */
-        private FilePart rollOver() throws IOException {
+        private @Nullable FilePart rollOver() throws IOException {
 
             if (currentLastBytePos > -1) {
                 throw new IllegalStateException("Current currentLastCharPos unexpectedly positive... "
@@ -268,11 +271,11 @@ public class ReversedLinesFileReader implements Closeable {
 
         /**
          * Reads a line.
-         * 
+         *
          * @return the line or null
          * @throws IOException if there is an error reading from the file
          */
-        private String readLine() throws IOException {
+        private @Nullable String readLine() throws IOException {
 
             String line = null;
             int newLineMatchByteCount;
@@ -343,7 +346,7 @@ public class ReversedLinesFileReader implements Closeable {
 
         /**
          * Finds the new-line sequence and return its length.
-         * 
+         *
          * @param data buffer to scan
          * @param i start offset in buffer
          * @return length of newline sequence or 0 if none found

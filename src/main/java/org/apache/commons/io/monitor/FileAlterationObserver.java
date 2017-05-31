@@ -28,6 +28,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.comparator.NameFileComparator;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * FileAlterationObserver represents the state of files below a root directory,
  * checking the filesystem and notifying listeners of create, change or
@@ -83,7 +85,7 @@ import org.apache.commons.io.comparator.NameFileComparator;
  * noise from <i>unwanted</i> file system events.
  * <p>
  * <a href="http://commons.apache.org/io/">Commons IO</a> has a good range of
- * useful, ready made 
+ * useful, ready made
  * <a href="../filefilter/package-summary.html">File Filter</a>
  * implementations for this purpose.
  * <p>
@@ -119,6 +121,7 @@ import org.apache.commons.io.comparator.NameFileComparator;
  * @version $Id$
  * @since 2.0
  */
+@AnnotatedFor({"nullness"})
 public class FileAlterationObserver implements Serializable {
 
     private static final long serialVersionUID = 1185122225658782848L;
@@ -142,7 +145,7 @@ public class FileAlterationObserver implements Serializable {
      * @param directoryName the name of the directory to observe
      * @param fileFilter The file filter or null if none
      */
-    public FileAlterationObserver(final String directoryName, final FileFilter fileFilter) {
+    public FileAlterationObserver(final String directoryName, final @Nullable FileFilter fileFilter) {
         this(new File(directoryName), fileFilter);
     }
 
@@ -154,8 +157,8 @@ public class FileAlterationObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    public FileAlterationObserver(final String directoryName, final FileFilter fileFilter,
-                                  final IOCase caseSensitivity) {
+    public FileAlterationObserver(final String directoryName, final @Nullable FileFilter fileFilter,
+                                  final @Nullable IOCase caseSensitivity) {
         this(new File(directoryName), fileFilter, caseSensitivity);
     }
 
@@ -174,7 +177,7 @@ public class FileAlterationObserver implements Serializable {
      * @param directory the directory to observe
      * @param fileFilter The file filter or null if none
      */
-    public FileAlterationObserver(final File directory, final FileFilter fileFilter) {
+    public FileAlterationObserver(final File directory, final @Nullable FileFilter fileFilter) {
         this(directory, fileFilter, null);
     }
 
@@ -186,7 +189,7 @@ public class FileAlterationObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    public FileAlterationObserver(final File directory, final FileFilter fileFilter, final IOCase caseSensitivity) {
+    public FileAlterationObserver(final File directory, final @Nullable FileFilter fileFilter, final @Nullable IOCase caseSensitivity) {
         this(new FileEntry(directory), fileFilter, caseSensitivity);
     }
 
@@ -198,8 +201,8 @@ public class FileAlterationObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    protected FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter,
-                                     final IOCase caseSensitivity) {
+    protected FileAlterationObserver(final FileEntry rootEntry, final @Nullable FileFilter fileFilter,
+                                     final @Nullable IOCase caseSensitivity) {
         if (rootEntry == null) {
             throw new IllegalArgumentException("Root entry is missing");
         }
