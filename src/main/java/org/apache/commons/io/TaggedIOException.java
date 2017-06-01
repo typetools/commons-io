@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,8 @@ package org.apache.commons.io;
 import java.io.IOException;
 import java.io.Serializable;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * An {@link IOException} decorator that adds a serializable tag to the
  * wrapped exception. Both the tag and the original exception can be used
@@ -26,7 +28,8 @@ import java.io.Serializable;
  *
  * @since 2.0
  */
-@SuppressWarnings("deprecation") // needs to extend deprecated IOExceptionWithCause to preserve binary compatibility 
+@SuppressWarnings("deprecation") // needs to extend deprecated IOExceptionWithCause to preserve binary compatibility
+@AnnotatedFor({"nullness"})
 public class TaggedIOException extends IOExceptionWithCause {
 
     /**
@@ -89,6 +92,9 @@ public class TaggedIOException extends IOExceptionWithCause {
      * @param throwable an exception
      * @param tag tag object
      * @throws IOException original exception from the tagged decorator, if any
+     *
+     * checker issues false positive warning , this method doesn't throw
+     * null, getCause doesn't return null value as cause is-known/exists.
      */
     public static void throwCauseIfTaggedWith(final Throwable throwable, final Object tag)
             throws IOException {
@@ -127,9 +133,11 @@ public class TaggedIOException extends IOExceptionWithCause {
      * {@link Throwable#getCause()} method is the narrower return type.
      *
      * @return wrapped exception
+     *
+     * Return type for getCause() in Throwable class can be null.
      */
     @Override
-    public IOException getCause() {
+    public @Nullable IOException getCause() {
         return (IOException) super.getCause();
     }
 

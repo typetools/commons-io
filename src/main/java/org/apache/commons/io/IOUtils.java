@@ -1153,8 +1153,10 @@ public class IOUtils {
      * @return The contents of the URL as a String.
      * @throws IOException if an I/O exception occurs.
      * @since 2.3.
+     *
+     * null encoding means encoding is platform default
      */
-    public static String toString(final URI uri, final Charset encoding) throws IOException {
+    public static String toString(final URI uri, final @Nullable Charset encoding) throws IOException {
         return toString(uri.toURL(), Charsets.toCharset(encoding));
     }
 
@@ -1169,8 +1171,10 @@ public class IOUtils {
      *                                                      .UnsupportedEncodingException} in version 2.2 if the
      *                                                      encoding is not supported.
      * @since 2.1
+     *
+     * null encoding means encoding is platform default
      */
-    public static String toString(final URI uri, final String encoding) throws IOException {
+    public static String toString(final URI uri, final @Nullable String encoding) throws IOException {
         return toString(uri, Charsets.toCharset(encoding));
     }
 
@@ -1196,8 +1200,10 @@ public class IOUtils {
      * @return The contents of the URL as a String.
      * @throws IOException if an I/O exception occurs.
      * @since 2.3
+     *
+     * null encoding means encoding is platform default
      */
-    public static String toString(final URL url, final Charset encoding) throws IOException {
+    public static String toString(final URL url, final @Nullable Charset encoding) throws IOException {
         try (InputStream inputStream = url.openStream()) {
             return toString(inputStream, encoding);
         }
@@ -1214,8 +1220,10 @@ public class IOUtils {
      *                                                      .UnsupportedEncodingException} in version 2.2 if the
      *                                                      encoding is not supported.
      * @since 2.1
+     *
+     * null encoding means encoding is platform default
      */
-    public static String toString(final URL url, final String encoding) throws IOException {
+    public static String toString(final URL url, final @Nullable String encoding) throws IOException {
         return toString(url, Charsets.toCharset(encoding));
     }
 
@@ -1289,10 +1297,11 @@ public class IOUtils {
      * @param classLoader the class loader that the resolution of the resource is delegated to
      * @return the requested String
      * @throws IOException if an I/O error occurs
-     *
      * @since 2.6
+     *
+     *  classLoader can be null as used in line 275.
      */
-    public static String resourceToString(final String name, final @Nullable Charset encoding, ClassLoader classLoader) throws IOException {
+    public static String resourceToString(final String name, final @Nullable Charset encoding, @Nullable ClassLoader classLoader) throws IOException {
         return toString(resourceToURL(name, classLoader), encoding);
     }
 
@@ -1326,10 +1335,11 @@ public class IOUtils {
      * @param classLoader the class loader that the resolution of the resource is delegated to
      * @return the requested byte array
      * @throws IOException if an I/O error occurs
-     *
      * @since 2.6
+     *
+     * classLoader can be null as used in line 1315.
      */
-    public static byte[] resourceToByteArray(final String name, final ClassLoader classLoader) throws IOException {
+    public static byte[] resourceToByteArray(final String name, final @Nullable ClassLoader classLoader) throws IOException {
         return toByteArray(resourceToURL(name, classLoader));
     }
 
@@ -1363,10 +1373,11 @@ public class IOUtils {
      * @param classLoader the class loader that the resolution of the resource is delegated to
      * @return the requested URL
      * @throws IOException if an I/O error occurs
-     *
      * @since 2.6
+     *
+     * classLoader can be null as used in line 1353.
      */
-    public static URL resourceToURL(final String name, final ClassLoader classLoader) throws IOException {
+    public static URL resourceToURL(final String name, final @Nullable ClassLoader classLoader) throws IOException {
         // What about the thread context class loader?
         // What about the system class loader?
         final URL resource = classLoader == null ? IOUtils.class.getResource(name) : classLoader.getResource(name);

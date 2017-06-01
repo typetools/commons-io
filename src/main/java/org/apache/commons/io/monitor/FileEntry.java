@@ -72,6 +72,8 @@ public class FileEntry implements Serializable {
      *
      * @param parent The parent
      * @param file The file being monitored
+     *
+     * paremter parent can have null value and is assigned to nullable FileEntry object.
      */
     public FileEntry(final @Nullable FileEntry parent, final File file) {
         if (file == null) {
@@ -135,8 +137,10 @@ public class FileEntry implements Serializable {
      * Return the parent entry.
      *
      * @return the parent entry
+     *
+     * return null since parent can be null.
      */
-    public FileEntry getParent() {
+    public @Nullable FileEntry getParent() {
         return parent;
     }
 
@@ -156,7 +160,7 @@ public class FileEntry implements Serializable {
      * array if the file is not a directory or the
      * directory is empty
      */
-    public FileEntry[] getChildren() {
+    public @Nullable FileEntry[] getChildren() {
         return children != null ? children : EMPTY_ENTRIES;
     }
 

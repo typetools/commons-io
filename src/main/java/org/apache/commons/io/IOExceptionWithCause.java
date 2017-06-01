@@ -47,8 +47,10 @@ public class IOExceptionWithCause extends IOException {
      *            the message (see {@link #getMessage()})
      * @param cause
      *            the cause (see {@link #getCause()}). A {@code null} value is allowed.
+     *
+     * Throwable constructor allows null value for message.
      */
-    public IOExceptionWithCause(final String message, final @Nullable Throwable cause) {
+    public IOExceptionWithCause(final @Nullable String message, final @Nullable Throwable cause) {
         super(message, cause);
     }
 

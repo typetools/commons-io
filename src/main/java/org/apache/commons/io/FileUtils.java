@@ -210,7 +210,7 @@ public class FileUtils {
      * @return the file
      * @since 2.1
      */
-    public static File getFile(final String... names) {
+    public static @Nullable File getFile(final String... names) {
         if (names == null) {
             throw new NullPointerException("names must not be null");
         }
@@ -564,7 +564,7 @@ public class FileUtils {
      * @param dirFilter a base filter to add to
      * @return a filter that accepts directories
      */
-    private static IOFileFilter setUpEffectiveDirFilter(final IOFileFilter dirFilter) {
+    private static IOFileFilter setUpEffectiveDirFilter(final @Nullable IOFileFilter dirFilter) {
         return dirFilter == null ? FalseFileFilter.INSTANCE : FileFilterUtils.and(dirFilter,
                 DirectoryFileFilter.INSTANCE);
     }
@@ -661,7 +661,7 @@ public class FileUtils {
      * @param extensions an array of extensions. Format: {"java", "xml"}
      * @return an array of suffixes. Format: {".java", ".xml"}
      */
-    private static String[] toSuffixes(final String[] extensions) {
+    private static String[] toSuffixes(final @Nullable String[] extensions) {
         final String[] suffixes = new String[extensions.length];
         for (int i = 0; i < extensions.length; i++) {
             suffixes[i] = "." + extensions[i];
@@ -823,6 +823,9 @@ public class FileUtils {
      * @param url the file URL to convert, {@code null} returns {@code null}
      * @return the equivalent <code>File</code> object, or {@code null}
      * if the URL's protocol is not <code>file</code>
+     *
+     * Checker cant check value of filename at runtime, it produces false positve
+     * warning, code never violates any property at runtime. 
      */
     public static @Nullable File toFile(final @Nullable URL url) {
         if (url == null || !"file".equalsIgnoreCase(url.getProtocol())) {
@@ -1978,8 +1981,11 @@ public class FileUtils {
      * @throws IOException                          in case of an I/O error
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.4
+     *
+     * data is annotated as @Nullable since null value is passed in this function
+     * while using it and is allowed.
      */
-    public static void writeStringToFile(final File file, final String data, final @Nullable Charset encoding)
+    public static void writeStringToFile(final File file, final @Nullable String data, final @Nullable Charset encoding)
             throws IOException {
         writeStringToFile(file, data, encoding, false);
     }
@@ -1995,8 +2001,11 @@ public class FileUtils {
      * @param encoding the encoding to use, {@code null} means platform default
      * @throws IOException                          in case of an I/O error
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
+     *
+     * data is annotated as @Nullable since null value is passed in this function
+     * while using it and is allowed.
      */
-    public static void writeStringToFile(final File file, final String data, final @Nullable String encoding) throws IOException {
+    public static void writeStringToFile(final File file, final @Nullable String data, final @Nullable String encoding) throws IOException {
         writeStringToFile(file, data, encoding, false);
     }
 
@@ -2010,8 +2019,11 @@ public class FileUtils {
      *                 end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since 2.3
+     *
+     * data is annotated as @Nullable since null value is passed in this function
+     * while using it and is allowed.
      */
-    public static void writeStringToFile(final File file, final String data, final @Nullable Charset encoding,
+    public static void writeStringToFile(final File file, final @Nullable String data, final @Nullable Charset encoding,
                                          final boolean append) throws IOException {
         try (OutputStream out = openOutputStream(file, append)) {
             IOUtils.write(data, out, encoding);
@@ -2030,8 +2042,11 @@ public class FileUtils {
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported by the VM
      * @since 2.1
+     *
+     * data is annotated as @Nullable since null value is passed in this function
+     * while using it and is allowed.
      */
-    public static void writeStringToFile(final File file, final String data, final @Nullable String encoding,
+    public static void writeStringToFile(final File file, final @Nullable String data, final @Nullable String encoding,
                                          final boolean append) throws IOException {
         writeStringToFile(file, data, Charsets.toCharset(encoding), append);
     }
@@ -2043,9 +2058,12 @@ public class FileUtils {
      * @param data the content to write to the file
      * @throws IOException in case of an I/O error
      * @deprecated 2.5 use {@link #writeStringToFile(File, String, Charset)} instead (and specify the appropriate encoding)
+     *
+     * data is annotated as @Nullable since null value is passed in this function
+     * while using it and is allowed.
      */
     @Deprecated
-    public static void writeStringToFile(final File file, final String data) throws IOException {
+    public static void writeStringToFile(final File file, final @Nullable String data) throws IOException {
         writeStringToFile(file, data, Charset.defaultCharset(), false);
     }
 
@@ -2059,9 +2077,12 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.1
      * @deprecated 2.5 use {@link #writeStringToFile(File, String, Charset, boolean)} instead (and specify the appropriate encoding)
+     *
+     * data is annotated as @Nullable since null value is passed in this function
+     * while using it and is allowed.
      */
     @Deprecated
-    public static void writeStringToFile(final File file, final String data, final boolean append) throws IOException {
+    public static void writeStringToFile(final File file, final @Nullable String data, final boolean append) throws IOException {
         writeStringToFile(file, data, Charset.defaultCharset(), append);
     }
 
@@ -2073,9 +2094,12 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.0
      * @deprecated 2.5 use {@link #write(File, CharSequence, Charset)} instead (and specify the appropriate encoding)
+     *
+     * data is annotated as @Nullable since null value is passed in this function
+     * while using it and is allowed without any exception.
      */
     @Deprecated
-    public static void write(final File file, final CharSequence data) throws IOException {
+    public static void write(final File file, final @Nullable CharSequence data) throws IOException {
         write(file, data, Charset.defaultCharset(), false);
     }
 
@@ -2089,9 +2113,12 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.1
      * @deprecated 2.5 use {@link #write(File, CharSequence, Charset, boolean)} instead (and specify the appropriate encoding)
+     *
+     * data is annotated as @Nullable since null value is passed in this function
+     * while using it and is allowed without any exception.
      */
     @Deprecated
-    public static void write(final File file, final CharSequence data, final boolean append) throws IOException {
+    public static void write(final File file, final @Nullable CharSequence data, final boolean append) throws IOException {
         write(file, data, Charset.defaultCharset(), append);
     }
 
@@ -2103,8 +2130,11 @@ public class FileUtils {
      * @param encoding the encoding to use, {@code null} means platform default
      * @throws IOException in case of an I/O error
      * @since 2.3
+     *
+     * data is annotated as @Nullable since null value is passed in this function
+     * while using it and is allowed without any exception.
      */
-    public static void write(final File file, final CharSequence data, final @Nullable Charset encoding) throws IOException {
+    public static void write(final File file, final @Nullable CharSequence data, final @Nullable Charset encoding) throws IOException {
         write(file, data, encoding, false);
     }
 
@@ -2117,8 +2147,11 @@ public class FileUtils {
      * @throws IOException                          in case of an I/O error
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.0
+     *
+     * data is annotated as @Nullable since null value is passed in this function
+     * while using it and is allowed without any exception.
      */
-    public static void write(final File file, final CharSequence data, final @Nullable String encoding) throws IOException {
+    public static void write(final File file, final @Nullable CharSequence data, final @Nullable String encoding) throws IOException {
         write(file, data, encoding, false);
     }
 
@@ -2132,8 +2165,12 @@ public class FileUtils {
      *                 end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since 2.3
+     *
+     * data is annotated as @Nullable since null value is passed in this function
+     * while using it and is allowed without any exception.This function tells about
+     * why data is annotated as @Nullable in this file.
      */
-    public static void write(final File file, final CharSequence data, final @Nullable Charset encoding, final boolean append)
+    public static void write(final File file, final @Nullable CharSequence data, final @Nullable Charset encoding, final boolean append)
             throws IOException {
         final String str = data == null ? null : data.toString();
         writeStringToFile(file, str, encoding, append);
@@ -2151,8 +2188,11 @@ public class FileUtils {
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported by the VM
      * @since 2.1
+     *
+     * data is annotated as @Nullable since null value is passed in this function
+     * while using it and is allowed without any exception.
      */
-    public static void write(final File file, final CharSequence data, final @Nullable String encoding, final boolean append)
+    public static void write(final File file, final @Nullable CharSequence data, final @Nullable String encoding, final boolean append)
             throws IOException {
         write(file, data, Charsets.toCharset(encoding), append);
     }

@@ -23,7 +23,7 @@ import java.util.concurrent.ThreadFactory;
 /**
  * A runnable that spawns a monitoring thread triggering any
  * registered {@link FileAlterationObserver} at a specified interval.
- * 
+ *
  * @see FileAlterationObserver
  * @version $Id$
  * @since 2.0
@@ -32,7 +32,10 @@ public final class FileAlterationMonitor implements Runnable {
 
     private final long interval;
     private final List<FileAlterationObserver> observers = new CopyOnWriteArrayList<>();
-    private Thread thread = null;
+   /*
+    * Thread cant have null value, no property is viotated at runtime.
+    */
+    private Thread thread;
     private ThreadFactory threadFactory;
     private volatile boolean running = false;
 
@@ -112,7 +115,7 @@ public final class FileAlterationMonitor implements Runnable {
 
     /**
      * Returns the set of {@link FileAlterationObserver} registered with
-     * this monitor. 
+     * this monitor.
      *
      * @return The set of {@link FileAlterationObserver}
      */

@@ -44,9 +44,10 @@ public class XmlStreamWriter extends Writer {
 
     private final OutputStream out;
 
-    private final @Nullable String defaultEncoding;
+    private final String defaultEncoding;
 
-    private StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
+    /* This annotation leads to dereference of nullable error, but is required annotation. */
+    private @Nullable StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
 
     private Writer writer;
 
@@ -95,7 +96,7 @@ public class XmlStreamWriter extends Writer {
      * @throws FileNotFoundException if there is an error creating or
      * opening the file
      */
-    public XmlStreamWriter(final File file, final String defaultEncoding) throws FileNotFoundException {
+    public XmlStreamWriter(final File file, final @Nullable String defaultEncoding) throws FileNotFoundException {
         this(new FileOutputStream(file), defaultEncoding);
     }
 
@@ -112,6 +113,8 @@ public class XmlStreamWriter extends Writer {
      * Returns the default encoding.
      *
      * @return the default encoding
+     *
+     * return type is annotated as @Nullable, as defaultEncoding can be null.
      */
     public String getDefaultEncoding() {
         return defaultEncoding;

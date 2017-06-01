@@ -16,12 +16,14 @@
  */
 package org.apache.commons.io.input;
 
+import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 /**
  * Listener for events from a {@link Tailer}.
  *
  * @since 2.0
  */
+@AnnotatedFor({"nullness"}) 
 public interface TailerListener {
 
     /**

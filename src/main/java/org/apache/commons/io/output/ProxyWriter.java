@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,20 +20,23 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
- * A Proxy stream which acts as expected, that is it passes the method 
- * calls on to the proxied stream and doesn't change which methods are 
+ * A Proxy stream which acts as expected, that is it passes the method
+ * calls on to the proxied stream and doesn't change which methods are
  * being called. It is an alternative base class to FilterWriter
- * to increase reusability, because FilterWriter changes the 
+ * to increase reusability, because FilterWriter changes the
  * methods being called, such as write(char[]) to write(char[], int, int)
  * and write(String) to write(String, int, int).
  *
  */
+@AnnotatedFor({"nullness"})
 public class ProxyWriter extends FilterWriter {
 
     /**
      * Constructs a new ProxyWriter.
-     * 
+     *
      * @param proxy  the Writer to delegate to
      */
     public ProxyWriter(final Writer proxy) {
@@ -68,9 +71,11 @@ public class ProxyWriter extends FilterWriter {
      * @return this writer
      * @throws IOException if an I/O error occurs
      * @since 2.0
+     *
+     *  append() in class Writer can have null value for csq {as annotated in jdk}.
      */
     @Override
-    public Writer append(final CharSequence csq, final int start, final int end) throws IOException {
+    public Writer append(final @Nullable CharSequence csq, final int start, final int end) throws IOException {
         try {
             beforeWrite(end - start);
             out.append(csq, start, end);
@@ -87,9 +92,11 @@ public class ProxyWriter extends FilterWriter {
      * @return this writer
      * @throws IOException if an I/O error occurs
      * @since 2.0
+     *
+     *  append() in class Writer can have null value for csq {as annotated in jdk}.
      */
     @Override
-    public Writer append(final CharSequence csq) throws IOException {
+    public Writer append(final @Nullable CharSequence csq) throws IOException {
         try {
             int len = 0;
             if (csq != null) {

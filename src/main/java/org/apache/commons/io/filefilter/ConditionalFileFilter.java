@@ -18,6 +18,7 @@ package org.apache.commons.io.filefilter;
 
 import java.util.List;
 
+import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 /**
  * Defines operations for conditional file filters.
@@ -25,6 +26,7 @@ import org.checkerframework.checker.initialization.qual.UnderInitialization;
  * @since 1.1
  * @version $Id$
  */
+@AnnotatedFor({"nullness"}) 
 public interface ConditionalFileFilter {
 
     /**

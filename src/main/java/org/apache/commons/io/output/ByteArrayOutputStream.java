@@ -31,6 +31,8 @@ import java.util.List;
 
 import org.apache.commons.io.input.ClosedInputStream;
 
+import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 /**
  * This class implements an output stream in which the data is
  * written into a byte array. The buffer automatically grows as data
@@ -53,6 +55,7 @@ import org.apache.commons.io.input.ClosedInputStream;
  * deprecated toString(int) method that has been ignored.
  *
  */
+@AnnotatedFor({"nullness"})
 public class ByteArrayOutputStream extends OutputStream {
 
     static final int DEFAULT_SIZE = 1024;
@@ -104,7 +107,7 @@ public class ByteArrayOutputStream extends OutputStream {
      *
      * @param newcount  the size of the buffer if one is created
      */
-    private void needNewBuffer(final int newcount) {
+    private void needNewBuffer(@UnknownInitialization(java.io.OutputStream.class) ByteArrayOutputStream this, final int newcount) {
         if (currentBufferIndex < buffers.size() - 1) {
             //Recycling old buffer
             filledBufferSum += currentBuffer.length;
