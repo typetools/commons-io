@@ -20,6 +20,10 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadFactory;
 
+import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 /**
  * A runnable that spawns a monitoring thread triggering any
  * registered {@link FileAlterationObserver} at a specified interval.
@@ -28,6 +32,7 @@ import java.util.concurrent.ThreadFactory;
  * @version $Id$
  * @since 2.0
  */
+@AnnotatedFor({"nullness"})
 public final class FileAlterationMonitor implements Runnable {
 
     private final long interval;
@@ -35,8 +40,8 @@ public final class FileAlterationMonitor implements Runnable {
    /*
     * Thread cant have null value, no property is viotated at runtime.
     */
-    private Thread thread;
-    private ThreadFactory threadFactory;
+    private @MonotonicNonNull Thread thread;
+    private @MonotonicNonNull ThreadFactory threadFactory;
     private volatile boolean running = false;
 
     /**
@@ -86,6 +91,7 @@ public final class FileAlterationMonitor implements Runnable {
      *
      * @param threadFactory the thread factory
      */
+    @EnsuresNonNull({"#1"})
     public synchronized void setThreadFactory(final ThreadFactory threadFactory) {
         this.threadFactory = threadFactory;
     }
@@ -128,6 +134,8 @@ public final class FileAlterationMonitor implements Runnable {
      *
      * @throws Exception if an error occurs initializing the observer
      */
+    @RequiresNonNull("threadFactory")
+    @EnsuresNonNull("thread")
     public synchronized void start() throws Exception {
         if (running) {
             throw new IllegalStateException("Monitor is already running");
@@ -149,6 +157,7 @@ public final class FileAlterationMonitor implements Runnable {
      *
      * @throws Exception if an error occurs initializing the observer
      */
+    @RequiresNonNull("thread")
     public synchronized void stop() throws Exception {
         stop(interval);
     }
@@ -161,6 +170,7 @@ public final class FileAlterationMonitor implements Runnable {
      * @throws Exception if an error occurs initializing the observer
      * @since 2.1
      */
+    @RequiresNonNull("thread")
     public synchronized void stop(final long stopInterval) throws Exception {
         if (running == false) {
             throw new IllegalStateException("Monitor is not running");

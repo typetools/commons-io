@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,15 +21,18 @@ import static org.apache.commons.io.IOUtils.EOF;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Data written to this stream is forwarded to a stream that has been associated
  * with this thread.
  *
  */
+@AnnotatedFor({"nullness"})
 public class DemuxInputStream
     extends InputStream
 {
-    private final InheritableThreadLocal<InputStream> m_streams = new InheritableThreadLocal<>();
+    private final InheritableThreadLocal<@Nullable InputStream> m_streams = new InheritableThreadLocal<>();
 
     /**
      * Bind the specified stream to the current thread.
@@ -37,7 +40,7 @@ public class DemuxInputStream
      * @param input the stream to bind
      * @return the InputStream that was previously active
      */
-    public InputStream bindStream( final InputStream input )
+    public @Nullable InputStream bindStream( final InputStream input )
     {
         final InputStream oldValue = m_streams.get();
         m_streams.set( input );

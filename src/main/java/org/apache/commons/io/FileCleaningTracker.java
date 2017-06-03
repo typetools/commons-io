@@ -26,6 +26,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Keeps track of files awaiting deletion, and deletes them when an associated
@@ -66,7 +68,7 @@ public class FileCleaningTracker {
     /**
      * The thread that will clean up registered files.
      */
-    Thread reaper;
+    @MonotonicNonNull Thread reaper;
 
     //-----------------------------------------------------------------------
     /**
@@ -136,6 +138,7 @@ public class FileCleaningTracker {
      * @param marker  the marker object used to track the file, not null
      * @param deleteStrategy  the strategy to delete the file, null means normal
      */
+    @EnsuresNonNull({"reaper"}) 
     private synchronized void addTracker(final String path, final Object marker, final @Nullable FileDeleteStrategy
             deleteStrategy) {
         // synchronized block protects reaper
