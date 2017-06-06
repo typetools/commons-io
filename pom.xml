@@ -329,8 +329,8 @@ file comparators, endian transformation classes, and much more.
               <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
               <!-- Uncomment the following line to use the type annotations compiler. -->
               <!-- <arg>-J-Xbootclasspath/p:${typeAnnotationsJavac}</arg> -->
-              <!-- <arg>-AuseDefaultsForUncheckedCode=source,bytecode</arg> --> 
-              <!--<arg>-Awarns</arg>
+              <!--<arg>-AuseDefaultsForUncheckedCode=source,bytecode</arg>
+              <arg>-Awarns</arg>
               <arg>-Xmaxwarns</arg>
               <arg>10000</arg>-->
             </compilerArgs>

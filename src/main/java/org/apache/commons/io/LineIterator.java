@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * An Iterator over the lines in a <code>Reader</code>.
@@ -49,6 +50,12 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  *
  * @since 1.2
  */
+/*
+ * cachedLine can have null value, checker fails to examine this property runtime
+ * value for currentLine and issues false-positive warning for nextLine method.
+ * no property is violated runtime.
+ */
+
 @AnnotatedFor({"nullness"})
 public class LineIterator implements Iterator<String>, Closeable {
 
@@ -57,7 +64,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     /** The reader that is being read. */
     private final BufferedReader bufferedReader;
     /** The current line. */
-    private String cachedLine;
+    private @Nullable String cachedLine;
     /** A flag indicating if the iterator has been fully read. */
     private boolean finished = false;
 
@@ -88,6 +95,7 @@ public class LineIterator implements Iterator<String>, Closeable {
      * @throws IllegalStateException if an IO exception occurs
      */
     @Override
+    @EnsuresNonNullIf(expression = "cachedLine", result = true)
     public boolean hasNext() {
         if (cachedLine != null) {
             return true;

@@ -28,6 +28,7 @@ import org.apache.commons.io.FileUtils;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 /**
  * FileWriter that will create and honor lock files to allow simple
@@ -93,8 +94,11 @@ public class LockableFileWriter extends Writer {
      * @param lockDir  the directory in which the lock file should be held
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
+     *
+     * lockDir is annotated as @Nullable since it can be null. null value passed
+     * in other overloaded constructors
      */
-    public LockableFileWriter(final String fileName, final boolean append, final String lockDir) throws IOException {
+    public LockableFileWriter(final String fileName, final boolean append, final @Nullable String lockDir) throws IOException {
         this(new File(fileName), append, lockDir);
     }
 
@@ -133,7 +137,7 @@ public class LockableFileWriter extends Writer {
      * @deprecated 2.5 use {@link #LockableFileWriter(File, Charset, boolean, String)} instead
      */
     @Deprecated
-    public LockableFileWriter(final File file, final boolean append, final String lockDir) throws IOException {
+    public LockableFileWriter(final File file, final boolean append, final @Nullable String lockDir) throws IOException {
         this(file, Charset.defaultCharset(), append, lockDir);
     }
 
@@ -177,7 +181,7 @@ public class LockableFileWriter extends Writer {
      * @since 2.3
      */
     public LockableFileWriter(File file, final @Nullable Charset encoding, final boolean append,
-            String lockDir) throws IOException {
+          @Nullable String lockDir) throws IOException {
         super();
         // init file to create/append
         file = file.getAbsoluteFile();
@@ -218,7 +222,7 @@ public class LockableFileWriter extends Writer {
      *             supported.
      */
     public LockableFileWriter(final File file, final @Nullable String encoding, final boolean append,
-            final String lockDir) throws IOException {
+            final @Nullable String lockDir) throws IOException {
         this(file, Charsets.toCharset(encoding), append, lockDir);
     }
 
@@ -246,6 +250,7 @@ public class LockableFileWriter extends Writer {
      *
      * @throws IOException if we cannot create the file
      */
+    @RequiresNonNull("lockFile") 
     private void createLock(@UnderInitialization(java.io.Writer.class) LockableFileWriter this) throws IOException {
         synchronized (LockableFileWriter.class) {
             if (!lockFile.createNewFile()) {
@@ -265,8 +270,11 @@ public class LockableFileWriter extends Writer {
      * @param append  true to append
      * @return The initialised writer
      * @throws IOException if an error occurs
+     *
+     * encoding is annotated as @Nullable since its value can be null. null value
+     * passed in constructors.
      */
-    private Writer initWriter(@UnderInitialization(java.io.Writer.class) LockableFileWriter this, final File file, final Charset encoding, final boolean append) throws IOException {
+    private Writer initWriter(@UnderInitialization(java.io.Writer.class) LockableFileWriter this, final File file, final @Nullable Charset encoding, final boolean append) throws IOException {
         final boolean fileExistedAlready = file.exists();
         try {
             return new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath(), append),

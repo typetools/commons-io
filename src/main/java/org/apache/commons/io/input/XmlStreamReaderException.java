@@ -58,8 +58,8 @@ public class XmlStreamReaderException extends IOException {
      * @param xmlGuessEnc XML guess encoding.
      * @param xmlEnc XML prolog encoding.
      */
-    public XmlStreamReaderException(final String msg, final String bomEnc,
-            final String xmlGuessEnc, final String xmlEnc) {
+    public XmlStreamReaderException(final String msg, final @Nullable String bomEnc,
+            final @Nullable String xmlGuessEnc, final @Nullable String xmlEnc) {
         this(msg, null, null, bomEnc, xmlGuessEnc, xmlEnc);
     }
 
@@ -75,9 +75,13 @@ public class XmlStreamReaderException extends IOException {
      * @param bomEnc BOM encoding.
      * @param xmlGuessEnc XML guess encoding.
      * @param xmlEnc XML prolog encoding.
+     *
+     *
+     * The parameters are annotated as @Nullable since they are assigned to the
+     * uninitialised Strings which can be null.  
      */
-    public XmlStreamReaderException(final String msg, final String ctMime, final String ctEnc,
-            final String bomEnc, final String xmlGuessEnc, final String xmlEnc) {
+    public XmlStreamReaderException(final String msg, final @Nullable String ctMime, final @Nullable String ctEnc,
+            final @Nullable String bomEnc, final @Nullable String xmlGuessEnc, final @Nullable String xmlEnc) {
         super(msg);
         contentTypeMime = ctMime;
         contentTypeEncoding = ctEnc;

@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Stack;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.PolyNull;
 import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * General filename and filepath manipulation utilities.
@@ -981,7 +982,7 @@ public class FilenameUtils {
      *
      * returns null when filename is null
      */
-    public static @Nullable String getName(final @Nullable String filename) {
+    public static @PolyNull String getName(final @PolyNull String filename) {
         if (filename == null) {
             return null;
         }
@@ -1046,7 +1047,7 @@ public class FilenameUtils {
      * @return the extension of the file or an empty string if none exists or {@code null}
      * if the filename is {@code null}.
      */
-    public static @Nullable String getExtension(final @Nullable String filename) {
+    public static @PolyNull String getExtension(final @PolyNull String filename) {
         if (filename == null) {
             return null;
         }
@@ -1076,7 +1077,7 @@ public class FilenameUtils {
      * @param filename  the filename to query, null returns null
      * @return the filename minus the extension
      */
-    public static @Nullable String removeExtension(final @Nullable String filename) {
+    public static @PolyNull String removeExtension(final @PolyNull String filename) {
         if (filename == null) {
             return null;
         }

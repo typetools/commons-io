@@ -91,7 +91,7 @@ public final class FileAlterationMonitor implements Runnable {
      *
      * @param threadFactory the thread factory
      */
-    @EnsuresNonNull({"#1"})
+    @EnsuresNonNull("#1")
     public synchronized void setThreadFactory(final ThreadFactory threadFactory) {
         this.threadFactory = threadFactory;
     }

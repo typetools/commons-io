@@ -44,7 +44,7 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)} or similar.
  *
  */
-@AnnotatedFor({"nullness"})
+@AnnotatedFor("nullness")
 public class FileCleaningTracker {
 
     // Note: fields are package protected to allow use by test cases
@@ -138,7 +138,7 @@ public class FileCleaningTracker {
      * @param marker  the marker object used to track the file, not null
      * @param deleteStrategy  the strategy to delete the file, null means normal
      */
-    @EnsuresNonNull({"reaper"}) 
+    @EnsuresNonNull({"reaper"})
     private synchronized void addTracker(final String path, final Object marker, final @Nullable FileDeleteStrategy
             deleteStrategy) {
         // synchronized block protects reaper

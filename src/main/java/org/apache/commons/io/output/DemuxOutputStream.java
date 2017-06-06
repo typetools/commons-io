@@ -25,7 +25,7 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * Forwards data to a stream that has been associated with this thread.
  *
  */
-@AnnotatedFor({"nullness"})
+@AnnotatedFor("nullness")
 public class DemuxOutputStream extends OutputStream {
     private final InheritableThreadLocal<@Nullable OutputStream> outputStreamThreadLocal = new InheritableThreadLocal<>();
 

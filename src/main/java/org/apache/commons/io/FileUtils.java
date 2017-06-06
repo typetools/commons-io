@@ -53,6 +53,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.output.NullOutputStream;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.PolyNull;
 import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * General file manipulation utilities.
@@ -825,7 +826,7 @@ public class FileUtils {
      * if the URL's protocol is not <code>file</code>
      *
      * Checker cant check value of filename at runtime, it produces false positve
-     * warning, code never violates any property at runtime. 
+     * warning, code never violates any property at runtime.
      */
     public static @Nullable File toFile(final @Nullable URL url) {
         if (url == null || !"file".equalsIgnoreCase(url.getProtocol())) {
@@ -851,7 +852,7 @@ public class FileUtils {
      * @return The decoded URL or {@code null} if the input was
      * {@code null}.
      */
-    static @Nullable String decodeUrl(final @Nullable String url) {
+    static @PolyNull String decodeUrl(final @PolyNull String url) {
         String decoded = url;
         if (url != null && url.indexOf('%') >= 0) {
             final int n = url.length();
