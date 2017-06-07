@@ -29,7 +29,7 @@ import org.apache.commons.io.FileUtils;
 
 /**
  * Simple implementation of the unix "tail -f" functionality.
- * 
+ *
  * <h2>1. Create a TailerListener implementation</h2>
  * <p>
  * First you need to create a {@link TailerListener} implementation
@@ -261,7 +261,7 @@ public class Tailer implements Runnable {
         this.listener = listener;
         listener.init(this);
         this.reOpen = reOpen;
-        this.cset = cset; 
+        this.cset = cset;
     }
 
     /**
@@ -437,6 +437,11 @@ public class Tailer implements Runnable {
                         reader = new RandomAccessFile(file, RAF_MODE);
                         // At this point, we're sure that the old file is rotated
                         // Finish scanning the old file and then we'll start with the new one
+                        /*
+                         * Checker issues false positive warning, save is assigned non-null
+                         * value and checker doesn't track this at runtime. No property is
+                         * violated.
+                         */
                         try {
                             readLines(save);
                         }  catch (IOException ioe) {
@@ -454,12 +459,20 @@ public class Tailer implements Runnable {
                     // See if the file needs to be read again
                     if (length > position) {
                         // The file has more content than it did last time
+                        /*
+                         * Checker issues false positive warning, reader is assigned non-null
+                         * value and checker doesn't track this at runtime. No property is
+                         * violated.
+                         */
                         position = readLines(reader);
                         last = file.lastModified();
                     } else if (newer) {
                         /*
                          * This can happen if the file is truncated or overwritten with the exact same length of
                          * information. In cases like this, the file position needs to be reset
+                         *
+                         * Checker issues false positive warning for reader, initially
+                         * reader initialized null value was assigned non-null value.
                          */
                         position = 0;
                         reader.seek(position); // cannot be null here

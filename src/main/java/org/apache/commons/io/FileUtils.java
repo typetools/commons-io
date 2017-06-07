@@ -903,6 +903,10 @@ public class FileUtils {
      * @throws IllegalArgumentException if any file is not a URL file
      * @throws IllegalArgumentException if any file is incorrectly encoded
      * @since 1.1
+     *
+     * Checker issues false positive error,  FileUtils.toFile() method returns
+     * {@code null} for {@code null} argument. Here this property is not violated
+     * at runtime.
      */
     public static File[] toFiles(final @Nullable URL[] urls) {
         if (urls == null || urls.length == 0) {

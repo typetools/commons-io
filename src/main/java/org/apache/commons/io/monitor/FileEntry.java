@@ -50,7 +50,7 @@ public class FileEntry implements Serializable {
     static final FileEntry[] EMPTY_ENTRIES = new FileEntry[0];
 
     private final @Nullable FileEntry parent;
-    private @Nullable FileEntry[] children;
+    private FileEntry @Nullable [] children;
     private final File file;
     private String name;
     private boolean exists;
@@ -160,7 +160,7 @@ public class FileEntry implements Serializable {
      * array if the file is not a directory or the
      * directory is empty
      */
-    public @Nullable FileEntry[] getChildren() {
+    public FileEntry[] getChildren() {
         return children != null ? children : EMPTY_ENTRIES;
     }
 
@@ -169,7 +169,7 @@ public class FileEntry implements Serializable {
      *
      * @param children This directory's files, may be null
      */
-    public void setChildren(final @Nullable FileEntry[] children) {
+    public void setChildren(final FileEntry @Nullable [] children) {
         this.children = children;
     }
 

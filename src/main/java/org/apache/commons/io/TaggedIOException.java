@@ -134,7 +134,8 @@ public class TaggedIOException extends IOExceptionWithCause {
      *
      * @return wrapped exception
      *
-     * Return type for getCause() in Throwable class can be null.
+     * getCause method in Throwable class returns null when cause is 
+     * nonexistent or unknown.
      */
     @Override
     public @Nullable IOException getCause() {

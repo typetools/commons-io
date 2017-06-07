@@ -52,6 +52,10 @@ import org.apache.commons.io.output.StringBuilderWriter;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 /**
  * General IO stream manipulation utilities.
  * <p>
@@ -168,8 +172,8 @@ public class IOUtils {
      * (if the buffer size were variable, we would need to synch. to ensure some other thread
      * did not create a smaller one)
      */
-    private static char[] SKIP_CHAR_BUFFER;
-    private static byte[] SKIP_BYTE_BUFFER;
+    private static char @Nullable [] SKIP_CHAR_BUFFER;
+    private static byte @Nullable [] SKIP_BYTE_BUFFER;
 
     /**
      * Instances should NOT be constructed in standard programming.
@@ -2844,6 +2848,7 @@ public class IOUtils {
      * @see <a href="https://issues.apache.org/jira/browse/IO-203">IO-203 - Add skipFully() method for InputStreams</a>
      * @since 2.0
      */
+    @EnsuresNonNull("SKIP_BYTE_BUFFER")
     public static long skip(final InputStream input, final long toSkip) throws IOException {
         if (toSkip < 0) {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
@@ -2919,6 +2924,7 @@ public class IOUtils {
      * @see <a href="https://issues.apache.org/jira/browse/IO-203">IO-203 - Add skipFully() method for InputStreams</a>
      * @since 2.0
      */
+    @EnsuresNonNull("SKIP_CHAR_BUFFER")
     public static long skip(final Reader input, final long toSkip) throws IOException {
         if (toSkip < 0) {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);

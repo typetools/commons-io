@@ -292,6 +292,13 @@ public class FileSystemUtils {
      *  is zero or less
      * @return the amount of free drive space on the drive
      * @throws IOException if an error occurs
+     *
+     * FilenameUtils.normalize have @Nullable return type, returns null when path
+     * is null. Here path is never null. checker issues error of incompatible assignment.
+     * of nullable value to non-null path Any property is not violated here.
+     *
+     * TRIED : can't use @PolyNull to annotate FilenameUtils correclty, as return of null if
+     * agrument path is null, but does not completely depended on agrument.
      */
     long freeSpaceWindows(String path, final long timeout) throws IOException {
         path = FilenameUtils.normalize(path, false);
