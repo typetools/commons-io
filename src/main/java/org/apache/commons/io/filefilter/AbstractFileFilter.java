@@ -36,10 +36,19 @@ public abstract class AbstractFileFilter implements IOFileFilter {
      * @param file  the File to check
      * @return true if this file matches the test
      *
-     * @param file must not be null in accept method of FilenameFilter
-     * interface. File.getParentFile() returns null value when pathname
-     * does not name a parent directory.
-     * TODO : Create Bug report and resolve accordingly.
+     * Note that a subclass must override one of the accept methods,
+     * otherwise your class will infinitely loop.
+     * Invoking AbstractFileFilter.accept method leads to StackOverflowError,
+     * hence following implementations are not to be called directly.
+     *
+     * File.getParentFile() returns null if parent file/dir is not known.
+     * Java doc does not mention of allowing null value for file in
+     * FilenameFilter.accept(File,String). No exception occurs her.
+     *
+     * Checker issues error here as File argument in FilenameFilter.accept(File,String)
+     * is annotated @NonNull, and File.getParentFile() has @Nullable return type.
+     *
+     * TODO : Create enhancement report asking significance of File.getParentFile.
      */
     @Override
     public boolean accept(final File file) {

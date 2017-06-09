@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * An {@link IOException} decorator that adds a serializable tag to the
@@ -93,8 +95,9 @@ public class TaggedIOException extends IOExceptionWithCause {
      * @param tag tag object
      * @throws IOException original exception from the tagged decorator, if any
      *
-     * checker issues false positive warning , this method doesn't throw
-     * null, getCause doesn't return null value as cause is-known/exists.
+     * Checker issues false positive warning ,here super.getCause() doesn't return
+     * null as cause is known/exists.
+     * Checker cannot establish correctness as it doesn't type check cause value at runtime.
      */
     public static void throwCauseIfTaggedWith(final Throwable throwable, final Object tag)
             throws IOException {
@@ -134,7 +137,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      *
      * @return wrapped exception
      *
-     * getCause method in Throwable class returns null when cause is 
+     * Throwable.getCause() returns null when cause is
      * nonexistent or unknown.
      */
     @Override

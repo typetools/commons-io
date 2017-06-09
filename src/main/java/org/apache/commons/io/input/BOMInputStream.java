@@ -95,7 +95,7 @@ public class BOMInputStream extends ProxyInputStream {
      * BOMs are sorted from longest to shortest.
      */
     private final List<ByteOrderMark> boms;
-    private ByteOrderMark byteOrderMark;
+    private @Nullable ByteOrderMark byteOrderMark;
     private int[] firstBytes;
     private int fbLength;
     private int fbIndex;

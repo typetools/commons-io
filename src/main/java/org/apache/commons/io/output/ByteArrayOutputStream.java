@@ -32,6 +32,9 @@ import java.util.List;
 import org.apache.commons.io.input.ClosedInputStream;
 
 import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 /**
  * This class implements an output stream in which the data is
@@ -106,7 +109,10 @@ public class ByteArrayOutputStream extends OutputStream {
      * a new one or re-cycling an existing one.
      *
      * @param newcount  the size of the buffer if one is created
+     *
+     * This is bug. currentBuffer if not initialised,may lead to null pointer exception.
      */
+    @EnsuresNonNull("currentBuffer")
     private void needNewBuffer(@UnknownInitialization(java.io.OutputStream.class) ByteArrayOutputStream this, final int newcount) {
         if (currentBufferIndex < buffers.size() - 1) {
             //Recycling old buffer
@@ -242,6 +248,10 @@ public class ByteArrayOutputStream extends OutputStream {
             currentBuffer = buffers.get(currentBufferIndex);
         } else {
             //Throw away old buffers
+            /*
+             * currentBuffer can't be annotated as @Nullable.
+             * TODO ask for significance of this null assignment.
+             */
             currentBuffer = null;
             int size = buffers.get(0).length;
             buffers.clear();

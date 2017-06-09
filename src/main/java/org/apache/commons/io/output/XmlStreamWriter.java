@@ -30,6 +30,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.input.XmlStreamReader;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Character stream that handles all the necessary Voodoo to figure out the
@@ -46,8 +48,11 @@ public class XmlStreamWriter extends Writer {
 
     private final String defaultEncoding;
 
-    /* This annotation leads to dereference of nullable error, but is required annotation. */
-    private @Nullable StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
+    /**
+     * @Nullable annotation for xmlPrologWriter leads to dereference of nullable
+     * error. It is assigned null value after encoding is chosen.
+     */
+    private StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
 
     private Writer writer;
 
@@ -113,8 +118,6 @@ public class XmlStreamWriter extends Writer {
      * Returns the default encoding.
      *
      * @return the default encoding
-     *
-     * return type is annotated as @Nullable, as defaultEncoding can be null.
      */
     public String getDefaultEncoding() {
         return defaultEncoding;
@@ -154,6 +157,15 @@ public class XmlStreamWriter extends Writer {
      * @param off The start offset
      * @param len The number of characters to write
      * @throws IOException if an error occurs detecting the encoding
+     *
+     * Checker issues false positive warning in function below. Matcher.group(int)
+     * return null if group failed to match part of input.
+     *
+     * Matcher.find() returns true only when subsequence of the input sequence
+     * matches matcher's pattern.
+     *
+     * Checker cannot establish this correctness here as it does not track Matcher.find()
+     * value and type check Matcher.group(int) value at runtime .
      */
     private void detectEncoding(final char[] cbuf, final int off, final int len)
             throws IOException {

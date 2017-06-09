@@ -105,6 +105,9 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      * Provide a String representation of this file filter.
      *
      * @return a String representation
+     *
+     * checker does not track the non-null value assigned to filenameFilter. No
+     * property is viotated here at runtime that causes null pointer exceptions. 
      */
     @Override
     public String toString() {

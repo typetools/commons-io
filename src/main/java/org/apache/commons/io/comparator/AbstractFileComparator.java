@@ -42,7 +42,7 @@ abstract class AbstractFileComparator implements Comparator<File> {
      * @return The sorted array
      * @since 2.0
      */
-    public @Nullable File[] sort(final @Nullable File... files) {
+    public File @Nullable [] sort(final File @Nullable ... files) {
         if (files != null) {
             Arrays.sort(files, this);
         }

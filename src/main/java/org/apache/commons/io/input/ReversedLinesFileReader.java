@@ -50,11 +50,6 @@ public class ReversedLinesFileReader implements Closeable {
     private final int avoidNewlineSplitBufferSize;
     private final int byteDecrement;
 
-    /*
-     * Annotated as @Nullable since it is assigned value using rollover method
-     * having @Nullable return type. Adding this annotation leads to dereference of null
-     * error (TO DO).
-     */
     private @Nullable FilePart currentFilePart;
 
     private boolean trailingNewlineOfFileSkipped = false;
@@ -178,6 +173,14 @@ public class ReversedLinesFileReader implements Closeable {
      *
      * @return the next line or null if the start of the file is reached
      * @throws IOException  if an I/O error occurs
+     *
+     * Checker issues ERROR dereference of possibly null reference for currentFilePart.
+     * currentFilePart is assigned non-null value in constructor.
+     * FilePart.rollOver() returns null when file is empty or there is single
+     * part in file.
+     *
+     * null value for currentFilePart is significant which tells that there are
+     * no more fileparts and line remains set to null.
      */
     public @Nullable String readLine() throws IOException {
 
@@ -227,9 +230,9 @@ public class ReversedLinesFileReader implements Closeable {
          * @param leftOverOfLastFilePart remainder
          * @throws IOException if there is a problem reading the file
          *
-         * leftOverOfLastFilePart can be null as used at line 149
+         * leftOverOfLastFilePart can be null.
          */
-        private FilePart(final long no, final int length, final @Nullable byte @Nullable [] leftOverOfLastFilePart) throws IOException {
+        private FilePart(final long no, final int length, final byte @Nullable [] leftOverOfLastFilePart) throws IOException {
             this.no = no;
             final int dataLength = length + (leftOverOfLastFilePart != null ? leftOverOfLastFilePart.length : 0);
             this.data = new byte[dataLength];

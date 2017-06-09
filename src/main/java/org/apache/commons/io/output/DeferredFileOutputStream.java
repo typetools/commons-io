@@ -64,7 +64,7 @@ public class DeferredFileOutputStream
     /**
      * The file to which output will be directed if the threshold is exceeded.
      */
-    private File outputFile;
+    private @Nullable File outputFile;
 
     /**
      * The temporary file prefix.
@@ -98,7 +98,7 @@ public class DeferredFileOutputStream
      * @param threshold  The number of bytes at which to trigger an event.
      * @param outputFile The file to which data is saved beyond the threshold.
      */
-    public DeferredFileOutputStream(final int threshold, final File outputFile)
+    public DeferredFileOutputStream(final int threshold, final @Nullable File outputFile)
     {
         this(threshold,  outputFile, null, null, null, ByteArrayOutputStream.DEFAULT_SIZE);
     }
@@ -113,7 +113,7 @@ public class DeferredFileOutputStream
      *
      * @since 2.5
      */
-    public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final File outputFile)
+    public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final @Nullable File outputFile)
     {
         this(threshold, outputFile, null, null, null, initialBufferSize);
         if (initialBufferSize < 0) {
@@ -176,7 +176,7 @@ public class DeferredFileOutputStream
      * @param directory Temporary file directory.
      * @param initialBufferSize The initial size of the in memory buffer.
      */
-    private DeferredFileOutputStream(final int threshold, final File outputFile, final @Nullable String prefix,
+    private DeferredFileOutputStream(final int threshold, final @Nullable File outputFile, final @Nullable String prefix,
                                      final @Nullable String suffix, final @Nullable File directory, final int initialBufferSize) {
         super(threshold);
         this.outputFile = outputFile;
@@ -214,6 +214,14 @@ public class DeferredFileOutputStream
      * disk-based storage.
      *
      * @throws IOException if an error occurs.
+     *
+     * Checker issues false positve warning, outputFile is assigned non-null value
+     * checker fails to track this assignment at runtime.If prefix was null the
+     * IllegalArgumentException occurs before invoking this methd, hence
+     * Exception does not occur here and checker cant establish this correctness.
+     *
+     * Can't use @MonotonicNonNull, @RequiresNonNull qualifier for memoryOutputStream as
+     * postcondition fails due to assignment of null to memoryOutputStream.
      */
     @Override
     protected void thresholdReached() throws IOException
@@ -258,7 +266,7 @@ public class DeferredFileOutputStream
      * @return The data for this output stream, or {@code null} if no such
      *         data is available.
      */
-    public @Nullable byte[] getData()
+    public byte @Nullable [] getData()
     {
         if (memoryOutputStream != null)
         {
@@ -307,6 +315,13 @@ public class DeferredFileOutputStream
      *
      * @param out output stream to write to.
      * @throws IOException if this stream is not yet closed or an error occurs.
+     *
+     * outputFile is {@code null} if no file exists for this output stream.
+     * The constructor and routine isThresholdReached() ensures that outputFile
+     * is assigned non-null value, but Exception may occurs if writeTo() is
+     * invoked before isThresholdReached().
+     *
+     * TODO : Bug/enhancement report as null outputFile can cause NullPointer Exception.
      */
     public void writeTo(final OutputStream out) throws IOException
     {
