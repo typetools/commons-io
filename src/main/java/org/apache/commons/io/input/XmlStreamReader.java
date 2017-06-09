@@ -507,6 +507,15 @@ public class XmlStreamReader extends Reader {
      * @param xmlEnc XML encoding
      * @return the raw encoding
      * @throws IOException thrown if there is a problem reading the stream.
+     *
+     * MessageFormat.format(String,Object[]) does not allow null values for Object[]
+     * In method below xmlGuessEnc, xmlEnc can be null, hence there is possibility of
+     * passing NULL arguments in MessageFormat.format().
+     *
+     * In current implementation null check is not performed for both (xmlGuessEnc, xmlEnc)
+     * in every if block, following which checker issues argument type incompatible warning.
+     *
+     * TODO : Create Bug report for null arguments in MessageFormat.format()
      */
     String calculateRawEncoding(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final @Nullable String bomEnc, final @Nullable String xmlGuessEnc,
             final @Nullable String xmlEnc) throws IOException {
@@ -579,6 +588,16 @@ public class XmlStreamReader extends Reader {
      *        relaxed.
      * @return the HTTP encoding
      * @throws IOException thrown if there is a problem reading the stream.
+     *
+     * MessageFormat.format(String,Object[]) does not allow null values for Object[]
+     * In method below cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc can be null, hence
+     * there is possibility of passing NULL arguments in MessageFormat.format().
+     *
+     * In current implementation null check is not performed for all (cTMime, cTEnc,
+     * bomEnc, xmlGuessEnc, xmlEnc) in every if block, following which checker
+     * issues argument type incompatible warning.
+     *
+     * TODO : Create Bug report for null arguments in MessageFormat.format()
      */
     String calculateHttpEncoding(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final @Nullable String httpContentType,
             final @Nullable String bomEnc, final @Nullable String xmlGuessEnc, final @Nullable String xmlEnc,
