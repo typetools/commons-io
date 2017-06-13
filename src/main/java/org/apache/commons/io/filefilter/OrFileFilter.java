@@ -89,7 +89,7 @@ public class OrFileFilter
      * {@inheritDoc}
      */
     @Override
-    public void addFileFilter(@UnderInitialization(java.lang.Object.class) OrFileFilter this, final IOFileFilter ioFileFilter) {
+    public void addFileFilter(@UnderInitialization(org.apache.commons.io.filefilter.ConditionalFileFilter.class) OrFileFilter this, final IOFileFilter ioFileFilter) {
         this.fileFilters.add(ioFileFilter);
     }
 

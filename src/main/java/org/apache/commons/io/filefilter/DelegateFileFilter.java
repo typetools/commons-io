@@ -22,6 +22,7 @@ import java.io.FilenameFilter;
 import java.io.Serializable;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * This class turns a Java FileFilter or FilenameFilter into an IO FileFilter.
@@ -106,10 +107,14 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      *
      * @return a String representation
      *
-     * checker does not track the non-null value assigned to filenameFilter. No
-     * property is viotated here at runtime that causes null pointer exceptions. 
+     * Checker issues warning of null reference in method below. This is because
+     * implementation below does not perform null check for filenameFilter.
+     *
+     * Both constructors ensure that either of the value for filefilter/filenameFilter
+     * is non-null and hence no NPE occur at runtime.
      */
     @Override
+    @Pure
     public String toString() {
         final String delegate = fileFilter != null ? fileFilter.toString() : filenameFilter.toString();
         return super.toString() + "(" + delegate + ")";

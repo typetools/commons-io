@@ -249,7 +249,7 @@ public class ByteArrayOutputStream extends OutputStream {
         } else {
             //Throw away old buffers
             /*
-             * currentBuffer can't be annotated as @Nullable.
+             * currentBuffer can't be be assigned null value
              * TODO ask for significance of this null assignment.
              */
             currentBuffer = null;

@@ -215,13 +215,10 @@ public class DeferredFileOutputStream
      *
      * @throws IOException if an error occurs.
      *
-     * Checker issues false positve warning, outputFile is assigned non-null value
-     * checker fails to track this assignment at runtime.If prefix was null the
-     * IllegalArgumentException occurs before invoking this methd, hence
-     * Exception does not occur here and checker cant establish this correctness.
-     *
-     * Can't use @MonotonicNonNull, @RequiresNonNull qualifier for memoryOutputStream as
-     * postcondition fails due to assignment of null to memoryOutputStream.
+     * Bug : Current implementation does not perform null check is for
+     * outputFile. When prefix is null, outputFile is not initialised and
+     * hence null argument is passed in FileUtils.forceMkdirParent(File).
+     * This method does not allow null argument.
      */
     @Override
     protected void thresholdReached() throws IOException
@@ -321,7 +318,8 @@ public class DeferredFileOutputStream
      * is assigned non-null value, but Exception may occurs if writeTo() is
      * invoked before isThresholdReached().
      *
-     * TODO : Bug/enhancement report as null outputFile can cause NullPointer Exception.
+     * BUG : Bug/enhancement report as null outputFile can cause NullPointer Exception.
+     * BUG : memoryOutputStream might be null, may cause NPE.
      */
     public void writeTo(final OutputStream out) throws IOException
     {

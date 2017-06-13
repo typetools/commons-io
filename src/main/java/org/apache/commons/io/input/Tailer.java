@@ -405,8 +405,7 @@ public class Tailer implements Runnable {
      * Checker issues dereference of null warning, while block does not guarantee
      * reader will have non-null value due to inclusion to getRun() condition.
      *
-     * getRun() returns null when trailer thread is stopped. These errors are not resolved
-     * due to unclear implementation details.
+     * getRun() returns false when trailer thread is stopped. 
      */
     @Override
     public void run() {
