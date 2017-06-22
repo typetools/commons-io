@@ -32,17 +32,14 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  *
  * @see FileFilterUtils#asFileFilter(FileFilter)
  * @see FileFilterUtils#asFileFilter(FilenameFilter)
- *
- * filenameFilter, fileFilter can have null values, which are assigned at runtime
- * based on use of constructor.
  */
 @AnnotatedFor({"nullness"})
 public class DelegateFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = -8723373124984771318L;
-    /** The Filename filter */
+    /** The Filename filter can be null */
     private final @Nullable FilenameFilter filenameFilter;
-    /** The File filter */
+    /** The File filter can be null */
     private final @Nullable FileFilter fileFilter;
 
     /**
@@ -106,16 +103,14 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      * Provide a String representation of this file filter.
      *
      * @return a String representation
-     *
-     * Checker issues warning of null reference in method below. This is because
-     * implementation below does not perform null check for filenameFilter.
-     *
-     * Both constructors ensure that either of the value for filefilter/filenameFilter
-     * is non-null and hence no NPE occur at runtime.
      */
+    // Checker issues false positive warning [dereference.of.nullable] in method below. This 
+    // is because implementation below does not perform null check for filenameFilter.
+    // However both constructors ensure that exactly one of filter fields is 
+    // non-null, hence Nullpointer Exception does not occur at runtime. 
+    @SuppressWarnings("nullness:dereference.of.nullable")
     @Override
-    @Pure
-    public String toString() {
+    @Pure public String toString() {
         final String delegate = fileFilter != null ? fileFilter.toString() : filenameFilter.toString();
         return super.toString() + "(" + delegate + ")";
     }

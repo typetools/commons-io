@@ -50,12 +50,6 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  *
  * @since 1.2
  */
-/*
- * cachedLine can have null value, checker fails to examine this property runtime
- * value for currentLine and issues false-positive warning for nextLine method.
- * no property is violated runtime.
- */
-
 @AnnotatedFor({"nullness"})
 public class LineIterator implements Iterator<String>, Closeable {
 
@@ -64,6 +58,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     /** The reader that is being read. */
     private final BufferedReader bufferedReader;
     /** The current line. */
+    // Field cachedLine can be null.
     private @Nullable String cachedLine;
     /** A flag indicating if the iterator has been fully read. */
     private boolean finished = false;

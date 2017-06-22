@@ -135,9 +135,6 @@ public class ByteOrderMark implements Serializable {
      * @param obj The object to compare to
      * @return true if the bom's bytes are equal, otherwise
      * false
-     *
-     * Overrides equals method in class Object which allows Nullable
-     * parameter.
      */
     @Override
     public boolean equals(final @Nullable Object obj) {

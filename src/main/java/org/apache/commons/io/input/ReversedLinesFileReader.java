@@ -173,15 +173,11 @@ public class ReversedLinesFileReader implements Closeable {
      *
      * @return the next line or null if the start of the file is reached
      * @throws IOException  if an I/O error occurs
-     *
-     * Checker issues ERROR dereference of possibly null reference for currentFilePart.
-     * currentFilePart is assigned non-null value in constructor.
-     * FilePart.rollOver() returns null when file is empty or there is single
-     * part in file.
-     *
-     * null value for currentFilePart is significant which tells that there are
-     * no more fileparts and line remains set to null.
      */
+    // BUG : currentFilePart may be null and it can cause Null pointer Exception. A null check
+    // for currentFilePart before using it will resolve this bug.
+    // null value for currentFilePart is significant which tells that there are
+    // no more fileparts and line remains set to null.
     public @Nullable String readLine() throws IOException {
 
         String line = currentFilePart.readLine();
@@ -227,10 +223,8 @@ public class ReversedLinesFileReader implements Closeable {
          * ctor
          * @param no the part number
          * @param length its length
-         * @param leftOverOfLastFilePart remainder
+         * @param leftOverOfLastFilePart remainder, may be null.
          * @throws IOException if there is a problem reading the file
-         *
-         * leftOverOfLastFilePart can be null.
          */
         private FilePart(final long no, final int length, final byte @Nullable [] leftOverOfLastFilePart) throws IOException {
             this.no = no;

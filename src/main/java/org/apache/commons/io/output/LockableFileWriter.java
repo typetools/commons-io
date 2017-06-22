@@ -94,9 +94,6 @@ public class LockableFileWriter extends Writer {
      * @param lockDir  the directory in which the lock file should be held
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
-     *
-     * lockDir is annotated as @Nullable since it can be null. null value passed
-     * in other overloaded constructors
      */
     public LockableFileWriter(final String fileName, final boolean append, final @Nullable String lockDir) throws IOException {
         this(new File(fileName), append, lockDir);
@@ -266,13 +263,10 @@ public class LockableFileWriter extends Writer {
      * Ensure that a cleanup occurs if the writer creation fails.
      *
      * @param file  the file to be accessed
-     * @param encoding  the encoding to use
+     * @param encoding  the encoding to use, may be null
      * @param append  true to append
      * @return The initialised writer
      * @throws IOException if an error occurs
-     *
-     * encoding is annotated as @Nullable since its value can be null. null value
-     * passed in constructors.
      */
     private Writer initWriter(@UnderInitialization(java.io.Writer.class) LockableFileWriter this, final File file, final @Nullable Charset encoding, final boolean append) throws IOException {
         final boolean fileExistedAlready = file.exists();

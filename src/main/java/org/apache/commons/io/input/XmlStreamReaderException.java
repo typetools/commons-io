@@ -75,10 +75,6 @@ public class XmlStreamReaderException extends IOException {
      * @param bomEnc BOM encoding.
      * @param xmlGuessEnc XML guess encoding.
      * @param xmlEnc XML prolog encoding.
-     *
-     *
-     * The parameters are annotated as @Nullable since they are assigned to the
-     * uninitialised Strings which can be null.  
      */
     public XmlStreamReaderException(final String msg, final @Nullable String ctMime, final @Nullable String ctEnc,
             final @Nullable String bomEnc, final @Nullable String xmlGuessEnc, final @Nullable String xmlEnc) {

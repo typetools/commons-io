@@ -82,8 +82,6 @@ public class StringBuilderWriter extends Writer implements Serializable {
      *
      * @param value The character to append
      * @return This writer instance
-     *
-     *  append() in class Writer can have null value for csq {as annotated in jdk}.
      */
     @Override
     public Writer append(final @Nullable CharSequence value) {
@@ -98,8 +96,6 @@ public class StringBuilderWriter extends Writer implements Serializable {
      * @param start The index of the first character
      * @param end The index of the last character + 1
      * @return This writer instance
-     *
-     *  append() in class Writer can have null value for csq {as annotated in jdk}.
      */
     @Override
     public Writer append(final @Nullable CharSequence value, final int start, final int end) {

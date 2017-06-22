@@ -292,15 +292,13 @@ public class FileSystemUtils {
      *  is zero or less
      * @return the amount of free drive space on the drive
      * @throws IOException if an error occurs
-     *
-     * FilenameUtils.normalize returns null when path is null. Here path is never null.
-     * checker issues error of incompatible assignment of nullable value to non-null
-     * path. Any property is not violated .
-     *
-     * TRIED : can't use @PolyNull to annotate FilenameUtils.normalize, as it returns null
-     * at conditions other than null value of argument.False positive warning remains unresolved.
      */
     long freeSpaceWindows(String path, final long timeout) throws IOException {
+        // Path cannot be null in this method. FilenameUtils.normalize(String filename,boolean)
+        // returns null if filename(here path) is null or filename(here path) is invalid path in Windows system.
+        //  
+        // BUG : path may be assigned null value. A simple check to verify(confirm) that path
+        // is legal/valid as per Windows system will resolve this bug.
         path = FilenameUtils.normalize(path, false);
         if (path.length() > 0 && path.charAt(0) != '"') {
             path = "\"" + path + "\"";

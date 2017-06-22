@@ -344,12 +344,10 @@ public class FilenameUtils {
     /**
      * Internal method to perform the normalization.
      *
-     * @param filename  the filename
+     * @param filename  the filename, null returns null
      * @param separator The separator character to use
      * @param keepSeparator  true to keep the final separator
-     * @return the normalized filename. Null bytes inside string will be removed
-     *
-     * returns null when filename is null.
+     * @return the normalized filename. Null bytes inside string will be removed.
      */
     private static @Nullable String doNormalize(final @Nullable String filename, final char separator, final boolean keepSeparator) {
         if (filename == null) {
@@ -585,8 +583,6 @@ public class FilenameUtils {
      *
      * @param path  the path to be changed, null ignored
      * @return the updated path
-     *
-     * returns null when path is null
      */
     public static @Nullable String separatorsToSystem(final @Nullable String path) {
         if (path == null) {
@@ -843,12 +839,9 @@ public class FilenameUtils {
     /**
      * Does the work of getting the path.
      *
-     * @param filename  the filename
+     * @param filename  the filename, null returns null
      * @param separatorAdd  0 to omit the end separator, 1 to return it
      * @return the path. Null bytes inside string will be removed
-     *
-     * filename can be null, as mentioned in getPathNoEndSeparator functions.
-     * returns null when filename is null
      */
     private static @Nullable String doGetPath(final @Nullable String filename, final int separatorAdd) {
         if (filename == null) {
@@ -930,11 +923,9 @@ public class FilenameUtils {
     /**
      * Does the work of getting the path.
      *
-     * @param filename  the filename
+     * @param filename  the filename, null returns null
      * @param includeSeparator  true to include the end separator
      * @return the path
-     *
-     * returns null when filename is null
      */
     private static @Nullable String doGetFullPath(final @Nullable String filename, final boolean includeSeparator) {
         if (filename == null) {
@@ -979,8 +970,6 @@ public class FilenameUtils {
      * @param filename  the filename to query, null returns null
      * @return the name of the file without the path, or an empty string if none exists.
      * Null bytes inside string will be removed
-     *
-     * returns null when filename is null
      */
     public static @PolyNull String getName(final @PolyNull String filename) {
         if (filename == null) {
@@ -1199,9 +1188,6 @@ public class FilenameUtils {
      * @param extension  the extension to check for, null or empty checks for no extension
      * @return true if the filename has the specified extension
      * @throws java.lang.IllegalArgumentException if the supplied filename contains null bytes
-     *
-     * getExtension() returns null when filename is null, checker issues Warning
-     * of dereferencing null reference  at line 1214.
      */
     public static boolean isExtension(final @Nullable String filename, final @Nullable String extension) {
         if (filename == null) {
@@ -1227,9 +1213,6 @@ public class FilenameUtils {
      * @param extensions  the extensions to check for, null checks for no extension
      * @return true if the filename is one of the extensions
      * @throws java.lang.IllegalArgumentException if the supplied filename contains null bytes
-     *
-     * getExtension() returns null when filename is null, checker issues Warning
-     * of dereferencing null reference at line 1242.
      */
     public static boolean isExtension(final @Nullable String filename, final @Nullable String @Nullable [] extensions) {
         if (filename == null) {
@@ -1260,9 +1243,6 @@ public class FilenameUtils {
      * @param extensions  the extensions to check for, null checks for no extension
      * @return true if the filename is one of the extensions
      * @throws java.lang.IllegalArgumentException if the supplied filename contains null bytes
-     *
-     * getExtension() returns null when filename is null, checker issues Warning
-     * of dereferencing null reference at line 1275.
      */
     public static boolean isExtension(final @Nullable String filename, final @Nullable Collection< @Nullable String> extensions) {
         if (filename == null) {

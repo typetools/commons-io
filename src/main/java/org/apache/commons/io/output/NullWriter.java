@@ -60,8 +60,6 @@ public class NullWriter extends Writer {
      * @param end  The index of the first character to write (exclusive)
      * @return this writer
      * @since 2.0
-     *
-     *  append() in class Writer can have null value for csq {as annotated in jdk}.
      */
     @Override
     public Writer append(final @Nullable CharSequence csq, final int start, final int end) {
@@ -74,8 +72,6 @@ public class NullWriter extends Writer {
      * @param csq The character sequence to write
      * @return this writer
      * @since 2.0
-     *
-     *  append() in class Writer can have null value for csq {as annotated in jdk}.
      */
     @Override
     public Writer append(final @Nullable CharSequence csq) {

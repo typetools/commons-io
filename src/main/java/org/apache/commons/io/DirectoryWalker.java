@@ -349,9 +349,6 @@ public abstract class DirectoryWalker<T> {
      * @param depth  the directory level (starting directory = 0)
      * @param results  the collection of result objects, may be updated
      * @throws IOException if an I/O Error occurs
-     *
-     * childFiles is annotated as (@NonNull File)(@Nullable []) since File.listFiles()
-     * has such return type in annotated jdk.
      */
     private void walk(final File directory, final int depth, final Collection<T> results) throws IOException {
         checkIfCancelled(directory, depth, results);
@@ -606,7 +603,7 @@ public abstract class DirectoryWalker<T> {
          * the file and depth when cancellation occurred.
          *
          * @param file  the file when the operation was cancelled, may be null
-         * @param depth  the depth when the operation was cancelled, may be null
+         * @param depth  the depth when the operation was cancelled
          */
         public CancelException(final @Nullable File file, final int depth) {
             this("Operation Cancelled", file, depth);
@@ -618,7 +615,7 @@ public abstract class DirectoryWalker<T> {
          * cancellation occurred.
          *
          * @param message  the detail message
-         * @param file  the file when the operation was cancelled
+         * @param file  the file when the operation was cancelled, may be null
          * @param depth  the depth when the operation was cancelled
          */
         public CancelException(final String message, final @Nullable File file, final int depth) {

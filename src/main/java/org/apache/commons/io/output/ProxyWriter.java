@@ -24,10 +24,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 /**
- * A Proxy stream which acts as expected, that is it passes the method
- * calls on to the proxied stream and doesn't change which methods are
+ * A Proxy stream which acts as expected, that is it passes the method 
+ * calls on to the proxied stream and doesn't change which methods are 
  * being called. It is an alternative base class to FilterWriter
- * to increase reusability, because FilterWriter changes the
+ * to increase reusability, because FilterWriter changes the 
  * methods being called, such as write(char[]) to write(char[], int, int)
  * and write(String) to write(String, int, int).
  *
@@ -72,8 +72,6 @@ public class ProxyWriter extends FilterWriter {
      * @return this writer
      * @throws IOException if an I/O error occurs
      * @since 2.0
-     *
-     *  append() in class Writer can have null value for csq {as annotated in jdk}.
      */
     @Override
     public Writer append(final @Nullable CharSequence csq, final int start, final int end) throws IOException {
@@ -93,8 +91,6 @@ public class ProxyWriter extends FilterWriter {
      * @return this writer
      * @throws IOException if an I/O error occurs
      * @since 2.0
-     *
-     *  append() in class Writer can have null value for csq {as annotated in jdk}.
      */
     @Override
     public Writer append(final @Nullable CharSequence csq) throws IOException {

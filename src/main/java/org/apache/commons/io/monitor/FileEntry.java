@@ -137,8 +137,6 @@ public class FileEntry implements Serializable {
      * Return the parent entry.
      *
      * @return the parent entry
-     *
-     * return null since parent can be null.
      */
     public @Nullable FileEntry getParent() {
         return parent;
