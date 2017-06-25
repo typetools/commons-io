@@ -109,9 +109,11 @@ public class ByteArrayOutputStream extends OutputStream {
      * a new one or re-cycling an existing one.
      *
      * @param newcount  the size of the buffer if one is created
-     *
-     * This is bug. currentBuffer if not initialised,may lead to null pointer exception.
      */
+    // Checker issues false positive error."If block" is executed when old buffers are 
+    // present, in this case currentBuffer is never null. Checker cannot establish this 
+    // correctness as block execution is based on other factors and not type checking.
+    @SuppressWarnings("nullness:dereference.of.nullable")
     @EnsuresNonNull("currentBuffer")
     private void needNewBuffer(@UnknownInitialization(java.io.OutputStream.class) ByteArrayOutputStream this, final int newcount) {
         if (currentBufferIndex < buffers.size() - 1) {
@@ -199,6 +201,7 @@ public class ByteArrayOutputStream extends OutputStream {
      * @throws IOException if an I/O error occurs while reading the input stream
      * @since 1.4
      */
+    @RequiresNonNull("currentBuffer") 
     public synchronized int write(final InputStream in) throws IOException {
         int readCount = 0;
         int inBufferPos = count - filledBufferSum;
@@ -240,6 +243,7 @@ public class ByteArrayOutputStream extends OutputStream {
     /**
      * @see java.io.ByteArrayOutputStream#reset()
      */
+    @SuppressWarnings("nullness:assignment.type.incompatible") 
     public synchronized void reset() {
         count = 0;
         filledBufferSum = 0;
@@ -248,10 +252,8 @@ public class ByteArrayOutputStream extends OutputStream {
             currentBuffer = buffers.get(currentBufferIndex);
         } else {
             //Throw away old buffers
-            /*
-             * currentBuffer can't be be assigned null value
-             * TODO ask for significance of this null assignment.
-             */
+            // This assignment is OK. ByteArrayOutputStream is reset to initial state, where
+            // no old buffers are present. Doing this does not cause any Nullpointer Exception.
             currentBuffer = null;
             int size = buffers.get(0).length;
             buffers.clear();

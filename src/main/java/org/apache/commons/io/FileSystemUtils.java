@@ -295,8 +295,7 @@ public class FileSystemUtils {
      */
     long freeSpaceWindows(String path, final long timeout) throws IOException {
         // Path cannot be null in this method. FilenameUtils.normalize(String filename,boolean)
-        // returns null if filename(here path) is null or filename(here path) is invalid path in Windows system.
-        //  
+        // returns null if filename(here path) is null or filename(here path) is invalid path in Windows system. 
         // BUG : path may be assigned null value. A simple check to verify(confirm) that path
         // is legal/valid as per Windows system will resolve this bug.
         path = FilenameUtils.normalize(path, false);

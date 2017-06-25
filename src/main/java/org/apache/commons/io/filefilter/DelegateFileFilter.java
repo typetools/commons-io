@@ -104,7 +104,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      *
      * @return a String representation
      */
-    // Checker issues false positive warning [dereference.of.nullable] in method below. This 
+    // Checker issues false positive warning [dereference.of.nullable] in following method. This 
     // is because implementation below does not perform null check for filenameFilter.
     // However both constructors ensure that exactly one of filter fields is 
     // non-null, hence Nullpointer Exception does not occur at runtime. 

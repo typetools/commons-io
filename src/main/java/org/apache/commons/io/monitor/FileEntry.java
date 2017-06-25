@@ -72,8 +72,6 @@ public class FileEntry implements Serializable {
      *
      * @param parent The parent
      * @param file The file being monitored
-     *
-     * paremter parent can have null value and is assigned to nullable FileEntry object.
      */
     public FileEntry(final @Nullable FileEntry parent, final File file) {
         if (file == null) {

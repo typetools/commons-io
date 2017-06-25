@@ -51,7 +51,7 @@ public class DeferredFileOutputStream
      * The output stream to which data will be written prior to the threshold
      * being reached.
      */
-    private ByteArrayOutputStream memoryOutputStream;
+    private @Nullable ByteArrayOutputStream memoryOutputStream;
 
 
     /**
@@ -215,12 +215,14 @@ public class DeferredFileOutputStream
      * disk-based storage.
      *
      * @throws IOException if an error occurs.
-     *
-     * Bug : Current implementation does not perform null check is for
-     * outputFile. When prefix is null, outputFile is not initialised and
-     * hence null argument is passed in FileUtils.forceMkdirParent(File).
-     * This method does not allow null argument.
      */
+    // memoryOutputStream is assigned null value after this methods is invoked. After that 
+    // memoryOutputStream not used further and remaining data is written on disk based storage.
+    // all the warnings for dereference of nullable for memoryOutputStream are false positive
+    // since memoryOutputStream when null is never used.
+    // If prefix is null, this class throws IllegalArgumentException and if prefix is non-null
+    // outputFile is assigned non-null value, before passing in FileUtils.forceMkdirParent.  
+    @SuppressWarnings({"nullness:dereference.of.nullable","nullness:argument.type.incompatible"}) 
     @Override
     protected void thresholdReached() throws IOException
     {
@@ -313,15 +315,9 @@ public class DeferredFileOutputStream
      *
      * @param out output stream to write to.
      * @throws IOException if this stream is not yet closed or an error occurs.
-     *
-     * outputFile is {@code null} if no file exists for this output stream.
-     * The constructor and routine isThresholdReached() ensures that outputFile
-     * is assigned non-null value, but Exception may occurs if writeTo() is
-     * invoked before isThresholdReached().
-     *
-     * BUG : Bug/enhancement report as null outputFile can cause NullPointer Exception.
-     * BUG : memoryOutputStream might be null, may cause NPE.
      */
+    // BUG : outputFile may be null.
+    @SuppressWarnings("nullness:dereference.of.nullable")
     public void writeTo(final OutputStream out) throws IOException
     {
         // we may only need to check if this is closed if we are working with a file

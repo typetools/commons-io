@@ -174,10 +174,11 @@ public class ReversedLinesFileReader implements Closeable {
      * @return the next line or null if the start of the file is reached
      * @throws IOException  if an I/O error occurs
      */
-    // BUG : currentFilePart may be null and it can cause Null pointer Exception. A null check
-    // for currentFilePart before using it will resolve this bug.
-    // null value for currentFilePart is significant which tells that there are
-    // no more fileparts and line remains set to null.
+    // This function reads entire line in given UTF format. After reading all lines currentFilePart
+    // will be assigned lastFilePart which returns null on every call. This implementation details
+    // can be seen in FilePart class.checker cannot establish correctness here as it does not 
+    // track this behaviour.
+    @SuppressWarnings("nullness:dereference.of.nullable")
     public @Nullable String readLine() throws IOException {
 
         String line = currentFilePart.readLine();

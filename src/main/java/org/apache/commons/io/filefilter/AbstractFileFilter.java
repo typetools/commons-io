@@ -46,7 +46,7 @@ public abstract class AbstractFileFilter implements IOFileFilter {
      // File.getParentFile() returns null if parent file/dir is not known.
      // Java doc does not mention of allowing null value for file in
      // FilenameFilter.accept(File,String).
-     //
+
      // Checker issues true positive error [argument.type.incompatible] as File
      // argument in FilenameFilter.accept(File,String) is annotated @NonNull,
      // and File.getParentFile() has @Nullable return type in annotated jdk.

@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
-import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 /**
  * A {@link java.io.FileFilter} providing conditional OR logic across a list of
  * file filters. This filter returns {@code true} if any filters in the
@@ -88,8 +88,9 @@ public class OrFileFilter
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("nullness:dereference.of.nullable") 
     @Override
-    public void addFileFilter(@UnderInitialization(org.apache.commons.io.filefilter.ConditionalFileFilter.class) OrFileFilter this, final IOFileFilter ioFileFilter) {
+    public void addFileFilter(@UnknownInitialization(org.apache.commons.io.filefilter.ConditionalFileFilter.class) OrFileFilter this, final IOFileFilter ioFileFilter) {
         this.fileFilters.add(ioFileFilter);
     }
 

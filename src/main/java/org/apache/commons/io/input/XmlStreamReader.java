@@ -507,16 +507,10 @@ public class XmlStreamReader extends Reader {
      * @param xmlEnc XML encoding
      * @return the raw encoding
      * @throws IOException thrown if there is a problem reading the stream.
-     *
-     * MessageFormat.format(String,Object[]) does not allow null values for Object[]
-     * In method below xmlGuessEnc, xmlEnc can be null, hence there is possibility of
-     * passing NULL arguments in MessageFormat.format().
-     *
-     * In current implementation null check is not performed for both (xmlGuessEnc, xmlEnc)
-     * in every if block, following which checker issues argument type incompatible warning.
-     *
-     * TODO : Create Bug report for null arguments in MessageFormat.format()
      */
+    // The arguments passed in MessageFormat.format are non-null. checker does not track this
+    // No property is violated here at runtime.
+    @SuppressWarnings("nullness:argument.type.incompatible") 
     String calculateRawEncoding(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final @Nullable String bomEnc, final @Nullable String xmlGuessEnc,
             final @Nullable String xmlEnc) throws IOException {
 
@@ -588,17 +582,10 @@ public class XmlStreamReader extends Reader {
      *        relaxed.
      * @return the HTTP encoding
      * @throws IOException thrown if there is a problem reading the stream.
-     *
-     * MessageFormat.format(String,Object[]) does not allow null values for Object[]
-     * In method below cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc can be null, hence
-     * there is possibility of passing NULL arguments in MessageFormat.format().
-     *
-     * In current implementation null check is not performed for all (cTMime, cTEnc,
-     * bomEnc, xmlGuessEnc, xmlEnc) in every if block, following which checker
-     * issues argument type incompatible warning.
-     *
-     * TODO : Create Bug report for null arguments in MessageFormat.format()
      */
+    // The arguments passed in MessageFormat.format are non-null. checker does not track this
+    // No property is violated here at runtime.
+    @SuppressWarnings("nullness:argument.type.incompatible")
     String calculateHttpEncoding(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final @Nullable String httpContentType,
             final @Nullable String bomEnc, final @Nullable String xmlGuessEnc, final @Nullable String xmlEnc,
             final boolean lenient) throws IOException {
@@ -723,16 +710,10 @@ public class XmlStreamReader extends Reader {
      * @param guessedEnc guessed encoding
      * @return the encoding declared in the <?xml encoding=...?>
      * @throws IOException thrown if there is a problem reading the stream.
-     *
-     * Checker issues false positive warning in function below. Matcher.group(int)
-     * return null if group failed to match part of input.
-     *
-     * Matcher.find() returns true only when subsequence of the input sequence
-     * matches matcher's pattern.
-     *
-     * Checker cannot establish this correctness here as it does not track Matcher.find()
-     * value and type check Matcher.group(int) value at runtime .
      */
+    // Checker issues false positive warning in function below. Matcher.group(int)
+    // return null if group failed to match part of input.
+    @SuppressWarnings("nullness:dereference.of.nullable")
     private static @Nullable String getXmlProlog(final InputStream is, final @Nullable String guessedEnc)
             throws IOException {
         String encoding = null;

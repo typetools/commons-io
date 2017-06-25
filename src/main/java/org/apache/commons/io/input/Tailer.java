@@ -261,7 +261,7 @@ public class Tailer implements Runnable {
         this.listener = listener;
         listener.init(this);
         this.reOpen = reOpen;
-        this.cset = cset;
+        this.cset = cset; 
     }
 
     /**
@@ -401,13 +401,14 @@ public class Tailer implements Runnable {
 
     /**
      * Follows changes in the file, calling the TailerListener's handle method for each new line.
-     *
-     * Checker issues dereference of null warning, while block does not guarantee
-     * reader will have non-null value due to inclusion to getRun() condition.
-     *
-     * getRun() returns false when trailer thread is stopped. 
      */
     @Override
+    @SuppressWarnings({"nullness:argument.type.incompatible","nullness:dereference.of.nullable"})
+    // Checker issues false positive warning, reader is never null in second while loop. First
+    // while loop terminates when 
+    //       1) reader is non-null.  
+    //       2) tailer thread stop, here reader may have null value but as thread stops the second  
+    // while loop is never executed.
     public void run() {
         RandomAccessFile reader = null;
         try {

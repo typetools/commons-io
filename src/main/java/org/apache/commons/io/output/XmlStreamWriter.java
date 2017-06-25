@@ -41,18 +41,17 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * @since 2.0
  */
 @AnnotatedFor({"nullness"})
+@SuppressWarnings("nullness:initialization.fields.uninitialized")
+// writer, encoding are initialized but checker continue to issue warning about uninitialized
+// fields, initialization is condition based and checker does not track this.  
 public class XmlStreamWriter extends Writer {
     private static final int BUFFER_SIZE = 4096;
 
     private final OutputStream out;
 
     private final String defaultEncoding;
-
-    /**
-     * @Nullable annotation for xmlPrologWriter leads to dereference of nullable
-     * error. It is assigned null value after encoding is chosen.
-     */
-    private StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
+    // xmlPrologWriter can be null, after encoding is chosen.
+    private @Nullable StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
 
     private Writer writer;
 
@@ -129,10 +128,14 @@ public class XmlStreamWriter extends Writer {
      * @throws IOException if an error occurs closing the underlying writer
      */
     @Override
+    @SuppressWarnings("nullness:dereference.of.nullable")
     public void close() throws IOException {
         if (writer == null) {
             encoding = defaultEncoding;
             writer = new OutputStreamWriter(out, encoding);
+            // Checker issues false positive warning dereference.of.nullable for xmlPrologWriter.
+            // writer is assigned non-null value when xmlPrologWriter is assigned null value.This
+            // implementation details can be understood in detectEncoding().
             writer.write(xmlPrologWriter.toString());
         }
         writer.close();
@@ -157,19 +160,13 @@ public class XmlStreamWriter extends Writer {
      * @param off The start offset
      * @param len The number of characters to write
      * @throws IOException if an error occurs detecting the encoding
-     *
-     * Checker issues false positive warning in function below. Matcher.group(int)
-     * return null if group failed to match part of input.
-     *
-     * Matcher.find() returns true only when subsequence of the input sequence
-     * matches matcher's pattern.
-     *
-     * Checker cannot establish this correctness here as it does not track Matcher.find()
-     * value and type check Matcher.group(int) value at runtime .
      */
+    @SuppressWarnings("nullness:dereference.of.nullable")
     private void detectEncoding(final char[] cbuf, final int off, final int len)
             throws IOException {
         int size = len;
+        // Checker issues false positive warning dereference.of.nullable for xmlPrologWriter
+        // This method is invoked only if xmlPrologWriter is non-null.  
         final StringBuffer xmlProlog = xmlPrologWriter.getBuffer();
         if (xmlProlog.length() + len > BUFFER_SIZE) {
             size = BUFFER_SIZE - xmlProlog.length();

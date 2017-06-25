@@ -263,6 +263,9 @@ public class FileCleaningTracker {
          * @param marker  the marker object used to track the file, not null
          * @param queue  the queue on to which the tracker will be pushed, not null
          */
+        // Map key checker issues warning for using bounded wild card as wrapper in ReferenceQueue.
+        // Constructor of PhantomReference class has ReferenceQueue parameter with bounded wildcard.
+        @SuppressWarnings("keyfor")  
         Tracker(final String path, final @Nullable FileDeleteStrategy deleteStrategy, final Object marker,
                 final ReferenceQueue<? super Object> queue) {
             super(marker, queue);

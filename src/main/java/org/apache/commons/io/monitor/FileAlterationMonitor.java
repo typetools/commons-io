@@ -37,9 +37,6 @@ public final class FileAlterationMonitor implements Runnable {
 
     private final long interval;
     private final List<FileAlterationObserver> observers = new CopyOnWriteArrayList<>();
-   /*
-    * Thread cant have null value, no property is viotated at runtime.
-    */
     private @MonotonicNonNull Thread thread;
     private @MonotonicNonNull ThreadFactory threadFactory;
     private volatile boolean running = false;
@@ -121,7 +118,7 @@ public final class FileAlterationMonitor implements Runnable {
 
     /**
      * Returns the set of {@link FileAlterationObserver} registered with
-     * this monitor.
+     * this monitor. 
      *
      * @return The set of {@link FileAlterationObserver}
      */
