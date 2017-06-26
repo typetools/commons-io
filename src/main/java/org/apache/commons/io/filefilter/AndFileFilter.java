@@ -90,7 +90,6 @@ public class AndFileFilter
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("nullness:dereference.of.nullable") 
     @Override
     public void addFileFilter(@UnknownInitialization(org.apache.commons.io.filefilter.ConditionalFileFilter.class) AndFileFilter this, final IOFileFilter ioFileFilter) {
         this.fileFilters.add(ioFileFilter);

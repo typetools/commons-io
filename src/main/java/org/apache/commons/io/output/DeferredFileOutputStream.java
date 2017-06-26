@@ -316,8 +316,9 @@ public class DeferredFileOutputStream
      * @param out output stream to write to.
      * @throws IOException if this stream is not yet closed or an error occurs.
      */
-    // BUG : outputFile may be null.
-    @SuppressWarnings("nullness:dereference.of.nullable")
+    // Checker issues false positive warning for using outputFile in FileInputStream object declaration
+    // isInMemory returns true when outputFile is null and buggy block is not executed. 
+    @SuppressWarnings({"nullness:dereference.of.nullable","nullness:argument.type.incompatible"})
     public void writeTo(final OutputStream out) throws IOException
     {
         // we may only need to check if this is closed if we are working with a file

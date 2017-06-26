@@ -276,7 +276,9 @@ public class BOMInputStream extends ProxyInputStream {
      * @throws IOException
      *             if an I/O error occurs
      */
-    // BUG : firstBytes may be null
+    // getBOM method is called before accessing firstBytes which ensures that firstBytes are 
+    // non-null.Checker does not track this implementation detail and issue false positive warning. 
+    @SuppressWarnings("nullness:accessing.nullable")
     private int readFirstBytes() throws IOException {
         getBOM();
         return fbIndex < fbLength ? firstBytes[fbIndex++] : EOF;
@@ -304,7 +306,10 @@ public class BOMInputStream extends ProxyInputStream {
      *            The BOM
      * @return true if the bytes match the bom, otherwise false
      */
-    // BUG : firstBytes may be null 
+    // Following function is called find function, which itself is invoked in getBOM
+    // function after initializing firstBytes. firstBytes is not null while executing following
+    // function.
+    @SuppressWarnings("nullness:accessing.nullable")
     @Pure private boolean matches(final ByteOrderMark bom) {
         // if (bom.length() != fbLength) {
         // return false;

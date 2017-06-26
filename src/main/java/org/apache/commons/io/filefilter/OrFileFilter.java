@@ -88,7 +88,6 @@ public class OrFileFilter
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("nullness:dereference.of.nullable") 
     @Override
     public void addFileFilter(@UnknownInitialization(org.apache.commons.io.filefilter.ConditionalFileFilter.class) OrFileFilter this, final IOFileFilter ioFileFilter) {
         this.fileFilters.add(ioFileFilter);
