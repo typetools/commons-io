@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Charsets required of every implementation of the Java platform.
- *
+ * 
  * From the Java documentation <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html">
  * Standard charsets</a>:
  * <p>
@@ -34,7 +34,7 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * the release documentation for your implementation to see if any other encodings are supported. Consult the release
  * documentation for your implementation to see if any other encodings are supported. </cite>
  * </p>
- *
+ * 
  * <ul>
  * <li><code>US-ASCII</code><br>
  * Seven-bit ASCII, a.k.a. ISO646-US, a.k.a. the Basic Latin block of the Unicode character set.</li>
@@ -50,7 +50,7 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * Sixteen-bit Unicode Transformation Format, byte order specified by a mandatory initial byte-order mark (either order
  * accepted on input, big-endian used on output.)</li>
  * </ul>
- *
+ * 
  * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
  * @since 2.3
  * @version $Id$
@@ -69,7 +69,7 @@ public class Charsets {
      * From the Java documentation <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html">
      * Standard charsets</a>:
      * </p>
-     *
+     * 
      * @return An immutable, case-insensitive map from canonical charset names to charset objects.
      * @see Charset#availableCharsets()
      * @since 2.5
@@ -88,7 +88,7 @@ public class Charsets {
 
     /**
      * Returns the given Charset or the default Charset if the given Charset is null.
-     *
+     * 
      * @param charset
      *            A charset or null.
      * @return the given Charset or the default Charset if the given Charset is null
@@ -99,7 +99,7 @@ public class Charsets {
 
     /**
      * Returns a Charset for the named charset. If the name is null, return the default Charset.
-     *
+     * 
      * @param charset
      *            The name of the requested charset, may be null.
      * @return a Charset for the named charset
@@ -115,7 +115,7 @@ public class Charsets {
      * <p>
      * Every implementation of the Java platform is required to support this character encoding.
      * </p>
-     *
+     * 
      * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
@@ -129,7 +129,7 @@ public class Charsets {
      * <p>
      * Every implementation of the Java platform is required to support this character encoding.
      * </p>
-     *
+     * 
      * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
@@ -144,7 +144,7 @@ public class Charsets {
      * <p>
      * Every implementation of the Java platform is required to support this character encoding.
      * </p>
-     *
+     * 
      * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
@@ -158,7 +158,7 @@ public class Charsets {
      * <p>
      * Every implementation of the Java platform is required to support this character encoding.
      * </p>
-     *
+     * 
      * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
@@ -172,7 +172,7 @@ public class Charsets {
      * <p>
      * Every implementation of the Java platform is required to support this character encoding.
      * </p>
-     *
+     * 
      * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
@@ -186,7 +186,7 @@ public class Charsets {
      * <p>
      * Every implementation of the Java platform is required to support this character encoding.
      * </p>
-     *
+     * 
      * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */

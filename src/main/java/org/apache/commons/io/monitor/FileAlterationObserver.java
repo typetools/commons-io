@@ -85,7 +85,7 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * noise from <i>unwanted</i> file system events.
  * <p>
  * <a href="http://commons.apache.org/io/">Commons IO</a> has a good range of
- * useful, ready made
+ * useful, ready made 
  * <a href="../filefilter/package-summary.html">File Filter</a>
  * implementations for this purpose.
  * <p>

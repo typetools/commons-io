@@ -27,7 +27,7 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 /**
  * A runnable that spawns a monitoring thread triggering any
  * registered {@link FileAlterationObserver} at a specified interval.
- *
+ * 
  * @see FileAlterationObserver
  * @version $Id$
  * @since 2.0

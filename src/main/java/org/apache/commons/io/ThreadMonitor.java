@@ -26,7 +26,7 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * completes its work before being interrupted, it should <code>interrupt()</code>
  * the <i>monitor</i> thread.
  * </p>
- *
+ * 
  * <pre>
  *       long timeoutInMillis = 1000;
  *       try {
