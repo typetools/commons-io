@@ -69,7 +69,7 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * <h3>Example 3 - Detect Multiple BOMs</h3>
  * 
  * <pre>
- * BOMInputStream bomIn = new BOMInputStream(in,
+ * BOMInputStream bomIn = new BOMInputStream(in, 
  *   ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_16BE,
  *   ByteOrderMark.UTF_32LE, ByteOrderMark.UTF_32BE
  *   );

@@ -93,6 +93,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * @param tag tag object
      * @throws IOException original exception from the tagged decorator, if any
      */
+    @SuppressWarnings("nullness:throwing.nullable") 
     public static void throwCauseIfTaggedWith(final Throwable throwable, final Object tag)
             throws IOException {
         if (isTaggedWith(throwable, tag)) {

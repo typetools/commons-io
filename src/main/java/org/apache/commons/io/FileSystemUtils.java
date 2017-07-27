@@ -293,6 +293,7 @@ public class FileSystemUtils {
      * @return the amount of free drive space on the drive
      * @throws IOException if an error occurs
      */
+    @SuppressWarnings("nullness:assignment.type.incompatible") 
     long freeSpaceWindows(String path, final long timeout) throws IOException {
         // Path cannot be null in this method. FilenameUtils.normalize(String filename,boolean)
         // returns null if filename(here path) is null or filename(here path) is invalid path in Windows system. 
