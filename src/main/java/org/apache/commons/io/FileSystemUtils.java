@@ -295,10 +295,11 @@ public class FileSystemUtils {
      */
     @SuppressWarnings("nullness:assignment.type.incompatible") 
     long freeSpaceWindows(String path, final long timeout) throws IOException {
-        // Path cannot be null in this method. FilenameUtils.normalize(String filename,boolean)
-        // returns null if filename(here path) is null or filename(here path) is invalid path in Windows system. 
-        // BUG : path may be assigned null value. A simple check to verify(confirm) that path
+        // normalize(String filename,boolean) returns null if its arugment is an invalid path.
+        // BUG : A simple check to verify(confirm) that path
         // is legal/valid as per Windows system will resolve this bug.
+        // It seems the only values that are ever passed are "" and "/".
+        // Are they legal?  Does "/" flow to here?
         path = FilenameUtils.normalize(path, false);
         if (path.length() > 0 && path.charAt(0) != '"') {
             path = "\"" + path + "\"";
