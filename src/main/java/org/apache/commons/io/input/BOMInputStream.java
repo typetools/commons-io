@@ -27,10 +27,15 @@ import java.util.List;
 
 import org.apache.commons.io.ByteOrderMark;
 
+import org.checkerframework.checker.nullness.qual.AssertNonNullIfNonNull;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.framework.qual.AnnotatedFor;
+
 /**
  * This class is used to wrap a stream that includes an encoded {@link ByteOrderMark} as its first bytes.
  * 
@@ -99,7 +104,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     private final List<ByteOrderMark> boms;
     private @Nullable ByteOrderMark byteOrderMark;
-    private int @Nullable [] firstBytes;
+    private int @MonotonicNonNull [] firstBytes;
     private int fbLength;
     private int fbIndex;
     private int markFbIndex;
@@ -204,13 +209,15 @@ public class BOMInputStream extends ProxyInputStream {
      *             if an error reading the first bytes of the stream occurs
      */
     // getBOM() returns byteOrderMark. In following function null check is performed for 
-    // byteOrderMark and after that getBOM() is invoked.This warning is false positive
+    // byteOrderMark and after that getBOM() is invoked.  This warning is false positive
     // and correctness cannot be established due to typechecking limitations in checker. 
     @SuppressWarnings("nullness:dereference.of.nullable")
     public boolean hasBOM(final ByteOrderMark bom) throws IOException {
         if (!boms.contains(bom)) {
             throw new IllegalArgumentException("Stream not configure to detect " + bom);
         }
+        // TODO: The first clause uses byteOrderMark, and the second clause uses getBom().
+        // The inconsistency is confusing.  Both clauses should use the same expression.
         return byteOrderMark != null && getBOM().equals(bom);
     }
 
@@ -221,10 +228,8 @@ public class BOMInputStream extends ProxyInputStream {
      * @throws IOException
      *             if an error reading the first bytes of the stream occurs
      */
-    // boms is never null in "If block", hence firstBytes is initialzed before use.
-    // Checker issue false positive warning as following implementation does not perform
-    // null check for boms.
-    @SuppressWarnings({"nullness:accessing.nullable","nullness:dereference.of.nullable"})
+    @AssertNonNullIfNonNull("byteOrderMark")
+    @EnsuresNonNull("firstBytes")
     public @Nullable ByteOrderMark getBOM() throws IOException {
         if (firstBytes == null) {
             fbLength = 0;
@@ -276,9 +281,6 @@ public class BOMInputStream extends ProxyInputStream {
      * @throws IOException
      *             if an I/O error occurs
      */
-    // getBOM method is called before accessing firstBytes which ensures that firstBytes are 
-    // non-null.Checker does not track this implementation detail and issue false positive warning. 
-    @SuppressWarnings("nullness:accessing.nullable")
     private int readFirstBytes() throws IOException {
         getBOM();
         return fbIndex < fbLength ? firstBytes[fbIndex++] : EOF;
@@ -290,6 +292,7 @@ public class BOMInputStream extends ProxyInputStream {
      * @return The matched BOM or null if none matched
      */
     @SideEffectFree 
+    @RequiresNonNull("firstBytes")
     private @Nullable ByteOrderMark find() {
         for (final ByteOrderMark bom : boms) {
             if (matches(bom)) {
@@ -306,10 +309,7 @@ public class BOMInputStream extends ProxyInputStream {
      *            The BOM
      * @return true if the bytes match the bom, otherwise false
      */
-    // Following function is called find function, which itself is invoked in getBOM
-    // function after initializing firstBytes. firstBytes is not null while executing following
-    // function.
-    @SuppressWarnings("nullness:accessing.nullable")
+    @RequiresNonNull("firstBytes")
     @Pure private boolean matches(final ByteOrderMark bom) {
         // if (bom.length() != fbLength) {
         // return false;
@@ -403,6 +403,7 @@ public class BOMInputStream extends ProxyInputStream {
      *             if an I/O error occurs
      */
     @Override
+    @SuppressWarnings("nullness:assignment.type.incompatible") // reset method resets @MonotonicNonNull variable
     public synchronized void reset() throws IOException {
         fbIndex = markFbIndex;
         if (markedAtStart) {
