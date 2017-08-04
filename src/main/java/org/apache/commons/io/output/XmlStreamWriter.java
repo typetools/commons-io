@@ -41,21 +41,21 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * @since 2.0
  */
 @AnnotatedFor({"nullness"})
-@SuppressWarnings("nullness:initialization.fields.uninitialized")
-// writer, encoding are initialized but checker continue to issue warning about uninitialized
-// fields, initialization is condition based and checker does not track this.  
+//MDE @SuppressWarnings("nullness:initialization.fields.uninitialized")
 public class XmlStreamWriter extends Writer {
     private static final int BUFFER_SIZE = 4096;
 
     private final OutputStream out;
 
     private final String defaultEncoding;
-    // xmlPrologWriter can be null, after encoding is chosen.
+    // xmlPrologWriter can be null, after encoding is chosen and writer and encoding are non-null.
+    // At least one of xmlPrologWriter and writer is non-null.
     private @Nullable StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
 
-    private Writer writer;
+    // writer and encoding have the same nullness:  either both are null, or both are non-null.
+    private @MonotonicNonNull Writer writer;
 
-    private String encoding;
+    private @MonotonicNonNull String encoding;
 
     /**
      * Constructs a new XML stream writer for the specified output stream
@@ -109,7 +109,7 @@ public class XmlStreamWriter extends Writer {
      *
      * @return the detected encoding
      */
-    public String getEncoding() {
+    public @Nullable String getEncoding() {
         return encoding;
     }
 
@@ -129,6 +129,7 @@ public class XmlStreamWriter extends Writer {
      */
     @Override
     @SuppressWarnings("nullness:dereference.of.nullable")
+    @EnsuresNonNull("writer")
     public void close() throws IOException {
         if (writer == null) {
             encoding = defaultEncoding;
@@ -222,6 +223,7 @@ public class XmlStreamWriter extends Writer {
      * @throws IOException if an error occurs detecting the encoding
      */
     @Override
+    @SuppressWarnings("nullness:dereference.of.nullable") // either xmlPrologWriter or writer is non-null
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
         if (xmlPrologWriter != null) {
             detectEncoding(cbuf, off, len);
