@@ -347,7 +347,7 @@ public class FilenameUtils {
      * @param filename  the filename, null returns null
      * @param separator The separator character to use
      * @param keepSeparator  true to keep the final separator
-     * @return the normalized filename. Null bytes inside string will be removed.
+     * @return the normalized filename, or null if invalid. Null bytes inside string will be removed.
      */
     private static @Nullable String doNormalize(final @Nullable String filename, final char separator, final boolean keepSeparator) {
         if (filename == null) {

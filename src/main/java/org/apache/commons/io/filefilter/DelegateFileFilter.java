@@ -37,9 +37,9 @@ import org.checkerframework.framework.qual.AnnotatedFor;
 public class DelegateFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = -8723373124984771318L;
-    /** The Filename filter can be null */
+    /** The Filename filter; can be null */
     private final @Nullable FilenameFilter filenameFilter;
-    /** The File filter can be null */
+    /** The File filter; can be null */
     private final @Nullable FileFilter fileFilter;
 
     /**
