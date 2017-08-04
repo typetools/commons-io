@@ -37,6 +37,7 @@ import org.checkerframework.framework.qual.AnnotatedFor;
 public class DelegateFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = -8723373124984771318L;
+    // Exactly one of the following two fields is non-null.
     /** The Filename filter; can be null */
     private final @Nullable FilenameFilter filenameFilter;
     /** The File filter; can be null */
@@ -104,13 +105,9 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      *
      * @return a String representation
      */
-    // Checker issues false positive warning [dereference.of.nullable] in following method. This 
-    // is because implementation below does not perform null check for filenameFilter.
-    // However both constructors ensure that exactly one of filter fields is 
-    // non-null, hence Nullpointer Exception does not occur at runtime. 
-    @SuppressWarnings("nullness:dereference.of.nullable")
     @Override
     @Pure public String toString() {
+        @SuppressWarnings("nullness:dereference.of.nullable") // exactly one of fileFilter and filenameFilter is non-null
         final String delegate = fileFilter != null ? fileFilter.toString() : filenameFilter.toString();
         return super.toString() + "(" + delegate + ")";
     }
