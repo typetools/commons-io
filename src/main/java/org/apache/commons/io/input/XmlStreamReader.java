@@ -508,9 +508,6 @@ public class XmlStreamReader extends Reader {
      * @return the raw encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    // The arguments passed in MessageFormat.format are non-null. checker does not track this
-    // No property is violated here at runtime.
-    @SuppressWarnings("nullness:argument.type.incompatible") 
     String calculateRawEncoding(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final @Nullable String bomEnc, final @Nullable String xmlGuessEnc,
             final @Nullable String xmlEnc) throws IOException {
 
@@ -583,9 +580,6 @@ public class XmlStreamReader extends Reader {
      * @return the HTTP encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    // The arguments passed in MessageFormat.format are non-null. checker does not track this
-    // No property is violated here at runtime.
-    @SuppressWarnings("nullness:argument.type.incompatible")
     String calculateHttpEncoding(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final @Nullable String httpContentType,
             final @Nullable String bomEnc, final @Nullable String xmlGuessEnc, final @Nullable String xmlEnc,
             final boolean lenient) throws IOException {
@@ -711,9 +705,7 @@ public class XmlStreamReader extends Reader {
      * @return the encoding declared in the <?xml encoding=...?>
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    // Checker issues false positive warning in function below. Matcher.group(int)
-    // return null if group failed to match part of input.
-    @SuppressWarnings("nullness:dereference.of.nullable")
+    @SuppressWarnings("nullness:dereference.of.nullable") // ENCODING_PATTERN has capturing group 1
     private static @Nullable String getXmlProlog(final InputStream is, final @Nullable String guessedEnc)
             throws IOException {
         String encoding = null;
