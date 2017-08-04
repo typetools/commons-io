@@ -110,13 +110,10 @@ public class ByteArrayOutputStream extends OutputStream {
      *
      * @param newcount  the size of the buffer if one is created
      */
-    // Checker issues false positive error."If block" is executed when old buffers are 
-    // present, in this case currentBuffer is never null. Checker cannot establish this 
-    // correctness as block execution is based on other factors and not type checking.
-    @SuppressWarnings("nullness:dereference.of.nullable")
     @EnsuresNonNull("currentBuffer")
     private void needNewBuffer(@UnknownInitialization(java.io.OutputStream.class) ByteArrayOutputStream this, final int newcount) {
         if (currentBufferIndex < buffers.size() - 1) {
+            assert currentBuffer != null : "@AssumeAssertion(nullness): when called from constructor, if clause is never executed";
             //Recycling old buffer
             filledBufferSum += currentBuffer.length;
 
