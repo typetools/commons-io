@@ -23,7 +23,7 @@ import java.io.File;
  * interfaces via the IOFileFilter interface.
  * <p>
  * Note that a subclass <b>must</b> override one of the accept methods,
- * otherwise your class will infinitely loop.
+ * otherwise your class will infinitely loop leading to StackOverflowError.
  *
  * @since 1.0
  * @version $Id$
@@ -36,22 +36,14 @@ public abstract class AbstractFileFilter implements IOFileFilter {
      * @param file  the File to check
      * @return true if this file matches the test
      */
-     // Note that a subclass must override one of the accept methods,
-     // otherwise your class will infinitely loop.
-     // Invoking AbstractFileFilter.accept methods without overridding
-     // leads to StackOverflowError.
     @Override
     @SuppressWarnings("nullness:argument.type.incompatible")
     public boolean accept(final File file) {
-     // File.getParentFile() returns null if parent file/dir is not known.
-     // Java doc does not mention of allowing null value for file in
-     // FilenameFilter.accept(File,String).
+        // File.getParentFile() can return null, and null is not documented
+        // as a permitted file argument for FilenameFilter.accept(File,String).
 
-     // Checker issues true positive error [argument.type.incompatible] as File
-     // argument in FilenameFilter.accept(File,String) is annotated @NonNull,
-     // and File.getParentFile() has @Nullable return type in annotated jdk.
-     // However following code does not lead to any Exception at runtime as this
-     // methods are to be overridden while using.
+        // However following code does not lead to any Exception at run time
+        // as this methods are to be overridden while using.
         return accept(file.getParentFile(), file.getName());
     }
 
