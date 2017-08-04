@@ -28,7 +28,9 @@ import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.Charsets;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.framework.qual.AnnotatedFor;
+
 /**
  * Reads lines in a file reversely (similar to a BufferedReader, but starting at
  * the last line). Useful for e.g. searching in log files.
@@ -174,11 +176,8 @@ public class ReversedLinesFileReader implements Closeable {
      * @return the next line or null if the start of the file is reached
      * @throws IOException  if an I/O error occurs
      */
-    // This function reads entire line in given UTF format. After reading all lines currentFilePart
-    // will be assigned lastFilePart which returns null on every call. This implementation details
-    // can be seen in FilePart class.checker cannot establish correctness here as it does not 
-    // track this behaviour.
-    @SuppressWarnings("nullness:dereference.of.nullable")
+    @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // if line is "", then currentFilePart is non-null, so the retursive call to this.readLine() is legal
+    @RequiresNonNull("currentFilePart")
     public @Nullable String readLine() throws IOException {
 
         String line = currentFilePart.readLine();
@@ -224,7 +223,7 @@ public class ReversedLinesFileReader implements Closeable {
          * ctor
          * @param no the part number
          * @param length its length
-         * @param leftOverOfLastFilePart remainder, may be null.
+         * @param leftOverOfLastFilePart remainder, may be null
          * @throws IOException if there is a problem reading the file
          */
         private FilePart(final long no, final int length, final byte @Nullable [] leftOverOfLastFilePart) throws IOException {
