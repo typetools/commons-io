@@ -25,10 +25,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.UnknownKeyFor;
 import org.checkerframework.framework.qual.AnnotatedFor;
+
 /**
  * Keeps track of files awaiting deletion, and deletes them when an associated
  * marker object is reclaimed by the garbage collector.
@@ -263,11 +265,8 @@ public class FileCleaningTracker {
          * @param marker  the marker object used to track the file, not null
          * @param queue  the queue on to which the tracker will be pushed, not null
          */
-        // Map key checker issues warning for using bounded wild card as wrapper in ReferenceQueue.
-        // Constructor of PhantomReference class has ReferenceQueue parameter with bounded wildcard.
-        @SuppressWarnings("keyfor")  
         Tracker(final String path, final @Nullable FileDeleteStrategy deleteStrategy, final Object marker,
-                final ReferenceQueue<? super Object> queue) {
+                final ReferenceQueue<? super @UnknownKeyFor Object> queue) {
             super(marker, queue);
             this.path = path;
             this.deleteStrategy = deleteStrategy == null ? FileDeleteStrategy.NORMAL : deleteStrategy;
