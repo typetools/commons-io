@@ -403,12 +403,6 @@ public class Tailer implements Runnable {
      * Follows changes in the file, calling the TailerListener's handle method for each new line.
      */
     @Override
-    @SuppressWarnings({"nullness:argument.type.incompatible","nullness:dereference.of.nullable"})
-    // Checker issues false positive warning, reader is never null in second while loop. First
-    // while loop terminates when 
-    //       1) reader is non-null.  
-    //       2) tailer thread stop, here reader may have null value but as thread stops the second  
-    // while loop is never executed.
     public void run() {
         RandomAccessFile reader = null;
         try {
@@ -431,6 +425,8 @@ public class Tailer implements Runnable {
                 }
             }
             while (getRun()) {
+                assert reader != null : "@AssumeAssertion(nullness):  first while loop terminates if reader is non-null or the Tailer thread stops; if thread stops, it is never restarted and this while loop is not executed";
+
                 final boolean newer = FileUtils.isFileNewer(file, last); // IO-279, must be done first
                 // Check the file length to see if it was rotated
                 final long length = file.length();
