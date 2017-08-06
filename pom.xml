@@ -235,18 +235,32 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>checker-qual</artifactId>
-      <version>2.1.11</version>
+      <version>2.1.14</version>
+      <scope>system</scope>
+      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/checker-qual.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>checker</artifactId>
-      <version>2.1.11</version>
+      <version>2.1.14</version>
+      <scope>system</scope>
+      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/checker.jar</systemPath>
     </dependency>
+    <!-- The Type Annotations compiler. Uncomment if using Java 7 or annotations in comments. -->
+    <!-- <dependency>
+      <groupId>org.checkerframework</groupId>
+      <artifactId>compiler</artifactId>
+      <version>2.1.14</version>
+      <scope>system</scope>
+      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/compiler.jar</systemPath>
+    </dependency> -->
     <!-- The annotated JDK to use (change to jdk7 if using Java 7). -->
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>jdk8</artifactId>
-      <version>2.1.11</version>
+      <version>2.1.14</version>
+      <scope>system</scope>
+      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/jdk8.jar</systemPath>
     </dependency>
   </dependencies>
 
