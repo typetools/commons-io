@@ -901,12 +901,11 @@ public class FileUtils {
      * @throws IllegalArgumentException if any file is incorrectly encoded
      * @since 1.1
      */
-    @SuppressWarnings("nullness:assignment.type.incompatible") 
-    public static File[] toFiles(final @Nullable URL[] urls) {
+    public static @Nullable File[] toFiles(final @Nullable URL[] urls) {
         if (urls == null || urls.length == 0) {
             return EMPTY_FILE_ARRAY;
         }
-        final File[] files = new File[urls.length];
+        final @Nullable File[] files = new File[urls.length];
         for (int i = 0; i < urls.length; i++) {
             final URL url = urls[i];
             if (url != null) {
@@ -914,9 +913,6 @@ public class FileUtils {
                     throw new IllegalArgumentException(
                             "URL could not be converted to a File: " + url);
                 }
-        // Checker issues false positive error,  FileUtils.toFile() method returns
-        // {@code null} for {@code null} argument. Here this property is not violated
-        // at runtime as url is not null.        
                 files[i] = toFile(url);
             }
         }
