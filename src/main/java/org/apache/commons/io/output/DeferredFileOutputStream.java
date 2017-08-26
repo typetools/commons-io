@@ -28,6 +28,7 @@ import org.apache.commons.io.IOUtils;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.dataflow.qual.Pure;
 /**
  * An output stream which will retain data in memory until a specified
  * threshold is reached, and only then commit it to disk. If the stream is
@@ -99,7 +100,7 @@ public class DeferredFileOutputStream
      * @param threshold  The number of bytes at which to trigger an event.
      * @param outputFile The file to which data is saved beyond the threshold.
      */
-    public DeferredFileOutputStream(final int threshold, final @Nullable File outputFile)
+    public DeferredFileOutputStream(final int threshold, final File outputFile)
     {
         this(threshold,  outputFile, null, null, null, ByteArrayOutputStream.DEFAULT_SIZE);
     }
@@ -114,7 +115,7 @@ public class DeferredFileOutputStream
      *
      * @since 2.5
      */
-    public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final @Nullable File outputFile)
+    public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final File outputFile)
     {
         this(threshold, outputFile, null, null, null, initialBufferSize);
         if (initialBufferSize < 0) {
@@ -134,7 +135,7 @@ public class DeferredFileOutputStream
      *
      * @since 1.4
      */
-    public DeferredFileOutputStream(final int threshold, final @Nullable String prefix, final @Nullable String suffix, final @Nullable File directory)
+    public DeferredFileOutputStream(final int threshold, final String prefix, final String suffix, final File directory)
     {
         this(threshold, null, prefix, suffix, directory, ByteArrayOutputStream.DEFAULT_SIZE);
         if (prefix == null) {
@@ -154,8 +155,8 @@ public class DeferredFileOutputStream
      *
      * @since 2.5
      */
-    public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final @Nullable String prefix,
-                                    final @Nullable String suffix, final @Nullable File directory)
+    public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final String prefix,
+                                    final String suffix, final File directory)
     {
         this(threshold, null, prefix, suffix, directory, initialBufferSize);
         if (prefix == null) {
@@ -215,20 +216,17 @@ public class DeferredFileOutputStream
      * disk-based storage.
      *
      * @throws IOException if an error occurs.
-     */
-    // memoryOutputStream is assigned null value after this methods is invoked. After that 
-    // memoryOutputStream not used further and remaining data is written on disk based storage.
-    // all the warnings for dereference of nullable for memoryOutputStream are false positive
-    // since memoryOutputStream when null is never used.
-    // If prefix is null, this class throws IllegalArgumentException and if prefix is non-null
-    // outputFile is assigned non-null value, before passing in FileUtils.forceMkdirParent.  
-    @SuppressWarnings({"nullness:dereference.of.nullable","nullness:argument.type.incompatible"}) 
+     */  
+    @SuppressWarnings("nullness:dereference.of.nullable") 
     @Override
     protected void thresholdReached() throws IOException
     {
         if (prefix != null) {
             outputFile = File.createTempFile(prefix, suffix, directory);
         }
+        assert outputFile != null : "@AssumeAssertion(nullness): both prefix and outputFile cannot be null at same time";
+        // The overloaded Constructors throws IllegalArgumentException incase both are null. In either case the outputFile
+        // is set to non-null value in this method.
         FileUtils.forceMkdirParent(outputFile);
         final FileOutputStream fos = new FileOutputStream(outputFile);
         try {
@@ -252,7 +250,7 @@ public class DeferredFileOutputStream
      * @return {@code true} if the data is available in memory;
      *         {@code false} otherwise.
      */
-    public boolean isInMemory()
+    @Pure public boolean isInMemory()
     {
         return !isThresholdExceeded();
     }
@@ -315,10 +313,7 @@ public class DeferredFileOutputStream
      *
      * @param out output stream to write to.
      * @throws IOException if this stream is not yet closed or an error occurs.
-     */
-    // Checker issues false positive warning for using outputFile in FileInputStream object declaration
-    // isInMemory returns true when outputFile is null and buggy block is not executed. 
-    @SuppressWarnings({"nullness:dereference.of.nullable","nullness:argument.type.incompatible"})
+     */ 
     public void writeTo(final OutputStream out) throws IOException
     {
         // we may only need to check if this is closed if we are working with a file

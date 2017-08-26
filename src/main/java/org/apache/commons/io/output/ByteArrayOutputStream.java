@@ -240,7 +240,9 @@ public class ByteArrayOutputStream extends OutputStream {
     /**
      * @see java.io.ByteArrayOutputStream#reset()
      */
-    @SuppressWarnings("nullness:assignment.type.incompatible") 
+    @SuppressWarnings("nullness:assignment.type.incompatible")
+    // The null assignment for currentBuffer is OK. ByteArrayOutputStream is reset to initial state, where
+    // no old buffers are present. Doing this does not cause any Nullpointer Exception.
     public synchronized void reset() {
         count = 0;
         filledBufferSum = 0;
@@ -249,8 +251,6 @@ public class ByteArrayOutputStream extends OutputStream {
             currentBuffer = buffers.get(currentBufferIndex);
         } else {
             //Throw away old buffers
-            // This assignment is OK. ByteArrayOutputStream is reset to initial state, where
-            // no old buffers are present. Doing this does not cause any Nullpointer Exception.
             currentBuffer = null;
             int size = buffers.get(0).length;
             buffers.clear();
