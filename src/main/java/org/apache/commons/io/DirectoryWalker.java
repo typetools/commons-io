@@ -603,7 +603,7 @@ public abstract class DirectoryWalker<T> {
          * the file and depth when cancellation occurred.
          *
          * @param file  the file when the operation was cancelled, may be null
-         * @param depth  the depth when the operation was cancelled
+         * @param depth  the depth when the operation was cancelled, may be null
          */
         public CancelException(final @Nullable File file, final int depth) {
             this("Operation Cancelled", file, depth);
@@ -615,7 +615,7 @@ public abstract class DirectoryWalker<T> {
          * cancellation occurred.
          *
          * @param message  the detail message
-         * @param file  the file when the operation was cancelled, may be null
+         * @param file  the file when the operation was cancelled
          * @param depth  the depth when the operation was cancelled
          */
         public CancelException(final String message, final @Nullable File file, final int depth) {

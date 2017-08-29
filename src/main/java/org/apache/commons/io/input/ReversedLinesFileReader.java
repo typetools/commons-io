@@ -30,7 +30,6 @@ import org.apache.commons.io.Charsets;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.framework.qual.AnnotatedFor;
-
 /**
  * Reads lines in a file reversely (similar to a BufferedReader, but starting at
  * the last line). Useful for e.g. searching in log files.
@@ -185,7 +184,7 @@ public class ReversedLinesFileReader implements Closeable {
             if (currentFilePart != null) {
                 line = currentFilePart.readLine();
             } else {
-                // no more fileparts: we're done, leave line and currentFilePart set to null
+                // no more fileparts: we're done, leave line set to null
                 break;
             }
         }
@@ -223,7 +222,7 @@ public class ReversedLinesFileReader implements Closeable {
          * ctor
          * @param no the part number
          * @param length its length
-         * @param leftOverOfLastFilePart remainder, may be null
+         * @param leftOverOfLastFilePart remainder
          * @throws IOException if there is a problem reading the file
          */
         private FilePart(final long no, final int length, final byte @Nullable [] leftOverOfLastFilePart) throws IOException {

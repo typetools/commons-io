@@ -219,7 +219,7 @@ public class DeferredFileOutputStream
      * disk-based storage.
      *
      * @throws IOException if an error occurs.
-     */  
+     */
     @SuppressWarnings("nullness:dereference.of.nullable") 
     @Override
     protected void thresholdReached() throws IOException
@@ -314,7 +314,7 @@ public class DeferredFileOutputStream
      *
      * @param out output stream to write to.
      * @throws IOException if this stream is not yet closed or an error occurs.
-     */ 
+     */
     public void writeTo(final OutputStream out) throws IOException
     {
         // we may only need to check if this is closed if we are working with a file

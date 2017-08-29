@@ -58,7 +58,6 @@ public class LineIterator implements Iterator<String>, Closeable {
     /** The reader that is being read. */
     private final BufferedReader bufferedReader;
     /** The current line. */
-    // Field cachedLine can be null.
     private @Nullable String cachedLine;
     /** A flag indicating if the iterator has been fully read. */
     private boolean finished = false;

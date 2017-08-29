@@ -38,9 +38,9 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
 
     private static final long serialVersionUID = -8723373124984771318L;
     // Exactly one of the following two fields is non-null.
-    /** The Filename filter; can be null */
+    /** The Filename filter */
     private final @Nullable FilenameFilter filenameFilter;
-    /** The File filter; can be null */
+    /** The File filter */
     private final @Nullable FileFilter fileFilter;
 
     /**

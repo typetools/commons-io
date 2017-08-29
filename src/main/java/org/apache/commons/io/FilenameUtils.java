@@ -344,10 +344,10 @@ public class FilenameUtils {
     /**
      * Internal method to perform the normalization.
      *
-     * @param filename  the filename, null returns null
+     * @param filename  the filename
      * @param separator The separator character to use
      * @param keepSeparator  true to keep the final separator
-     * @return the normalized filename, or null if invalid. Null bytes inside string will be removed.
+     * @return the normalized filename. Null bytes inside string will be removed.
      */
     private static @Nullable String doNormalize(final @Nullable String filename, final char separator, final boolean keepSeparator) {
         if (filename == null) {
@@ -839,7 +839,7 @@ public class FilenameUtils {
     /**
      * Does the work of getting the path.
      *
-     * @param filename  the filename, null returns null
+     * @param filename  the filename
      * @param separatorAdd  0 to omit the end separator, 1 to return it
      * @return the path. Null bytes inside string will be removed
      */
@@ -923,7 +923,7 @@ public class FilenameUtils {
     /**
      * Does the work of getting the path.
      *
-     * @param filename  the filename, null returns null
+     * @param filename  the filename
      * @param includeSeparator  true to include the end separator
      * @return the path
      */
