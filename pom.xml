@@ -231,7 +231,7 @@ file comparators, endian transformation classes, and much more.
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
-    <!-- annotations from the Checker Framework: nullness, interning, locking, ... -->
+    <!-- Annotations from the Checker Framework: nullness, interning, locking, ... -->
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>checker-qual</artifactId>
@@ -246,7 +246,7 @@ file comparators, endian transformation classes, and much more.
       <scope>system</scope>
       <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/checker.jar</systemPath>
     </dependency>
-    <!-- The Type Annotations compiler. Uncomment if using Java 7 or annotations in comments. -->
+    <!-- The Type Annotations compiler. Uncomment if using annotations in comments. -->
     <!-- <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>compiler</artifactId>
@@ -254,7 +254,7 @@ file comparators, endian transformation classes, and much more.
       <scope>system</scope>
       <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/compiler.jar</systemPath>
     </dependency> -->
-    <!-- The annotated JDK to use (change to jdk7 if using Java 7). -->
+    <!-- The annotated JDK to use. -->
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>jdk8</artifactId>
@@ -296,7 +296,7 @@ file comparators, endian transformation classes, and much more.
     <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
     <!-- These properties will be set by the Maven Dependency plugin -->
     <annotatedJdk>${org.checkerframework:jdk8:jar}</annotatedJdk>
-    <typeAnnotationsJavac>${org.checkerframework:compiler:jar}</typeAnnotationsJavac>
+    <!-- <typeAnnotationsJavac>${org.checkerframework:compiler:jar}</typeAnnotationsJavac> -->
   </properties>
 
   <build>
@@ -331,7 +331,7 @@ file comparators, endian transformation classes, and much more.
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.6.1</version>
         <configuration>
-          <!-- Change source and target to 1.7 if using Java 7 -->
+          <!-- Change source and target to 1.7 to create .class files that can be run on a Java 7 JVM -->
           <source>1.8</source>
           <target>1.8</target>
           <fork>true</fork>
