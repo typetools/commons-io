@@ -92,7 +92,7 @@ public class AndFileFilter
      */
     @Override
     public void addFileFilter(@UnknownInitialization(org.apache.commons.io.filefilter.ConditionalFileFilter.class) AndFileFilter this, final IOFileFilter ioFileFilter) {
-        assert this.fileFilters!=null : "@AssumeAssertion(nullness): when called from constructor";
+        assert this.fileFilters != null : "@AssumeAssertion(nullness): when called from constructor";
         this.fileFilters.add(ioFileFilter);
     }
 

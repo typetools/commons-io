@@ -698,14 +698,13 @@ public class XmlStreamReader extends Reader {
             Pattern.MULTILINE);
 
     /**
-     * Returns the encoding declared in the <?xml encoding=...?>, NULL if none.
+     * Returns the encoding declared in the {@code <?xml encoding=...?>}, NULL if none.
      *
      * @param is InputStream to create the reader from.
      * @param guessedEnc guessed encoding
-     * @return the encoding declared in the <?xml encoding=...?>
+     * @return the encoding declared in the {@code <?xml encoding=...?>}
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    @SuppressWarnings("nullness:dereference.of.nullable") // ENCODING_PATTERN has capturing group 1
     private static @Nullable String getXmlProlog(final InputStream is, final @Nullable String guessedEnc)
             throws IOException {
         String encoding = null;
@@ -746,6 +745,7 @@ public class XmlStreamReader extends Reader {
                 }
                 final Matcher m = ENCODING_PATTERN.matcher(prolog);
                 if (m.find()) {
+                    assert m.group(1) != null : "@AssumeAssertion: ENCODING_PATTERN has capturing group 1";
                     encoding = m.group(1).toUpperCase();
                     encoding = encoding.substring(1, encoding.length() - 1);
                 }

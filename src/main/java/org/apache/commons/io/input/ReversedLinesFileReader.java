@@ -185,7 +185,7 @@ public class ReversedLinesFileReader implements Closeable {
             if (currentFilePart != null) {
                 line = currentFilePart.readLine();
             } else {
-                // no more fileparts: we're done, leave line set to null
+                // no more fileparts: we're done, leave line and currentFilePart set to null
                 break;
             }
         }
@@ -193,10 +193,8 @@ public class ReversedLinesFileReader implements Closeable {
         // aligned behaviour with BufferedReader that doesn't return a last, empty line
         if("".equals(line) && !trailingNewlineOfFileSkipped) {
             trailingNewlineOfFileSkipped = true;
-            // Temporary variable introduced to permit localized @SuppressWarnings
-            @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // if line is "", then currentFilePart is non-null, so the recursive call to this.readLine() is legal
-            String tmpLine = readLine();
-            line = tmpLine;
+            assert currentFilePart != null : "@AssumeAssertion(nullness): if line is non-null (e.g., ""), then currentFilePart is non-null";
+            line = readLine();
         }
 
         return line;

@@ -41,7 +41,6 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * @since 2.0
  */
 @AnnotatedFor({"nullness"})
-//MDE @SuppressWarnings("nullness:initialization.fields.uninitialized")
 public class XmlStreamWriter extends Writer {
     private static final int BUFFER_SIZE = 4096;
 
@@ -49,7 +48,7 @@ public class XmlStreamWriter extends Writer {
 
     private final String defaultEncoding;
     // xmlPrologWriter can be null, after encoding is chosen and writer and encoding are non-null.
-    // At least one of xmlPrologWriter and writer is non-null.
+    // At least one of xmlPrologWriter and writer is non-null; this is enforced by detectEncoding().
     private @Nullable StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
 
     // writer and encoding have the same nullness:  either both are null, or both are non-null.
@@ -128,15 +127,12 @@ public class XmlStreamWriter extends Writer {
      * @throws IOException if an error occurs closing the underlying writer
      */
     @Override
-    @SuppressWarnings("nullness:dereference.of.nullable")
     @EnsuresNonNull("writer")
     public void close() throws IOException {
         if (writer == null) {
+            assert xmlPrologWriter != null : "@AssumeAssertion(nullness): At least one of xmlPrologWriter and writer is non-null";
             encoding = defaultEncoding;
             writer = new OutputStreamWriter(out, encoding);
-            // Checker issues false positive warning dereference.of.nullable for xmlPrologWriter.
-            // writer is assigned non-null value when xmlPrologWriter is assigned null value.This
-            // implementation details can be understood in detectEncoding().
             writer.write(xmlPrologWriter.toString());
         }
         writer.close();
@@ -162,12 +158,10 @@ public class XmlStreamWriter extends Writer {
      * @param len The number of characters to write
      * @throws IOException if an error occurs detecting the encoding
      */
-    @SuppressWarnings("nullness:dereference.of.nullable")
+    @RequiresNonNull("xmlPrologWriter")
     private void detectEncoding(final char[] cbuf, final int off, final int len)
             throws IOException {
         int size = len;
-        // Checker issues false positive warning dereference.of.nullable for xmlPrologWriter
-        // This method is invoked only if xmlPrologWriter is non-null.  
         final StringBuffer xmlProlog = xmlPrologWriter.getBuffer();
         if (xmlProlog.length() + len > BUFFER_SIZE) {
             size = BUFFER_SIZE - xmlProlog.length();

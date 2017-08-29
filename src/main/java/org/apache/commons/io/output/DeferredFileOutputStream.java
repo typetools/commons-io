@@ -63,6 +63,9 @@ public class DeferredFileOutputStream
     private OutputStream currentOutputStream;
 
 
+    // Either outputFile or prefix is non-null when a new
+    // DeferredFileOutputStream is created; if outputFile is null, it is
+    // set to non-null by thresholdReached().
     /**
      * The file to which output will be directed if the threshold is exceeded.
      */
@@ -224,9 +227,7 @@ public class DeferredFileOutputStream
         if (prefix != null) {
             outputFile = File.createTempFile(prefix, suffix, directory);
         }
-        assert outputFile != null : "@AssumeAssertion(nullness): both prefix and outputFile cannot be null at same time";
-        // The overloaded Constructors throws IllegalArgumentException incase both are null. In either case the outputFile
-        // is set to non-null value in this method.
+        assert outputFile != null : "@AssumeAssertion(nullness): constructors ensure that either prefix or outputFile is non-null";
         FileUtils.forceMkdirParent(outputFile);
         final FileOutputStream fos = new FileOutputStream(outputFile);
         try {
