@@ -294,7 +294,7 @@ public class FileSystemUtils {
      * @throws IOException if an error occurs
      */
     long freeSpaceWindows(String path, final long timeout) throws IOException {
-        // normalize(String filename,boolean) returns null if its arugment is an invalid path.
+        // normalize(String filename,boolean) returns null if its argument is an invalid path.
         // BUG : A simple check to verify(confirm) that path
         // is legal/valid as per Windows system will resolve this bug.
         // It seems the only values that are ever passed are "" and "/".
