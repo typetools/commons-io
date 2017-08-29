@@ -176,7 +176,6 @@ public class ReversedLinesFileReader implements Closeable {
      * @return the next line or null if the start of the file is reached
      * @throws IOException  if an I/O error occurs
      */
-    @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // if line is "", then currentFilePart is non-null, so the retursive call to this.readLine() is legal
     @RequiresNonNull("currentFilePart")
     public @Nullable String readLine() throws IOException {
 
@@ -194,7 +193,10 @@ public class ReversedLinesFileReader implements Closeable {
         // aligned behaviour with BufferedReader that doesn't return a last, empty line
         if("".equals(line) && !trailingNewlineOfFileSkipped) {
             trailingNewlineOfFileSkipped = true;
-            line = readLine();
+            // Temporary variable introduced to permit localized @SuppressWarnings
+            @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // if line is "", then currentFilePart is non-null, so the recursive call to this.readLine() is legal
+            String tmpLine = readLine();
+            line = tmpLine;
         }
 
         return line;
