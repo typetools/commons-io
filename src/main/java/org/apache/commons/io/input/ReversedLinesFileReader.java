@@ -193,7 +193,7 @@ public class ReversedLinesFileReader implements Closeable {
         // aligned behaviour with BufferedReader that doesn't return a last, empty line
         if("".equals(line) && !trailingNewlineOfFileSkipped) {
             trailingNewlineOfFileSkipped = true;
-            assert currentFilePart != null : "@AssumeAssertion(nullness): if line is non-null (e.g., ""), then currentFilePart is non-null";
+            assert currentFilePart != null : "@AssumeAssertion(nullness): if line is non-null (e.g., empty String), then currentFilePart is non-null";
             line = readLine();
         }
 

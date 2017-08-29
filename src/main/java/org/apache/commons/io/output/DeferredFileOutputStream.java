@@ -325,8 +325,10 @@ public class DeferredFileOutputStream
         }
 
         if (isInMemory()) {
+            assert memoryOutputStream != null : "@AssumeAssertion(nullness): isInMemory return true when threshold is not exceeded,memoryOutputStream is reset null after threshold is reached.";
             memoryOutputStream.writeTo(out);
         } else {
+            assert outputFile != null : "@AssumeAssertion(nullness): output is directed to this file when threshold is exceeded,outputFile is set to non-null by thresholdReached()";
             try (FileInputStream fis = new FileInputStream(outputFile)) {
                 IOUtils.copy(fis, out);
             }

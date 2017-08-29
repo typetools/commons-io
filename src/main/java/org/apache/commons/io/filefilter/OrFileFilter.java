@@ -90,7 +90,7 @@ public class OrFileFilter
      */
     @Override
     public void addFileFilter(@UnknownInitialization(org.apache.commons.io.filefilter.ConditionalFileFilter.class) OrFileFilter this, final IOFileFilter ioFileFilter) {
-        assert this.fileFilters!=null : "@AssumeAssertion(nullness): when called from constructor";
+        assert this.fileFilters!=null : "@AssumeAssertion(nullness): when called from constructor,fileFilters is assigned empty list";
         this.fileFilters.add(ioFileFilter);
     }
 

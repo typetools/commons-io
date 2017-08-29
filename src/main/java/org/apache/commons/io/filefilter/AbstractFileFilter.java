@@ -38,12 +38,13 @@ public abstract class AbstractFileFilter implements IOFileFilter {
      */
     @Override
     @SuppressWarnings("nullness:argument.type.incompatible")
+    // Refer bug report at https://issues.apache.org/jira/browse/IO-540
     public boolean accept(final File file) {
         // File.getParentFile() can return null, and null is not documented
         // as a permitted file argument for FilenameFilter.accept(File,String).
 
-        // However following code does not lead to any Exception at run time
-        // as this methods are to be overridden while using.
+        // However following code does not cause Exception at run time
+        // as this method is to be overridden in sub-class to avoid StackOverflowError.
         return accept(file.getParentFile(), file.getName());
     }
 
