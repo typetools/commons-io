@@ -300,7 +300,7 @@ public abstract class DirectoryWalker<T> {
      * @param depthLimit  controls how <i>deep</i> the hierarchy is
      *  navigated to (less than 0 means unlimited)
      */
-    protected DirectoryWalker( @Nullable IOFileFilter directoryFilter, @Nullable IOFileFilter fileFilter, final int depthLimit) {
+    protected DirectoryWalker(@Nullable IOFileFilter directoryFilter, @Nullable IOFileFilter fileFilter, final int depthLimit) {
         if (directoryFilter == null && fileFilter == null) {
             this.filter = null;
         } else {
