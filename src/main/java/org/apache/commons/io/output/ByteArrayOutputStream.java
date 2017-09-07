@@ -113,7 +113,7 @@ public class ByteArrayOutputStream extends OutputStream {
     @EnsuresNonNull("currentBuffer")
     private void needNewBuffer(@UnknownInitialization(java.io.OutputStream.class) ByteArrayOutputStream this, final int newcount) {
         if (currentBufferIndex < buffers.size() - 1) {
-            assert currentBuffer != null : "@AssumeAssertion(nullness): IF block is executed when old buffers is/are present";
+            assert currentBuffer != null : "@AssumeAssertion(nullness): currentBuffer is null only if this method is called from the constructor, in which case this code is not executed (the else clause is executed instead)";
             //Recycling old buffer
             filledBufferSum += currentBuffer.length;
 

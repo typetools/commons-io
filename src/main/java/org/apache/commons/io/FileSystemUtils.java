@@ -294,7 +294,7 @@ public class FileSystemUtils {
      * @throws IOException if an error occurs
      */
     @SuppressWarnings("assignment.type.incompatible")
-    // Refer bug report at https://issues.apache.org/jira/browse/IO-547 
+    // See bug report at https://issues.apache.org/jira/browse/IO-547
     long freeSpaceWindows(String path, final long timeout) throws IOException {
         // normalize(String filename,boolean) returns null if its argument is an invalid path.
         // BUG : A simple check to verify(confirm) that path

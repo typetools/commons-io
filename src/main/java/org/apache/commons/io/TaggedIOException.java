@@ -93,8 +93,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * @param tag tag object
      * @throws IOException original exception from the tagged decorator, if any
      */
-    @SuppressWarnings("throwing.nullable")
-    // For TaggedIOException, cause of Exception is non-null. In constructor of TaggedIOException class
+    @SuppressWarnings("throwing.nullable") // TaggedIOException's cause is non-null, as guaranteed by its constructor.
     // non-null value for cause is set using superclass constructor.
     public static void throwCauseIfTaggedWith(final Throwable throwable, final Object tag)
             throws IOException {

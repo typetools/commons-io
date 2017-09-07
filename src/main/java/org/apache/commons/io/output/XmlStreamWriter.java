@@ -160,7 +160,7 @@ public class XmlStreamWriter extends Writer {
      * @throws IOException if an error occurs detecting the encoding
      */
     @RequiresNonNull("xmlPrologWriter")
-    @SuppressWarnings("nullness:dereference.of.nullable") // ENCODING_PATTERN has capturing group 1, m.group(1) is non-null
+    @SuppressWarnings("nullness:dereference.of.nullable") // ENCODING_PATTERN has capturing group 1, so m.group(1) is non-null
     private void detectEncoding(final char[] cbuf, final int off, final int len)
             throws IOException {
         int size = len;

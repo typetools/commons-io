@@ -705,7 +705,7 @@ public class XmlStreamReader extends Reader {
      * @return the encoding declared in the {@code <?xml encoding=...?>}
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    @SuppressWarnings("nullness:dereference.of.nullable") // ENCODING_PATTERN has capturing group 1, m.group(1) is non-null 
+    @SuppressWarnings("nullness:dereference.of.nullable") // ENCODING_PATTERN has capturing group 1, so m.group(1) is non-null
     private static @Nullable String getXmlProlog(final InputStream is, final @Nullable String guessedEnc)
             throws IOException {
         String encoding = null;

@@ -27,8 +27,10 @@ import org.apache.commons.io.IOUtils;
 
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.dataflow.qual.Pure;
+
 /**
  * An output stream which will retain data in memory until a specified
  * threshold is reached, and only then commit it to disk. If the stream is
@@ -52,6 +54,7 @@ public class DeferredFileOutputStream
      * The output stream to which data will be written prior to the threshold
      * being reached.
      */
+    // Starts out non-null
     private @Nullable ByteArrayOutputStream memoryOutputStream;
 
 
@@ -220,7 +223,6 @@ public class DeferredFileOutputStream
      *
      * @throws IOException if an error occurs.
      */
-    @SuppressWarnings("nullness:dereference.of.nullable") 
     @Override
     protected void thresholdReached() throws IOException
     {
@@ -231,6 +233,9 @@ public class DeferredFileOutputStream
         FileUtils.forceMkdirParent(outputFile);
         final FileOutputStream fos = new FileOutputStream(outputFile);
         try {
+            // Can't do @RequiresNonNull("memoryOutputStream") because superclass has no such requirement.
+            assert memoryOutputStream != null : "@AssumeAssertion(nullness): thresholdReached() is called at most once and nothing else sets memoryOutputStream to null";
+        
             memoryOutputStream.writeTo(fos);
         } catch (IOException e){
             fos.close();
@@ -325,10 +330,10 @@ public class DeferredFileOutputStream
         }
 
         if (isInMemory()) {
-            assert memoryOutputStream != null : "@AssumeAssertion(nullness): isInMemory return true when threshold is not exceeded,memoryOutputStream is reset null after threshold is reached.";
+            assert memoryOutputStream != null : "@AssumeAssertion(nullness): isInMemory returns true when threshold is not exceeded; memoryOutputStream is reset to null after threshold is reached.";
             memoryOutputStream.writeTo(out);
         } else {
-            assert outputFile != null : "@AssumeAssertion(nullness): output is directed to this file when threshold is exceeded,outputFile is set to non-null by thresholdReached()";
+            assert outputFile != null : "@AssumeAssertion(nullness): output is directed to this file when threshold is exceeded; outputFile is set to non-null by thresholdReached()";
             try (FileInputStream fis = new FileInputStream(outputFile)) {
                 IOUtils.copy(fis, out);
             }
