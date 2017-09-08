@@ -477,7 +477,6 @@ public class FileSystemUtils {
      * @return the lines returned by the command, converted to lower-case
      * @throws IOException if an error occurs
      */
-    @SuppressWarnings("nullness") // CF bug: https://tinyurl.com/cfissue/1500
     List<String> performCommand(final String[] cmdAttribs, final int max, final long timeout) throws IOException {
         // this method does what it can to avoid the 'Too many open files' error
         // based on trial and error and these links:
