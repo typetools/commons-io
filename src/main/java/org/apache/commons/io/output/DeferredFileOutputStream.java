@@ -25,11 +25,14 @@ import java.io.OutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
-import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.framework.qual.EnsuresQualifierIf;
+import org.checkerframework.framework.qual.EnsuresQualifiersIf;
 
 /**
  * An output stream which will retain data in memory until a specified
@@ -256,7 +259,33 @@ public class DeferredFileOutputStream
      * @return {@code true} if the data is available in memory;
      *         {@code false} otherwise.
      */
-    @Pure public boolean isInMemory()
+    @EnsuresQualifiersIf({
+      @EnsuresQualifierIf(result=true, qualifier=NonNull.class, expression="memoryOutputStream"),
+      @EnsuresQualifierIf(result=false, qualifier=NonNull.class, expression="outputFile")
+    })
+    @Pure
+    public boolean isInMemory()
+    {
+        return !isThresholdExceeded();
+    }
+
+    @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // application invariant; see note immediately below
+    // Note: a call to checkThreshold() can violate these properties by
+    // switching the stream from in memory to on disk, without changing the
+    // values that isInMemory() and isThresholdExceeded() depend upon.
+    // However, checkThreshold(int count) is protected, and it is never
+    // called without count bytes being immediately written to the stream,
+    // which re-establishes the invariant.
+    // The below is equivalent to the following:
+    //   @EnsuresNonNullIf(expression="outputFile", result=true)
+    //   @EnsuresNonNullIf(expression="memoryOutputStream", result=false)
+    // but @EnsuresNonNullIf is not repeatable (see https://tinyurl.com/cfissue/1307 ).
+    @EnsuresQualifiersIf({
+      @EnsuresQualifierIf(result=true, qualifier=NonNull.class, expression="outputFile"),
+      @EnsuresQualifierIf(result=false, qualifier=NonNull.class, expression="memoryOutputStream")
+    })
+    @Pure
+    public boolean isThresholdExceeded()
     {
         return !isThresholdExceeded();
     }
@@ -330,10 +359,8 @@ public class DeferredFileOutputStream
         }
 
         if (isInMemory()) {
-            assert memoryOutputStream != null : "@AssumeAssertion(nullness): isInMemory returns true when threshold is not exceeded; memoryOutputStream is reset to null after threshold is reached.";
             memoryOutputStream.writeTo(out);
         } else {
-            assert outputFile != null : "@AssumeAssertion(nullness): output is directed to this file when threshold is exceeded; outputFile is set to non-null by thresholdReached()";
             try (FileInputStream fis = new FileInputStream(outputFile)) {
                 IOUtils.copy(fis, out);
             }
