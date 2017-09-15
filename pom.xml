@@ -231,6 +231,37 @@ file comparators, endian transformation classes, and much more.
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
+    <!-- Annotations from the Checker Framework: nullness, interning, locking, ... -->
+    <dependency>
+      <groupId>org.checkerframework</groupId>
+      <artifactId>checker-qual</artifactId>
+      <version>${checkerframework.version}</version>
+      <scope>system</scope>
+      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/checker-qual.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>org.checkerframework</groupId>
+      <artifactId>checker</artifactId>
+      <version>${checkerframework.version}</version>
+      <scope>system</scope>
+      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/checker.jar</systemPath>
+    </dependency>
+    <!-- The Type Annotations compiler. Uncomment if using annotations in comments. -->
+    <!-- <dependency>
+      <groupId>org.checkerframework</groupId>
+      <artifactId>compiler</artifactId>
+      <version>${checkerframework.version}</version>
+      <scope>system</scope>
+      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/compiler.jar</systemPath>
+    </dependency> -->
+    <!-- The annotated JDK to use. -->
+    <dependency>
+      <groupId>org.checkerframework</groupId>
+      <artifactId>jdk8</artifactId>
+      <version>${checkerframework.version}</version>
+      <scope>system</scope>
+      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/jdk8.jar</systemPath>
+    </dependency>
   </dependencies>
 
   <properties>
@@ -263,6 +294,10 @@ file comparators, endian transformation classes, and much more.
     <!-- Override clirr version to be able to build the site on Java 8 -->
     <commons.clirr.version>2.8</commons.clirr.version>
     <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
+    <!-- These properties will be set by the Maven Dependency plugin -->
+    <annotatedJdk>${org.checkerframework:jdk8:jar}</annotatedJdk>
+    <!-- <typeAnnotationsJavac>${org.checkerframework:compiler:jar}</typeAnnotationsJavac> -->
+    <checkerframework.version>2.2.0</checkerframework.version>
   </properties>
 
   <build>
@@ -281,6 +316,42 @@ file comparators, endian transformation classes, and much more.
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <!-- This plugin will set properties values using dependency information -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+              <goals>
+                  <goal>properties</goal>
+              </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.6.1</version>
+        <configuration>
+          <!-- Change source and target to 1.7 to create .class files that can be run on a Java 7 JVM -->
+          <source>1.8</source>
+          <target>1.8</target>
+          <fork>true</fork>
+          <annotationProcessors>
+            <!-- Add all the checkers you want to enable here -->
+            <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
+          </annotationProcessors>
+          <compilerArgs>
+              <!-- location of the annotated JDK, which comes from a Maven dependency -->
+              <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
+              <!-- Uncomment the following line to use the type annotations compiler. -->
+              <!-- <arg>-J-Xbootclasspath/p:${typeAnnotationsJavac}</arg> -->
+              <!--<arg>-AuseDefaultsForUncheckedCode=source,bytecode</arg>
+              <arg>-Awarns</arg>
+              <arg>-Xmaxwarns</arg>
+              <arg>10000</arg>-->
+            </compilerArgs>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>

@@ -18,6 +18,8 @@ package org.apache.commons.io.output;
 
 import java.io.Writer;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * This {@link Writer} writes all data to the famous <b>/dev/null</b>.
  * <p>
@@ -25,6 +27,7 @@ import java.io.Writer;
  * characters written to it are ignored and lost.
  *
  */
+@AnnotatedFor({"nullness"})
 public class NullWriter extends Writer {
 
     /**
@@ -59,7 +62,7 @@ public class NullWriter extends Writer {
      * @since 2.0
      */
     @Override
-    public Writer append(final CharSequence csq, final int start, final int end) {
+    public Writer append(final @Nullable CharSequence csq, final int start, final int end) {
         //to /dev/null
         return this;
     }
@@ -71,7 +74,7 @@ public class NullWriter extends Writer {
      * @since 2.0
      */
     @Override
-    public Writer append(final CharSequence csq) {
+    public Writer append(final @Nullable CharSequence csq) {
         //to /dev/null
         return this;
     }

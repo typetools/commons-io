@@ -23,6 +23,9 @@ import java.io.Reader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * An Iterator over the lines in a <code>Reader</code>.
  * <p>
@@ -47,6 +50,7 @@ import java.util.NoSuchElementException;
  *
  * @since 1.2
  */
+@AnnotatedFor({"nullness"})
 public class LineIterator implements Iterator<String>, Closeable {
 
     // N.B. This class deliberately does not implement Iterable, see https://issues.apache.org/jira/browse/IO-181
@@ -54,7 +58,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     /** The reader that is being read. */
     private final BufferedReader bufferedReader;
     /** The current line. */
-    private String cachedLine;
+    private @Nullable String cachedLine;
     /** A flag indicating if the iterator has been fully read. */
     private boolean finished = false;
 
@@ -85,6 +89,7 @@ public class LineIterator implements Iterator<String>, Closeable {
      * @throws IllegalStateException if an IO exception occurs
      */
     @Override
+    @EnsuresNonNullIf(expression = "cachedLine", result = true)
     public boolean hasNext() {
         if (cachedLine != null) {
             return true;
@@ -187,7 +192,7 @@ public class LineIterator implements Iterator<String>, Closeable {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final LineIterator iterator) {
+    public static void closeQuietly(final @Nullable LineIterator iterator) {
         try {
             if (iterator != null) {
                 iterator.close();

@@ -20,6 +20,9 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 /**
  * A Proxy stream which acts as expected, that is it passes the method 
  * calls on to the proxied stream and doesn't change which methods are 
@@ -29,6 +32,7 @@ import java.io.Writer;
  * and write(String) to write(String, int, int).
  *
  */
+@AnnotatedFor({"nullness"})
 public class ProxyWriter extends FilterWriter {
 
     /**
@@ -70,7 +74,7 @@ public class ProxyWriter extends FilterWriter {
      * @since 2.0
      */
     @Override
-    public Writer append(final CharSequence csq, final int start, final int end) throws IOException {
+    public Writer append(final @Nullable CharSequence csq, final int start, final int end) throws IOException {
         try {
             beforeWrite(end - start);
             out.append(csq, start, end);
@@ -89,7 +93,7 @@ public class ProxyWriter extends FilterWriter {
      * @since 2.0
      */
     @Override
-    public Writer append(final CharSequence csq) throws IOException {
+    public Writer append(final @Nullable CharSequence csq) throws IOException {
         try {
             int len = 0;
             if (csq != null) {
@@ -238,7 +242,7 @@ public class ProxyWriter extends FilterWriter {
      * @param n number of chars to be written
      * @throws IOException if the pre-processing fails
      */
-    protected void beforeWrite(final int n) throws IOException {
+    protected void beforeWrite(final @UnknownInitialization int n) throws IOException {
     }
 
     /**
@@ -255,7 +259,7 @@ public class ProxyWriter extends FilterWriter {
      * @param n number of chars written
      * @throws IOException if the post-processing fails
      */
-    protected void afterWrite(final int n) throws IOException {
+    protected void afterWrite(final @UnknownInitialization int n) throws IOException {
     }
 
     /**

@@ -29,6 +29,11 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.input.XmlStreamReader;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Character stream that handles all the necessary Voodoo to figure out the
  * charset encoding of the XML document written to the stream.
@@ -36,18 +41,21 @@ import org.apache.commons.io.input.XmlStreamReader;
  * @see XmlStreamReader
  * @since 2.0
  */
+@AnnotatedFor({"nullness"})
 public class XmlStreamWriter extends Writer {
     private static final int BUFFER_SIZE = 4096;
 
     private final OutputStream out;
 
     private final String defaultEncoding;
+    // xmlPrologWriter can be null, after encoding is chosen and writer and encoding are non-null.
+    // At least one of xmlPrologWriter and writer is non-null; this is enforced by detectEncoding().
+    private @Nullable StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
 
-    private StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
+    // writer and encoding have the same nullness:  either both are null, or both are non-null.
+    private @MonotonicNonNull Writer writer;
 
-    private Writer writer;
-
-    private String encoding;
+    private @MonotonicNonNull String encoding;
 
     /**
      * Constructs a new XML stream writer for the specified output stream
@@ -66,7 +74,7 @@ public class XmlStreamWriter extends Writer {
      * @param out The output stream
      * @param defaultEncoding The default encoding if not encoding could be detected
      */
-    public XmlStreamWriter(final OutputStream out, final String defaultEncoding) {
+    public XmlStreamWriter(final OutputStream out, final @Nullable String defaultEncoding) {
         this.out = out;
         this.defaultEncoding = defaultEncoding != null ? defaultEncoding : "UTF-8";
     }
@@ -92,7 +100,7 @@ public class XmlStreamWriter extends Writer {
      * @throws FileNotFoundException if there is an error creating or
      * opening the file
      */
-    public XmlStreamWriter(final File file, final String defaultEncoding) throws FileNotFoundException {
+    public XmlStreamWriter(final File file, final @Nullable String defaultEncoding) throws FileNotFoundException {
         this(new FileOutputStream(file), defaultEncoding);
     }
 
@@ -101,7 +109,7 @@ public class XmlStreamWriter extends Writer {
      *
      * @return the detected encoding
      */
-    public String getEncoding() {
+    public @Nullable String getEncoding() {
         return encoding;
     }
 
@@ -120,8 +128,10 @@ public class XmlStreamWriter extends Writer {
      * @throws IOException if an error occurs closing the underlying writer
      */
     @Override
+    @EnsuresNonNull("writer")
     public void close() throws IOException {
         if (writer == null) {
+            assert xmlPrologWriter != null : "@AssumeAssertion(nullness): At least one of xmlPrologWriter and writer is non-null";
             encoding = defaultEncoding;
             writer = new OutputStreamWriter(out, encoding);
             writer.write(xmlPrologWriter.toString());
@@ -149,6 +159,8 @@ public class XmlStreamWriter extends Writer {
      * @param len The number of characters to write
      * @throws IOException if an error occurs detecting the encoding
      */
+    @RequiresNonNull("xmlPrologWriter")
+    @SuppressWarnings("nullness:dereference.of.nullable") // ENCODING_PATTERN has capturing group 1, so m.group(1) is non-null
     private void detectEncoding(final char[] cbuf, final int off, final int len)
             throws IOException {
         int size = len;
@@ -207,6 +219,7 @@ public class XmlStreamWriter extends Writer {
      * @throws IOException if an error occurs detecting the encoding
      */
     @Override
+    @SuppressWarnings("nullness:dereference.of.nullable") // either xmlPrologWriter or writer is non-null
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
         if (xmlPrologWriter != null) {
             detectEncoding(cbuf, off, len);

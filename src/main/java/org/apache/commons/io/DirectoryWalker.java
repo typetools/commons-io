@@ -25,6 +25,8 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Abstract class that walks through a directory hierarchy and provides
  * subclasses with convenient hooks to add specific behaviour.
@@ -248,12 +250,13 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @since 1.3
  * @version $Id$
  */
+@AnnotatedFor({"nullness"})
 public abstract class DirectoryWalker<T> {
 
     /**
      * The file filter to use to filter files and directories.
      */
-    private final FileFilter filter;
+    private final @Nullable FileFilter filter;
     /**
      * The limit on the directory depth to walk.
      */
@@ -278,7 +281,7 @@ public abstract class DirectoryWalker<T> {
      * @param depthLimit  controls how <i>deep</i> the hierarchy is
      *  navigated to (less than 0 means unlimited)
      */
-    protected DirectoryWalker(final FileFilter filter, final int depthLimit) {
+    protected DirectoryWalker(final @Nullable FileFilter filter, final int depthLimit) {
         this.filter = filter;
         this.depthLimit = depthLimit;
     }
@@ -297,7 +300,7 @@ public abstract class DirectoryWalker<T> {
      * @param depthLimit  controls how <i>deep</i> the hierarchy is
      *  navigated to (less than 0 means unlimited)
      */
-    protected DirectoryWalker(IOFileFilter directoryFilter, IOFileFilter fileFilter, final int depthLimit) {
+    protected DirectoryWalker(@Nullable IOFileFilter directoryFilter, @Nullable IOFileFilter fileFilter, final int depthLimit) {
         if (directoryFilter == null && fileFilter == null) {
             this.filter = null;
         } else {
@@ -354,7 +357,7 @@ public abstract class DirectoryWalker<T> {
             final int childDepth = depth + 1;
             if (depthLimit < 0 || childDepth <= depthLimit) {
                 checkIfCancelled(directory, depth, results);
-                File[] childFiles = filter == null ? directory.listFiles() : directory.listFiles(filter);
+                File @Nullable [] childFiles = filter == null ? directory.listFiles() : directory.listFiles(filter);
                 childFiles = filterDirectoryContents(directory, depth, childFiles);
                 if (childFiles == null) {
                     handleRestricted(directory, childDepth, results);
@@ -519,7 +522,7 @@ public abstract class DirectoryWalker<T> {
      * @throws IOException if an I/O Error occurs
      * @since 2.0
      */
-    protected File[] filterDirectoryContents(final File directory, final int depth, final File[] files) throws
+    protected File @Nullable [] filterDirectoryContents(final File directory, final int depth, final File @Nullable [] files) throws
             IOException {
         return files;
     }
@@ -591,7 +594,7 @@ public abstract class DirectoryWalker<T> {
         private static final long serialVersionUID = 1347339620135041008L;
 
         /** The file being processed when the exception was thrown. */
-        private final File file;
+        private final @Nullable File file;
         /** The file depth when the exception was thrown. */
         private final int depth;
 
@@ -602,7 +605,7 @@ public abstract class DirectoryWalker<T> {
          * @param file  the file when the operation was cancelled, may be null
          * @param depth  the depth when the operation was cancelled, may be null
          */
-        public CancelException(final File file, final int depth) {
+        public CancelException(final @Nullable File file, final int depth) {
             this("Operation Cancelled", file, depth);
         }
 
@@ -615,7 +618,7 @@ public abstract class DirectoryWalker<T> {
          * @param file  the file when the operation was cancelled
          * @param depth  the depth when the operation was cancelled
          */
-        public CancelException(final String message, final File file, final int depth) {
+        public CancelException(final String message, final @Nullable File file, final int depth) {
             super(message);
             this.file = file;
             this.depth = depth;
@@ -626,7 +629,7 @@ public abstract class DirectoryWalker<T> {
          *
          * @return the file when the operation was cancelled
          */
-        public File getFile() {
+        public @Nullable File getFile() {
             return file;
         }
 

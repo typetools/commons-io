@@ -425,6 +425,8 @@ public class Tailer implements Runnable {
                 }
             }
             while (getRun()) {
+                assert reader != null : "@AssumeAssertion(nullness):  first while loop terminates if reader is non-null or the Tailer thread stops; if thread stops, it is never restarted and this while loop is not executed";
+
                 final boolean newer = FileUtils.isFileNewer(file, last); // IO-279, must be done first
                 // Check the file length to see if it was rotated
                 final long length = file.length();

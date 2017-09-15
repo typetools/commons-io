@@ -22,6 +22,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+
 /**
  * A {@link java.io.FileFilter} providing conditional AND logic across a list of
  * file filters. This filter returns {@code true} if all filters in the
@@ -34,6 +39,7 @@ import java.util.List;
  *
  * @see FileFilterUtils#and(IOFileFilter...)
  */
+@AnnotatedFor({"nullness"})
 public class AndFileFilter
         extends AbstractFileFilter
         implements ConditionalFileFilter, Serializable {
@@ -59,7 +65,7 @@ public class AndFileFilter
      * @param fileFilters  a List of IOFileFilter instances, copied, null ignored
      * @since 1.1
      */
-    public AndFileFilter(final List<IOFileFilter> fileFilters) {
+    public AndFileFilter(final @Nullable List<IOFileFilter> fileFilters) {
         if (fileFilters == null) {
             this.fileFilters = new ArrayList<>();
         } else {
@@ -87,7 +93,9 @@ public class AndFileFilter
      * {@inheritDoc}
      */
     @Override
-    public void addFileFilter(final IOFileFilter ioFileFilter) {
+    public void addFileFilter(@UnknownInitialization(org.apache.commons.io.filefilter.ConditionalFileFilter.class) AndFileFilter this, final IOFileFilter ioFileFilter) {
+        // Can't do @RequiresNonNull("this.fileFilters") because superclass has no such requirement.
+        assert this.fileFilters != null : "@AssumeAssertion(nullness): when called from constructor, fileFilters is assigned an empty list";
         this.fileFilters.add(ioFileFilter);
     }
 

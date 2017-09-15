@@ -22,6 +22,8 @@ import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Charsets required of every implementation of the Java platform.
  * 
@@ -53,6 +55,7 @@ import java.util.TreeMap;
  * @since 2.3
  * @version $Id$
  */
+@AnnotatedFor({"nullness"})
 public class Charsets {
     //
     // This class should only contain Charset instances for required encodings. This guarantees that it will load
@@ -90,7 +93,7 @@ public class Charsets {
      *            A charset or null.
      * @return the given Charset or the default Charset if the given Charset is null
      */
-    public static Charset toCharset(final Charset charset) {
+    public static Charset toCharset(final @Nullable Charset charset) {
         return charset == null ? Charset.defaultCharset() : charset;
     }
 
@@ -103,7 +106,7 @@ public class Charsets {
      * @throws java.nio.charset.UnsupportedCharsetException
      *             If the named charset is unavailable
      */
-    public static Charset toCharset(final String charset) {
+    public static Charset toCharset(final @Nullable String charset) {
         return charset == null ? Charset.defaultCharset() : Charset.forName(charset);
     }
 

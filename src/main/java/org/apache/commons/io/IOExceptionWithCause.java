@@ -19,6 +19,8 @@ package org.apache.commons.io;
 
 import java.io.IOException;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Subclasses IOException with the {@link Throwable} constructors missing before Java 6.
  *
@@ -26,6 +28,7 @@ import java.io.IOException;
  * @deprecated (since 2.5) use {@link IOException} instead
  */
 @Deprecated
+@AnnotatedFor({"nullness"})
 public class IOExceptionWithCause extends IOException {
 
     /**
@@ -45,7 +48,8 @@ public class IOExceptionWithCause extends IOException {
      * @param cause
      *            the cause (see {@link #getCause()}). A {@code null} value is allowed.
      */
-    public IOExceptionWithCause(final String message, final Throwable cause) {
+     // Throwable (super class) constructor allows null value for message.
+    public IOExceptionWithCause(final @Nullable String message, final @Nullable Throwable cause) {
         super(message, cause);
     }
 
@@ -59,7 +63,7 @@ public class IOExceptionWithCause extends IOException {
      * @param cause
      *            the cause (see {@link #getCause()}). A {@code null} value is allowed.
      */
-    public IOExceptionWithCause(final Throwable cause) {
+    public IOExceptionWithCause(final @Nullable Throwable cause) {
         super(cause);
     }
 

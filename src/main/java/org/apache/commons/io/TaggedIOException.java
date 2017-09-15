@@ -19,6 +19,8 @@ package org.apache.commons.io;
 import java.io.IOException;
 import java.io.Serializable;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * An {@link IOException} decorator that adds a serializable tag to the
  * wrapped exception. Both the tag and the original exception can be used
@@ -26,7 +28,8 @@ import java.io.Serializable;
  *
  * @since 2.0
  */
-@SuppressWarnings("deprecation") // needs to extend deprecated IOExceptionWithCause to preserve binary compatibility 
+@SuppressWarnings("deprecation") // needs to extend deprecated IOExceptionWithCause to preserve binary compatibility
+@AnnotatedFor({"nullness"})
 public class TaggedIOException extends IOExceptionWithCause {
 
     /**
@@ -90,6 +93,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * @param tag tag object
      * @throws IOException original exception from the tagged decorator, if any
      */
+    @SuppressWarnings("throwing.nullable") // TaggedIOException's cause is non-null, as guaranteed by its constructor.
     public static void throwCauseIfTaggedWith(final Throwable throwable, final Object tag)
             throws IOException {
         if (isTaggedWith(throwable, tag)) {
@@ -129,7 +133,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * @return wrapped exception
      */
     @Override
-    public IOException getCause() {
+    public @Nullable IOException getCause() {
         return (IOException) super.getCause();
     }
 

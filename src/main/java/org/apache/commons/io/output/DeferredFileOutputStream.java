@@ -25,6 +25,14 @@ import java.io.OutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.framework.qual.EnsuresQualifierIf;
+import org.checkerframework.framework.qual.EnsuresQualifiersIf;
 
 /**
  * An output stream which will retain data in memory until a specified
@@ -38,6 +46,7 @@ import org.apache.commons.io.IOUtils;
  * to store it to file (to avoid memory issues).
  *
  */
+@AnnotatedFor({"nullness"})
 public class DeferredFileOutputStream
     extends ThresholdingOutputStream
 {
@@ -48,7 +57,8 @@ public class DeferredFileOutputStream
      * The output stream to which data will be written prior to the threshold
      * being reached.
      */
-    private ByteArrayOutputStream memoryOutputStream;
+    // Starts out non-null
+    private @Nullable ByteArrayOutputStream memoryOutputStream;
 
 
     /**
@@ -59,25 +69,28 @@ public class DeferredFileOutputStream
     private OutputStream currentOutputStream;
 
 
+    // Either outputFile or prefix is non-null when a new
+    // DeferredFileOutputStream is created; if outputFile is null, it is
+    // set to non-null by thresholdReached().
     /**
      * The file to which output will be directed if the threshold is exceeded.
      */
-    private File outputFile;
+    private @Nullable File outputFile;
 
     /**
      * The temporary file prefix.
      */
-    private final String prefix;
+    private final @Nullable String prefix;
 
     /**
      * The temporary file suffix.
      */
-    private final String suffix;
+    private final @Nullable String suffix;
 
     /**
      * The directory to use for temporary files.
      */
-    private final File directory;
+    private final @Nullable File directory;
 
 
     /**
@@ -174,8 +187,8 @@ public class DeferredFileOutputStream
      * @param directory Temporary file directory.
      * @param initialBufferSize The initial size of the in memory buffer.
      */
-    private DeferredFileOutputStream(final int threshold, final File outputFile, final String prefix,
-                                     final String suffix, final File directory, final int initialBufferSize) {
+    private DeferredFileOutputStream(final int threshold, final @Nullable File outputFile, final @Nullable String prefix,
+                                     final @Nullable String suffix, final @Nullable File directory, final int initialBufferSize) {
         super(threshold);
         this.outputFile = outputFile;
         this.prefix = prefix;
@@ -219,9 +232,13 @@ public class DeferredFileOutputStream
         if (prefix != null) {
             outputFile = File.createTempFile(prefix, suffix, directory);
         }
+        assert outputFile != null : "@AssumeAssertion(nullness): constructors ensure that either prefix or outputFile is non-null";
         FileUtils.forceMkdirParent(outputFile);
         final FileOutputStream fos = new FileOutputStream(outputFile);
         try {
+            // Can't do @RequiresNonNull("memoryOutputStream") because superclass has no such requirement.
+            assert memoryOutputStream != null : "@AssumeAssertion(nullness): thresholdReached() is called at most once and nothing else sets memoryOutputStream to null";
+        
             memoryOutputStream.writeTo(fos);
         } catch (IOException e){
             fos.close();
@@ -242,7 +259,33 @@ public class DeferredFileOutputStream
      * @return {@code true} if the data is available in memory;
      *         {@code false} otherwise.
      */
+    @EnsuresQualifiersIf({
+      @EnsuresQualifierIf(result=true, qualifier=NonNull.class, expression="memoryOutputStream"),
+      @EnsuresQualifierIf(result=false, qualifier=NonNull.class, expression="outputFile")
+    })
+    @Pure
     public boolean isInMemory()
+    {
+        return !isThresholdExceeded();
+    }
+
+    @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // application invariant; see note immediately below
+    // Note: a call to checkThreshold() can violate these properties by
+    // switching the stream from in memory to on disk, without changing the
+    // values that isInMemory() and isThresholdExceeded() depend upon.
+    // However, checkThreshold(int count) is protected, and it is never
+    // called without count bytes being immediately written to the stream,
+    // which re-establishes the invariant.
+    // The below is equivalent to the following:
+    //   @EnsuresNonNullIf(expression="outputFile", result=true)
+    //   @EnsuresNonNullIf(expression="memoryOutputStream", result=false)
+    // but @EnsuresNonNullIf is not repeatable (see https://tinyurl.com/cfissue/1307 ).
+    @EnsuresQualifiersIf({
+      @EnsuresQualifierIf(result=true, qualifier=NonNull.class, expression="outputFile"),
+      @EnsuresQualifierIf(result=false, qualifier=NonNull.class, expression="memoryOutputStream")
+    })
+    @Pure
+    public boolean isThresholdExceeded()
     {
         return !isThresholdExceeded();
     }
@@ -256,7 +299,7 @@ public class DeferredFileOutputStream
      * @return The data for this output stream, or {@code null} if no such
      *         data is available.
      */
-    public byte[] getData()
+    public byte @Nullable [] getData()
     {
         if (memoryOutputStream != null)
         {
@@ -280,7 +323,7 @@ public class DeferredFileOutputStream
      * @return The file for this output stream, or {@code null} if no such
      *         file exists.
      */
-    public File getFile()
+    public @Nullable File getFile()
     {
         return outputFile;
     }

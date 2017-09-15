@@ -16,11 +16,14 @@
  */
 package org.apache.commons.io.input;
 
+import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 /**
  * Listener for events from a {@link Tailer}.
  *
  * @since 2.0
  */
+@AnnotatedFor({"nullness"}) 
 public interface TailerListener {
 
     /**
@@ -28,7 +31,7 @@ public interface TailerListener {
      * giving the listener a method of stopping the tailer.
      * @param tailer the tailer.
      */
-    void init(Tailer tailer);
+    void init(@UnderInitialization(java.lang.Object.class) Tailer tailer);
 
     /**
      * This method is called if the tailed file is not found.

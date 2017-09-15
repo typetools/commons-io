@@ -27,6 +27,14 @@ import java.util.List;
 
 import org.apache.commons.io.ByteOrderMark;
 
+import org.checkerframework.checker.nullness.qual.AssertNonNullIfNonNull;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * This class is used to wrap a stream that includes an encoded {@link ByteOrderMark} as its first bytes.
  * 
@@ -87,14 +95,15 @@ import org.apache.commons.io.ByteOrderMark;
  * @version $Id$
  * @since 2.0
  */
+@AnnotatedFor({"nullness"})
 public class BOMInputStream extends ProxyInputStream {
     private final boolean include;
     /**
      * BOMs are sorted from longest to shortest.
      */
     private final List<ByteOrderMark> boms;
-    private ByteOrderMark byteOrderMark;
-    private int[] firstBytes;
+    private @Nullable ByteOrderMark byteOrderMark;
+    private int @MonotonicNonNull [] firstBytes;
     private int fbLength;
     private int fbIndex;
     private int markFbIndex;
@@ -202,7 +211,8 @@ public class BOMInputStream extends ProxyInputStream {
         if (!boms.contains(bom)) {
             throw new IllegalArgumentException("Stream not configure to detect " + bom);
         }
-        return byteOrderMark != null && getBOM().equals(bom);
+        getBOM();
+        return byteOrderMark != null && byteOrderMark.equals(bom);
     }
 
     /**
@@ -212,7 +222,9 @@ public class BOMInputStream extends ProxyInputStream {
      * @throws IOException
      *             if an error reading the first bytes of the stream occurs
      */
-    public ByteOrderMark getBOM() throws IOException {
+    @AssertNonNullIfNonNull("byteOrderMark")
+    @EnsuresNonNull("firstBytes")
+    public @Nullable ByteOrderMark getBOM() throws IOException {
         if (firstBytes == null) {
             fbLength = 0;
             // BOMs are sorted from longest to shortest
@@ -249,7 +261,7 @@ public class BOMInputStream extends ProxyInputStream {
      *             if an error reading the first bytes of the stream occurs
      * 
      */
-    public String getBOMCharsetName() throws IOException {
+    public @Nullable String getBOMCharsetName() throws IOException {
         getBOM();
         return byteOrderMark == null ? null : byteOrderMark.getCharsetName();
     }
@@ -273,7 +285,9 @@ public class BOMInputStream extends ProxyInputStream {
      * 
      * @return The matched BOM or null if none matched
      */
-    private ByteOrderMark find() {
+    @SideEffectFree 
+    @RequiresNonNull("firstBytes")
+    private @Nullable ByteOrderMark find() {
         for (final ByteOrderMark bom : boms) {
             if (matches(bom)) {
                 return bom;
@@ -289,7 +303,8 @@ public class BOMInputStream extends ProxyInputStream {
      *            The BOM
      * @return true if the bytes match the bom, otherwise false
      */
-    private boolean matches(final ByteOrderMark bom) {
+    @RequiresNonNull("firstBytes")
+    @Pure private boolean matches(final ByteOrderMark bom) {
         // if (bom.length() != fbLength) {
         // return false;
         // }
@@ -382,6 +397,7 @@ public class BOMInputStream extends ProxyInputStream {
      *             if an I/O error occurs
      */
     @Override
+    @SuppressWarnings("nullness:assignment.type.incompatible") // reset method resets @MonotonicNonNull variable
     public synchronized void reset() throws IOException {
         fbIndex = markFbIndex;
         if (markedAtStart) {

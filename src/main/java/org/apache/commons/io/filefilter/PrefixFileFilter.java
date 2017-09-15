@@ -22,6 +22,8 @@ import java.util.List;
 
 import org.apache.commons.io.IOCase;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Filters filenames for a certain prefix.
  * <p>
@@ -41,6 +43,7 @@ import org.apache.commons.io.IOCase;
  * @see FileFilterUtils#prefixFileFilter(String)
  * @see FileFilterUtils#prefixFileFilter(String, IOCase)
  */
+@AnnotatedFor({"nullness"})
 public class PrefixFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = 8533897440809599867L;
@@ -70,7 +73,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @throws IllegalArgumentException if the prefix is null
      * @since 1.4
      */
-    public PrefixFileFilter(final String prefix, final IOCase caseSensitivity) {
+    public PrefixFileFilter(final String prefix, final @Nullable IOCase caseSensitivity) {
         if (prefix == null) {
             throw new IllegalArgumentException("The prefix must not be null");
         }
@@ -100,7 +103,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @throws IllegalArgumentException if the prefix is null
      * @since 1.4
      */
-    public PrefixFileFilter(final String[] prefixes, final IOCase caseSensitivity) {
+    public PrefixFileFilter(final String[] prefixes, final @Nullable IOCase caseSensitivity) {
         if (prefixes == null) {
             throw new IllegalArgumentException("The array of prefixes must not be null");
         }
@@ -130,7 +133,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @throws ClassCastException if the list does not contain Strings
      * @since 1.4
      */
-    public PrefixFileFilter(final List<String> prefixes, final IOCase caseSensitivity) {
+    public PrefixFileFilter(final List<String> prefixes, final @Nullable IOCase caseSensitivity) {
         if (prefixes == null) {
             throw new IllegalArgumentException("The list of prefixes must not be null");
         }
