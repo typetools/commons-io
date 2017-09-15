@@ -207,17 +207,12 @@ public class BOMInputStream extends ProxyInputStream {
      * @throws IOException
      *             if an error reading the first bytes of the stream occurs
      */
-    // getBOM() returns byteOrderMark. In following function null check is performed for 
-    // byteOrderMark and after that getBOM() is invoked.  This warning is false positive
-    // and correctness cannot be established due to typechecking limitations in checker. 
-    @SuppressWarnings("nullness:dereference.of.nullable")
     public boolean hasBOM(final ByteOrderMark bom) throws IOException {
         if (!boms.contains(bom)) {
             throw new IllegalArgumentException("Stream not configure to detect " + bom);
         }
-        // TODO: The first clause uses byteOrderMark, and the second clause uses getBom().
-        // The inconsistency is confusing.  Both clauses should use the same expression.
-        return byteOrderMark != null && getBOM().equals(bom);
+        getBOM();
+        return byteOrderMark != null && byteOrderMark.equals(bom);
     }
 
     /**
