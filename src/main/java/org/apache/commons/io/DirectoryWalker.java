@@ -594,7 +594,7 @@ public abstract class DirectoryWalker<T> {
         private static final long serialVersionUID = 1347339620135041008L;
 
         /** The file being processed when the exception was thrown. */
-        private final @Nullable File file;
+        private final File file;
         /** The file depth when the exception was thrown. */
         private final int depth;
 
@@ -605,7 +605,7 @@ public abstract class DirectoryWalker<T> {
          * @param file  the file when the operation was cancelled, may be null
          * @param depth  the depth when the operation was cancelled, may be null
          */
-        public CancelException(final @Nullable File file, final int depth) {
+        public CancelException(final File file, final int depth) {
             this("Operation Cancelled", file, depth);
         }
 
@@ -618,7 +618,7 @@ public abstract class DirectoryWalker<T> {
          * @param file  the file when the operation was cancelled
          * @param depth  the depth when the operation was cancelled
          */
-        public CancelException(final String message, final @Nullable File file, final int depth) {
+        public CancelException(final String message, final File file, final int depth) {
             super(message);
             this.file = file;
             this.depth = depth;
@@ -629,7 +629,7 @@ public abstract class DirectoryWalker<T> {
          *
          * @return the file when the operation was cancelled
          */
-        public @Nullable File getFile() {
+        public File getFile() {
             return file;
         }
 

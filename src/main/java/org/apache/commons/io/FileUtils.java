@@ -901,7 +901,7 @@ public class FileUtils {
      * @throws IllegalArgumentException if any file is incorrectly encoded
      * @since 1.1
      */
-    public static @Nullable File[] toFiles(final @Nullable URL[] urls) {
+    public static @PolyNull File[] toFiles(final @PolyNull URL[] urls) {
         if (urls == null || urls.length == 0) {
             return EMPTY_FILE_ARRAY;
         }
