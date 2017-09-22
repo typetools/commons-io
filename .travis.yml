@@ -28,5 +28,4 @@ jdk:
 #   - mvn clean cobertura:cobertura coveralls:report
 
 install: true
-script: echo "Hello world from .travis.yml"
-#  - ./.travis-build.sh
+script: ./.travis-build.sh
