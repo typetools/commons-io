@@ -27,4 +27,5 @@ jdk:
 # after_success:
 #   - mvn clean cobertura:cobertura coveralls:report
 
-script: ./.travis-build.sh
+script: echo "Hello world from .travis.yml"
+#  - ./.travis-build.sh
