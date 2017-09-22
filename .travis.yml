@@ -21,7 +21,14 @@ jdk:
   - oraclejdk8
 
 script:
-  - mvn test apache-rat:check clirr:check checkstyle:check javadoc:javadoc
+  - mvn compile
+
+## To type-check all non-test files: mvn compile
+## mvn install type-checks all files including tests
+
+## Original script from upstream commons-io project
+# script:
+#   - mvn test apache-rat:check clirr:check checkstyle:check javadoc:javadoc
 
 after_success:
   - mvn clean cobertura:cobertura coveralls:report
