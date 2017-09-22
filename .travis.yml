@@ -23,6 +23,9 @@ jdk:
 ## Original script from upstream commons-io project
 # script:
 #   - mvn test apache-rat:check clirr:check checkstyle:check javadoc:javadoc
+#
+# after_success:
+#   - mvn clean cobertura:cobertura coveralls:report
 
 ## To type-check all non-test files: mvn compile
 ## To type-check all files including tests: mvn install
@@ -33,6 +36,3 @@ script:
   - (cd checker-framework && ./.travis-build-without-test.sh)
   - export CHECKERFRAMEWORK=`pwd`/checker-framework
   - mvn compile
-
-after_success:
-  - mvn clean cobertura:cobertura coveralls:report
