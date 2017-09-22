@@ -20,15 +20,19 @@ jdk:
   - openjdk7
   - oraclejdk8
 
-script:
-  - mvn compile
-
-## To type-check all non-test files: mvn compile
-## mvn install type-checks all files including tests
-
 ## Original script from upstream commons-io project
 # script:
 #   - mvn test apache-rat:check clirr:check checkstyle:check javadoc:javadoc
+
+## To type-check all non-test files: mvn compile
+## To type-check all files including tests: mvn install
+## To skip compiling the tests:  mvn install -Dmaven.test.skip=true
+
+script:
+  - git clone https://github.com/typetools/checker-framework.git
+  - (cd checker-framework && ./.travis-build-without-test.sh)
+  - export CHECKERFRAMEWORK=`pwd`/checker-framework
+  - mvn compile
 
 after_success:
   - mvn clean cobertura:cobertura coveralls:report
