@@ -20,6 +20,6 @@ export SHELLOPTS
 ## To skip compiling the tests:  mvn install -Dmaven.test.skip=true
 
 git clone https://github.com/typetools/checker-framework.git
-(cd checker-framework && ./.travis-build-without-test.sh)
+(cd checker-framework && ./.travis-build-without-test.sh downloadjdk)
 export CHECKERFRAMEWORK=`pwd`/checker-framework
 mvn compile
