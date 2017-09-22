@@ -905,7 +905,7 @@ public class FileUtils {
         if (urls == null || urls.length == 0) {
             return EMPTY_FILE_ARRAY;
         }
-        final @Nullable File[] files = new File[urls.length];
+        final @PolyNull File[] files = new File[urls.length];
         for (int i = 0; i < urls.length; i++) {
             final URL url = urls[i];
             if (url != null) {
