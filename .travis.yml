@@ -27,13 +27,4 @@ jdk:
 # after_success:
 #   - mvn clean cobertura:cobertura coveralls:report
 
-## To type-check all non-test files: mvn compile
-## To type-check all files including tests: mvn install
-## To skip compiling the tests:  mvn install -Dmaven.test.skip=true
-
-script:
-  - |
-    git clone https://github.com/typetools/checker-framework.git
-    (cd checker-framework && ./.travis-build-without-test.sh)
-    export CHECKERFRAMEWORK=`pwd`/checker-framework
-    mvn compile
+script: ./.travis-build.sh
