@@ -17,7 +17,8 @@ language: java
 sudo: false
 
 jdk:
-  - openjdk7
+# Pluggable type-checking requires JDK 8 or later
+#  - openjdk7
   - oraclejdk8
 
 ## Original script from upstream commons-io project
