@@ -32,7 +32,8 @@ jdk:
 ## To skip compiling the tests:  mvn install -Dmaven.test.skip=true
 
 script:
-  - git clone https://github.com/typetools/checker-framework.git
-  - (cd checker-framework && ./.travis-build-without-test.sh)
-  - export CHECKERFRAMEWORK=`pwd`/checker-framework
-  - mvn compile
+  - |
+    git clone https://github.com/typetools/checker-framework.git
+    (cd checker-framework && ./.travis-build-without-test.sh)
+    export CHECKERFRAMEWORK=`pwd`/checker-framework
+    mvn compile
