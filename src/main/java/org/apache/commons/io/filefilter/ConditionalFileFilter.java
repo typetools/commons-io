@@ -18,8 +18,11 @@ package org.apache.commons.io.filefilter;
 
 import java.util.List;
 
+/*>>>
 import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+*/
+
 /**
  * Defines operations for conditional file filters.
  *
@@ -36,7 +39,7 @@ public interface ConditionalFileFilter {
      * @param ioFileFilter the filter to be added
      * @since 1.1
      */
-    void addFileFilter(@UnknownInitialization(org.apache.commons.io.filefilter.ConditionalFileFilter.class) ConditionalFileFilter this, IOFileFilter ioFileFilter);
+    void addFileFilter(/*@UnknownInitialization(org.apache.commons.io.filefilter.ConditionalFileFilter.class)*/ ConditionalFileFilter this, IOFileFilter ioFileFilter);
 
     /**
      * Returns this conditional file filter's list of file filters.

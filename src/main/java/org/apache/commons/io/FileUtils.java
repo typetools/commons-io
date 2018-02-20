@@ -52,9 +52,12 @@ import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.output.NullOutputStream;
 
+/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;
 import org.checkerframework.framework.qual.AnnotatedFor;
+*/
+
 /**
  * General file manipulation utilities.
  * <p>
@@ -211,7 +214,7 @@ public class FileUtils {
      * @return the file
      * @since 2.1
      */
-    public static @Nullable File getFile(final String... names) {
+    public static /*@Nullable*/ File getFile(final String... names) {
         if (names == null) {
             throw new NullPointerException("names must not be null");
         }
@@ -517,7 +520,7 @@ public class FileUtils {
      * @see org.apache.commons.io.filefilter.NameFileFilter
      */
     public static Collection<File> listFiles(
-            final File directory, final IOFileFilter fileFilter, final @Nullable IOFileFilter dirFilter) {
+            final File directory, final IOFileFilter fileFilter, final /*@Nullable*/ IOFileFilter dirFilter) {
         validateListFilesParameters(directory, fileFilter);
 
         final IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);
@@ -565,7 +568,7 @@ public class FileUtils {
      * @param dirFilter a base filter to add to
      * @return a filter that accepts directories
      */
-    private static IOFileFilter setUpEffectiveDirFilter(final @Nullable IOFileFilter dirFilter) {
+    private static IOFileFilter setUpEffectiveDirFilter(final /*@Nullable*/ IOFileFilter dirFilter) {
         return dirFilter == null ? FalseFileFilter.INSTANCE : FileFilterUtils.and(dirFilter,
                 DirectoryFileFilter.INSTANCE);
     }
@@ -590,7 +593,7 @@ public class FileUtils {
      * @since 2.2
      */
     public static Collection<File> listFilesAndDirs(
-            final File directory, final IOFileFilter fileFilter, final @Nullable IOFileFilter dirFilter) {
+            final File directory, final IOFileFilter fileFilter, final /*@Nullable*/ IOFileFilter dirFilter) {
         validateListFilesParameters(directory, fileFilter);
 
         final IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);
@@ -625,7 +628,7 @@ public class FileUtils {
      * @since 1.2
      */
     public static Iterator<File> iterateFiles(
-            final File directory, final IOFileFilter fileFilter, final @Nullable IOFileFilter dirFilter) {
+            final File directory, final IOFileFilter fileFilter, final /*@Nullable*/ IOFileFilter dirFilter) {
         return listFiles(directory, fileFilter, dirFilter).iterator();
     }
 
@@ -650,7 +653,7 @@ public class FileUtils {
      * @since 2.2
      */
     public static Iterator<File> iterateFilesAndDirs(final File directory, final IOFileFilter fileFilter,
-                                                     final @Nullable IOFileFilter dirFilter) {
+                                                     final /*@Nullable*/ IOFileFilter dirFilter) {
         return listFilesAndDirs(directory, fileFilter, dirFilter).iterator();
     }
 
@@ -662,7 +665,7 @@ public class FileUtils {
      * @param extensions an array of extensions. Format: {"java", "xml"}
      * @return an array of suffixes. Format: {".java", ".xml"}
      */
-    private static String[] toSuffixes(final @Nullable String[] extensions) {
+    private static String[] toSuffixes(final /*@Nullable*/ String[] extensions) {
         final String[] suffixes = new String[extensions.length];
         for (int i = 0; i < extensions.length; i++) {
             suffixes[i] = "." + extensions[i];
@@ -682,7 +685,7 @@ public class FileUtils {
      * @return a collection of java.io.File with the matching files
      */
     public static Collection<File> listFiles(
-            final File directory, final @Nullable String[] extensions, final boolean recursive) {
+            final File directory, final /*@Nullable*/ String[] extensions, final boolean recursive) {
         IOFileFilter filter;
         if (extensions == null) {
             filter = TrueFileFilter.INSTANCE;
@@ -708,7 +711,7 @@ public class FileUtils {
      * @since 1.2
      */
     public static Iterator<File> iterateFiles(
-            final File directory, final @Nullable String[] extensions, final boolean recursive) {
+            final File directory, final /*@Nullable*/ String[] extensions, final boolean recursive) {
         return listFiles(directory, extensions, recursive).iterator();
     }
 
@@ -778,7 +781,7 @@ public class FileUtils {
      * @see IOUtils#contentEqualsIgnoreEOL(Reader, Reader)
      * @since 2.2
      */
-    public static boolean contentEqualsIgnoreEOL(final File file1, final File file2, final @Nullable String charsetName)
+    public static boolean contentEqualsIgnoreEOL(final File file1, final File file2, final /*@Nullable*/ String charsetName)
             throws IOException {
         final boolean file1Exists = file1.exists();
         if (file1Exists != file2.exists()) {
@@ -825,7 +828,7 @@ public class FileUtils {
      * @return the equivalent <code>File</code> object, or {@code null}
      * if the URL's protocol is not <code>file</code>
      */
-    public static @Nullable File toFile(final @Nullable URL url) {
+    public static /*@Nullable*/ File toFile(final /*@Nullable*/ URL url) {
         if (url == null || !"file".equalsIgnoreCase(url.getProtocol())) {
             return null;
         } else {
@@ -1295,7 +1298,7 @@ public class FileUtils {
      * @since 1.4
      */
     public static void copyDirectory(final File srcDir, final File destDir,
-                                     final @Nullable FileFilter filter) throws IOException {
+                                     final /*@Nullable*/ FileFilter filter) throws IOException {
         copyDirectory(srcDir, destDir, filter, true);
     }
 
@@ -1346,7 +1349,7 @@ public class FileUtils {
      * @since 1.4
      */
     public static void copyDirectory(final File srcDir, final File destDir,
-                                     final @Nullable FileFilter filter, final boolean preserveFileDate) throws IOException {
+                                     final /*@Nullable*/ FileFilter filter, final boolean preserveFileDate) throws IOException {
         checkFileRequirements(srcDir, destDir);
         if (!srcDir.isDirectory()) {
             throw new IOException("Source '" + srcDir + "' exists but is not a directory");
@@ -1399,8 +1402,8 @@ public class FileUtils {
      * @throws IOException if an error occurs
      * @since 1.1
      */
-    private static void doCopyDirectory(final File srcDir, final File destDir, final @Nullable FileFilter filter,
-                                        final boolean preserveFileDate, final @Nullable List<String> exclusionList)
+    private static void doCopyDirectory(final File srcDir, final File destDir, final /*@Nullable*/ FileFilter filter,
+                                        final boolean preserveFileDate, final /*@Nullable*/ List<String> exclusionList)
             throws IOException {
         // recurse
         final File[] srcFiles = filter == null ? srcDir.listFiles() : srcDir.listFiles(filter);
@@ -1643,7 +1646,7 @@ public class FileUtils {
      *
      * @since 1.4
      */
-    public static boolean deleteQuietly(final @Nullable File file) {
+    public static boolean deleteQuietly(final /*@Nullable*/ File file) {
         if (file == null) {
             return false;
         }
@@ -1805,7 +1808,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public static String readFileToString(final File file, final @Nullable Charset encoding) throws IOException {
+    public static String readFileToString(final File file, final /*@Nullable*/ Charset encoding) throws IOException {
         try (InputStream in = openInputStream(file)) {
             return IOUtils.toString(in, Charsets.toCharset(encoding));
         }
@@ -1822,7 +1825,7 @@ public class FileUtils {
      * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported.
      * @since 2.3
      */
-    public static String readFileToString(final File file, final @Nullable String encoding) throws IOException {
+    public static String readFileToString(final File file, final /*@Nullable*/ String encoding) throws IOException {
         return readFileToString(file, Charsets.toCharset(encoding));
     }
 
@@ -1869,7 +1872,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public static List<String> readLines(final File file, final @Nullable Charset encoding) throws IOException {
+    public static List<String> readLines(final File file, final /*@Nullable*/ Charset encoding) throws IOException {
         try (InputStream in = openInputStream(file)) {
             return IOUtils.readLines(in, Charsets.toCharset(encoding));
         }
@@ -1886,7 +1889,7 @@ public class FileUtils {
      * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported.
      * @since 1.1
      */
-    public static List<String> readLines(final File file, final @Nullable String encoding) throws IOException {
+    public static List<String> readLines(final File file, final /*@Nullable*/ String encoding) throws IOException {
         return readLines(file, Charsets.toCharset(encoding));
     }
 
@@ -1936,7 +1939,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error (file closed)
      * @since 1.2
      */
-    public static LineIterator lineIterator(final File file, final @Nullable String encoding) throws IOException {
+    public static LineIterator lineIterator(final File file, final /*@Nullable*/ String encoding) throws IOException {
         InputStream in = null;
         try {
             in = openInputStream(file);
@@ -1982,7 +1985,7 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.4
      */
-    public static void writeStringToFile(final File file, final @Nullable String data, final @Nullable Charset encoding)
+    public static void writeStringToFile(final File file, final /*@Nullable*/ String data, final /*@Nullable*/ Charset encoding)
             throws IOException {
         writeStringToFile(file, data, encoding, false);
     }
@@ -1999,7 +2002,7 @@ public class FileUtils {
      * @throws IOException                          in case of an I/O error
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      */
-    public static void writeStringToFile(final File file, final @Nullable String data, final @Nullable String encoding) throws IOException {
+    public static void writeStringToFile(final File file, final /*@Nullable*/ String data, final /*@Nullable*/ String encoding) throws IOException {
         writeStringToFile(file, data, encoding, false);
     }
 
@@ -2014,7 +2017,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public static void writeStringToFile(final File file, final @Nullable String data, final @Nullable Charset encoding,
+    public static void writeStringToFile(final File file, final /*@Nullable*/ String data, final /*@Nullable*/ Charset encoding,
                                          final boolean append) throws IOException {
         try (OutputStream out = openOutputStream(file, append)) {
             IOUtils.write(data, out, encoding);
@@ -2034,7 +2037,7 @@ public class FileUtils {
      * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported by the VM
      * @since 2.1
      */
-    public static void writeStringToFile(final File file, final @Nullable String data, final @Nullable String encoding,
+    public static void writeStringToFile(final File file, final /*@Nullable*/ String data, final /*@Nullable*/ String encoding,
                                          final boolean append) throws IOException {
         writeStringToFile(file, data, Charsets.toCharset(encoding), append);
     }
@@ -2048,7 +2051,7 @@ public class FileUtils {
      * @deprecated 2.5 use {@link #writeStringToFile(File, String, Charset)} instead (and specify the appropriate encoding)
      */
     @Deprecated
-    public static void writeStringToFile(final File file, final @Nullable String data) throws IOException {
+    public static void writeStringToFile(final File file, final /*@Nullable*/ String data) throws IOException {
         writeStringToFile(file, data, Charset.defaultCharset(), false);
     }
 
@@ -2064,7 +2067,7 @@ public class FileUtils {
      * @deprecated 2.5 use {@link #writeStringToFile(File, String, Charset, boolean)} instead (and specify the appropriate encoding)
      */
     @Deprecated
-    public static void writeStringToFile(final File file, final @Nullable String data, final boolean append) throws IOException {
+    public static void writeStringToFile(final File file, final /*@Nullable*/ String data, final boolean append) throws IOException {
         writeStringToFile(file, data, Charset.defaultCharset(), append);
     }
 
@@ -2078,7 +2081,7 @@ public class FileUtils {
      * @deprecated 2.5 use {@link #write(File, CharSequence, Charset)} instead (and specify the appropriate encoding)
      */
     @Deprecated
-    public static void write(final File file, final @Nullable CharSequence data) throws IOException {
+    public static void write(final File file, final /*@Nullable*/ CharSequence data) throws IOException {
         write(file, data, Charset.defaultCharset(), false);
     }
 
@@ -2094,7 +2097,7 @@ public class FileUtils {
      * @deprecated 2.5 use {@link #write(File, CharSequence, Charset, boolean)} instead (and specify the appropriate encoding)
      */
     @Deprecated
-    public static void write(final File file, final @Nullable CharSequence data, final boolean append) throws IOException {
+    public static void write(final File file, final /*@Nullable*/ CharSequence data, final boolean append) throws IOException {
         write(file, data, Charset.defaultCharset(), append);
     }
 
@@ -2107,7 +2110,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public static void write(final File file, final @Nullable CharSequence data, final @Nullable Charset encoding) throws IOException {
+    public static void write(final File file, final /*@Nullable*/ CharSequence data, final /*@Nullable*/ Charset encoding) throws IOException {
         write(file, data, encoding, false);
     }
 
@@ -2121,7 +2124,7 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.0
      */
-    public static void write(final File file, final @Nullable CharSequence data, final @Nullable String encoding) throws IOException {
+    public static void write(final File file, final /*@Nullable*/ CharSequence data, final /*@Nullable*/ String encoding) throws IOException {
         write(file, data, encoding, false);
     }
 
@@ -2136,7 +2139,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public static void write(final File file, final @Nullable CharSequence data, final @Nullable Charset encoding, final boolean append)
+    public static void write(final File file, final /*@Nullable*/ CharSequence data, final /*@Nullable*/ Charset encoding, final boolean append)
             throws IOException {
         final String str = data == null ? null : data.toString();
         writeStringToFile(file, str, encoding, append);
@@ -2155,7 +2158,7 @@ public class FileUtils {
      * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported by the VM
      * @since 2.1
      */
-    public static void write(final File file, final @Nullable CharSequence data, final @Nullable String encoding, final boolean append)
+    public static void write(final File file, final /*@Nullable*/ CharSequence data, final /*@Nullable*/ String encoding, final boolean append)
             throws IOException {
         write(file, data, Charsets.toCharset(encoding), append);
     }
@@ -2243,7 +2246,7 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 1.1
      */
-    public static void writeLines(final File file, final @Nullable String encoding, final @Nullable Collection<?> lines)
+    public static void writeLines(final File file, final /*@Nullable*/ String encoding, final /*@Nullable*/ Collection<?> lines)
             throws IOException {
         writeLines(file, encoding, lines, null, false);
     }
@@ -2262,7 +2265,7 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.1
      */
-    public static void writeLines(final File file, final @Nullable String encoding, final @Nullable Collection<?> lines,
+    public static void writeLines(final File file, final /*@Nullable*/ String encoding, final /*@Nullable*/ Collection<?> lines,
                                   final boolean append) throws IOException {
         writeLines(file, encoding, lines, null, append);
     }
@@ -2277,7 +2280,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 1.3
      */
-    public static void writeLines(final File file, final @Nullable Collection<?> lines) throws IOException {
+    public static void writeLines(final File file, final /*@Nullable*/ Collection<?> lines) throws IOException {
         writeLines(file, null, lines, null, false);
     }
 
@@ -2293,7 +2296,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.1
      */
-    public static void writeLines(final File file, final @Nullable Collection<?> lines, final boolean append) throws IOException {
+    public static void writeLines(final File file, final /*@Nullable*/ Collection<?> lines, final boolean append) throws IOException {
         writeLines(file, null, lines, null, append);
     }
 
@@ -2313,8 +2316,8 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 1.1
      */
-    public static void writeLines(final File file, final @Nullable String encoding, final @Nullable Collection<?> lines,
-                                  final @Nullable String lineEnding) throws IOException {
+    public static void writeLines(final File file, final /*@Nullable*/ String encoding, final /*@Nullable*/ Collection<?> lines,
+                                  final /*@Nullable*/ String lineEnding) throws IOException {
         writeLines(file, encoding, lines, lineEnding, false);
     }
 
@@ -2333,8 +2336,8 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.1
      */
-    public static void writeLines(final File file, final @Nullable String encoding, final @Nullable Collection<?> lines,
-                                  final @Nullable String lineEnding, final boolean append) throws IOException {
+    public static void writeLines(final File file, final /*@Nullable*/ String encoding, final /*@Nullable*/ Collection<?> lines,
+                                  final /*@Nullable*/ String lineEnding, final boolean append) throws IOException {
         try (OutputStream out = new BufferedOutputStream(openOutputStream(file, append))) {
             IOUtils.writeLines(lines, lineEnding, out, encoding);
         }
@@ -2351,7 +2354,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 1.3
      */
-    public static void writeLines(final File file, final @Nullable Collection<?> lines, final @Nullable String lineEnding)
+    public static void writeLines(final File file, final /*@Nullable*/ Collection<?> lines, final /*@Nullable*/ String lineEnding)
             throws IOException {
         writeLines(file, null, lines, lineEnding, false);
     }
@@ -2369,7 +2372,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.1
      */
-    public static void writeLines(final File file, final @Nullable Collection<?> lines, final @Nullable String lineEnding,
+    public static void writeLines(final File file, final /*@Nullable*/ Collection<?> lines, final /*@Nullable*/ String lineEnding,
                                   final boolean append) throws IOException {
         writeLines(file, null, lines, lineEnding, append);
     }

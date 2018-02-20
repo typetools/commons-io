@@ -19,15 +19,18 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
+*/
+
 /**
  * Forwards data to a stream that has been associated with this thread.
  *
  */
 @AnnotatedFor("nullness")
 public class DemuxOutputStream extends OutputStream {
-    private final InheritableThreadLocal<@Nullable OutputStream> outputStreamThreadLocal = new InheritableThreadLocal<>();
+    private final InheritableThreadLocal</*@Nullable*/ OutputStream> outputStreamThreadLocal = new InheritableThreadLocal<>();
 
     /**
      * Binds the specified stream to the current thread.
@@ -36,7 +39,7 @@ public class DemuxOutputStream extends OutputStream {
      *            the stream to bind
      * @return the OutputStream that was previously active
      */
-    public @Nullable OutputStream bindStream(final OutputStream output) {
+    public /*@Nullable*/ OutputStream bindStream(final OutputStream output) {
         final OutputStream stream = outputStreamThreadLocal.get();
         outputStreamThreadLocal.set(output);
         return stream;

@@ -22,8 +22,11 @@ import java.util.Comparator;
 
 import org.apache.commons.io.IOCase;
 
+/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
+*/
+
 /**
  * Compare the <b>names</b> of two files for order (see {@link File#getName()}).
  * <p>
@@ -88,7 +91,7 @@ public class NameFileComparator extends AbstractFileComparator implements Serial
      *
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      */
-    public NameFileComparator(final @Nullable IOCase caseSensitivity) {
+    public NameFileComparator(final /*@Nullable*/ IOCase caseSensitivity) {
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 

@@ -22,8 +22,11 @@ import java.util.List;
 
 import org.apache.commons.io.IOCase;
 
+/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
+*/
+
 /**
  * Filters filenames for a certain name.
  * <p>
@@ -69,7 +72,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the name is null
      */
-    public NameFileFilter(final String name, final @Nullable IOCase caseSensitivity) {
+    public NameFileFilter(final String name, final /*@Nullable*/ IOCase caseSensitivity) {
         if (name == null) {
             throw new IllegalArgumentException("The wildcard must not be null");
         }
@@ -97,7 +100,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the names array is null
      */
-    public NameFileFilter(final String[] names, final @Nullable IOCase caseSensitivity) {
+    public NameFileFilter(final String[] names, final /*@Nullable*/ IOCase caseSensitivity) {
         if (names == null) {
             throw new IllegalArgumentException("The array of names must not be null");
         }
@@ -125,7 +128,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      * @throws IllegalArgumentException if the name list is null
      * @throws ClassCastException if the list does not contain Strings
      */
-    public NameFileFilter(final List<String> names, final @Nullable IOCase caseSensitivity) {
+    public NameFileFilter(final List<String> names, final /*@Nullable*/ IOCase caseSensitivity) {
         if (names == null) {
             throw new IllegalArgumentException("The list of names must not be null");
         }

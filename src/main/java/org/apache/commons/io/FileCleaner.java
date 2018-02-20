@@ -18,8 +18,11 @@ package org.apache.commons.io;
 
 import java.io.File;
 
+/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
+*/
+
 /**
  * Keeps track of files awaiting deletion, and deletes them when an associated
  * marker object is reclaimed by the garbage collector.
@@ -72,7 +75,7 @@ public class FileCleaner {
      * @deprecated Use {@link FileCleaningTracker#track(File, Object, FileDeleteStrategy)}.
      */
     @Deprecated
-    public static void track(final File file, final Object marker, final @Nullable FileDeleteStrategy deleteStrategy) {
+    public static void track(final File file, final Object marker, final /*@Nullable*/ FileDeleteStrategy deleteStrategy) {
         theInstance.track(file, marker, deleteStrategy);
     }
 
@@ -103,7 +106,7 @@ public class FileCleaner {
      * @deprecated Use {@link FileCleaningTracker#track(String, Object, FileDeleteStrategy)}.
      */
     @Deprecated
-    public static void track(final String path, final Object marker, final @Nullable FileDeleteStrategy deleteStrategy) {
+    public static void track(final String path, final Object marker, final /*@Nullable*/ FileDeleteStrategy deleteStrategy) {
         theInstance.track(path, marker, deleteStrategy);
     }
 

@@ -50,9 +50,12 @@ import java.util.List;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.StringBuilderWriter;
 
+/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+*/
+
 /**
  * General IO stream manipulation utilities.
  * <p>
@@ -169,8 +172,8 @@ public class IOUtils {
      * (if the buffer size were variable, we would need to synch. to ensure some other thread
      * did not create a smaller one)
      */
-    private static char @Nullable [] SKIP_CHAR_BUFFER;
-    private static byte @Nullable [] SKIP_BYTE_BUFFER;
+    private static char /*@Nullable*/ [] SKIP_CHAR_BUFFER;
+    private static byte /*@Nullable*/ [] SKIP_BYTE_BUFFER;
 
     /**
      * Instances should NOT be constructed in standard programming.
@@ -221,7 +224,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final @Nullable Reader input) {
+    public static void closeQuietly(final /*@Nullable*/ Reader input) {
         closeQuietly((Closeable) input);
     }
 
@@ -252,7 +255,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final @Nullable Writer output) {
+    public static void closeQuietly(final /*@Nullable*/ Writer output) {
         closeQuietly((Closeable) output);
     }
 
@@ -284,7 +287,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final @Nullable InputStream input) {
+    public static void closeQuietly(final /*@Nullable*/ InputStream input) {
         closeQuietly((Closeable) input);
     }
 
@@ -317,7 +320,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final @Nullable OutputStream output) {
+    public static void closeQuietly(final /*@Nullable*/ OutputStream output) {
         closeQuietly((Closeable) output);
     }
 
@@ -361,7 +364,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final @Nullable Closeable closeable) {
+    public static void closeQuietly(final /*@Nullable*/ Closeable closeable) {
         try {
             if (closeable != null) {
                 closeable.close();
@@ -419,7 +422,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final @Nullable Closeable... closeables) {
+    public static void closeQuietly(final /*@Nullable*/ Closeable... closeables) {
         if (closeables == null) {
             return;
         }
@@ -456,7 +459,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final @Nullable Socket sock) {
+    public static void closeQuietly(final /*@Nullable*/ Socket sock) {
         if (sock != null) {
             try {
                 sock.close();
@@ -494,7 +497,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final @Nullable Selector selector) {
+    public static void closeQuietly(final /*@Nullable*/ Selector selector) {
         if (selector != null) {
             try {
                 selector.close();
@@ -532,7 +535,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final @Nullable ServerSocket sock) {
+    public static void closeQuietly(final /*@Nullable*/ ServerSocket sock) {
         if (sock != null) {
             try {
                 sock.close();
@@ -867,7 +870,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static byte[] toByteArray(final Reader input, final @Nullable Charset encoding) throws IOException {
+    public static byte[] toByteArray(final Reader input, final /*@Nullable*/ Charset encoding) throws IOException {
         try (final ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             copy(input, output, encoding);
             return output.toByteArray();
@@ -894,7 +897,7 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static byte[] toByteArray(final Reader input, final @Nullable String encoding) throws IOException {
+    public static byte[] toByteArray(final Reader input, final /*@Nullable*/ String encoding) throws IOException {
         return toByteArray(input, Charsets.toCharset(encoding));
     }
 
@@ -998,7 +1001,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static char[] toCharArray(final InputStream is, final @Nullable Charset encoding)
+    public static char[] toCharArray(final InputStream is, final /*@Nullable*/ Charset encoding)
             throws IOException {
         final CharArrayWriter output = new CharArrayWriter();
         copy(is, output, encoding);
@@ -1025,7 +1028,7 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static char[] toCharArray(final InputStream is, final @Nullable String encoding) throws IOException {
+    public static char[] toCharArray(final InputStream is, final /*@Nullable*/ String encoding) throws IOException {
         return toCharArray(is, Charsets.toCharset(encoding));
     }
 
@@ -1083,7 +1086,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static String toString(final InputStream input, final @Nullable Charset encoding) throws IOException {
+    public static String toString(final InputStream input, final /*@Nullable*/ Charset encoding) throws IOException {
         try (final StringBuilderWriter sw = new StringBuilderWriter()) {
             copy(input, sw, encoding);
             return sw.toString();
@@ -1109,7 +1112,7 @@ public class IOUtils {
      *                                                      .UnsupportedEncodingException} in version 2.2 if the
      *                                                      encoding is not supported.
      */
-    public static String toString(final InputStream input, final @Nullable String encoding)
+    public static String toString(final InputStream input, final /*@Nullable*/ String encoding)
             throws IOException {
         return toString(input, Charsets.toCharset(encoding));
     }
@@ -1155,7 +1158,7 @@ public class IOUtils {
      * @throws IOException if an I/O exception occurs.
      * @since 2.3.
      */
-    public static String toString(final URI uri, final @Nullable Charset encoding) throws IOException {
+    public static String toString(final URI uri, final /*@Nullable*/ Charset encoding) throws IOException {
         return toString(uri.toURL(), Charsets.toCharset(encoding));
     }
 
@@ -1171,7 +1174,7 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 2.1
      */
-    public static String toString(final URI uri, final @Nullable String encoding) throws IOException {
+    public static String toString(final URI uri, final /*@Nullable*/ String encoding) throws IOException {
         return toString(uri, Charsets.toCharset(encoding));
     }
 
@@ -1198,7 +1201,7 @@ public class IOUtils {
      * @throws IOException if an I/O exception occurs.
      * @since 2.3
      */
-    public static String toString(final URL url, final @Nullable Charset encoding) throws IOException {
+    public static String toString(final URL url, final /*@Nullable*/ Charset encoding) throws IOException {
         try (InputStream inputStream = url.openStream()) {
             return toString(inputStream, encoding);
         }
@@ -1216,7 +1219,7 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 2.1
      */
-    public static String toString(final URL url, final @Nullable String encoding) throws IOException {
+    public static String toString(final URL url, final /*@Nullable*/ String encoding) throws IOException {
         return toString(url, Charsets.toCharset(encoding));
     }
 
@@ -1249,7 +1252,7 @@ public class IOUtils {
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs (never occurs)
      */
-    public static String toString(final byte[] input, final @Nullable String encoding) throws IOException {
+    public static String toString(final byte[] input, final /*@Nullable*/ String encoding) throws IOException {
         return new String(input, Charsets.toCharset(encoding));
     }
 
@@ -1272,7 +1275,7 @@ public class IOUtils {
      *
      * @since 2.6
      */
-    public static String resourceToString(final String name, final @Nullable Charset encoding) throws IOException {
+    public static String resourceToString(final String name, final /*@Nullable*/ Charset encoding) throws IOException {
         return resourceToString(name, encoding, null);
     }
 
@@ -1293,7 +1296,7 @@ public class IOUtils {
      *
      * @since 2.6
      */
-    public static String resourceToString(final String name, final @Nullable Charset encoding, final @Nullable ClassLoader classLoader) throws IOException {
+    public static String resourceToString(final String name, final /*@Nullable*/ Charset encoding, final /*@Nullable*/ ClassLoader classLoader) throws IOException {
         return toString(resourceToURL(name, classLoader), encoding);
     }
 
@@ -1330,7 +1333,7 @@ public class IOUtils {
      *
      * @since 2.6
      */
-    public static byte[] resourceToByteArray(final String name, final @Nullable ClassLoader classLoader) throws IOException {
+    public static byte[] resourceToByteArray(final String name, final /*@Nullable*/ ClassLoader classLoader) throws IOException {
         return toByteArray(resourceToURL(name, classLoader));
     }
 
@@ -1367,7 +1370,7 @@ public class IOUtils {
      *
      * @since 2.6
      */
-    public static URL resourceToURL(final String name, final @Nullable ClassLoader classLoader) throws IOException {
+    public static URL resourceToURL(final String name, final /*@Nullable*/ ClassLoader classLoader) throws IOException {
         // What about the thread context class loader?
         // What about the system class loader?
         final URL resource = classLoader == null ? IOUtils.class.getResource(name) : classLoader.getResource(name);
@@ -1415,7 +1418,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static List<String> readLines(final InputStream input, final @Nullable Charset encoding) throws IOException {
+    public static List<String> readLines(final InputStream input, final /*@Nullable*/ Charset encoding) throws IOException {
         final InputStreamReader reader = new InputStreamReader(input, Charsets.toCharset(encoding));
         return readLines(reader);
     }
@@ -1440,7 +1443,7 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static List<String> readLines(final InputStream input, final @Nullable String encoding) throws IOException {
+    public static List<String> readLines(final InputStream input, final /*@Nullable*/ String encoding) throws IOException {
         return readLines(input, Charsets.toCharset(encoding));
     }
 
@@ -1532,7 +1535,7 @@ public class IOUtils {
      * @throws IOException              if an I/O error occurs, such as if the encoding is invalid
      * @since 2.3
      */
-    public static LineIterator lineIterator(final InputStream input, final @Nullable Charset encoding) throws IOException {
+    public static LineIterator lineIterator(final InputStream input, final /*@Nullable*/ Charset encoding) throws IOException {
         return new LineIterator(new InputStreamReader(input, Charsets.toCharset(encoding)));
     }
 
@@ -1569,7 +1572,7 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.2
      */
-    public static LineIterator lineIterator(final InputStream input, final @Nullable String encoding) throws IOException {
+    public static LineIterator lineIterator(final InputStream input, final /*@Nullable*/ String encoding) throws IOException {
         return lineIterator(input, Charsets.toCharset(encoding));
     }
 
@@ -1598,7 +1601,7 @@ public class IOUtils {
      * @return an input stream
      * @since 2.3
      */
-    public static InputStream toInputStream(final CharSequence input, final @Nullable Charset encoding) {
+    public static InputStream toInputStream(final CharSequence input, final /*@Nullable*/ Charset encoding) {
         return toInputStream(input.toString(), encoding);
     }
 
@@ -1618,7 +1621,7 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 2.0
      */
-    public static InputStream toInputStream(final CharSequence input, final @Nullable String encoding) throws IOException {
+    public static InputStream toInputStream(final CharSequence input, final /*@Nullable*/ String encoding) throws IOException {
         return toInputStream(input, Charsets.toCharset(encoding));
     }
 
@@ -1647,7 +1650,7 @@ public class IOUtils {
      * @return an input stream
      * @since 2.3
      */
-    public static InputStream toInputStream(final String input, final @Nullable Charset encoding) {
+    public static InputStream toInputStream(final String input, final /*@Nullable*/ Charset encoding) {
         return new ByteArrayInputStream(input.getBytes(Charsets.toCharset(encoding)));
     }
 
@@ -1667,7 +1670,7 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static InputStream toInputStream(final String input, final @Nullable String encoding) throws IOException {
+    public static InputStream toInputStream(final String input, final /*@Nullable*/ String encoding) throws IOException {
         final byte[] bytes = input.getBytes(Charsets.toCharset(encoding));
         return new ByteArrayInputStream(bytes);
     }
@@ -1751,7 +1754,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static void write(final byte[] data, final Writer output, final @Nullable Charset encoding) throws IOException {
+    public static void write(final byte[] data, final Writer output, final /*@Nullable*/ Charset encoding) throws IOException {
         if (data != null) {
             output.write(new String(data, Charsets.toCharset(encoding)));
         }
@@ -1777,7 +1780,7 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static void write(final byte[] data, final Writer output, final @Nullable String encoding) throws IOException {
+    public static void write(final byte[] data, final Writer output, final /*@Nullable*/ String encoding) throws IOException {
         write(data, output, Charsets.toCharset(encoding));
     }
 
@@ -1861,7 +1864,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static void write(final char[] data, final OutputStream output, final @Nullable Charset encoding) throws IOException {
+    public static void write(final char[] data, final OutputStream output, final /*@Nullable*/ Charset encoding) throws IOException {
         if (data != null) {
             output.write(new String(data).getBytes(Charsets.toCharset(encoding)));
         }
@@ -1887,7 +1890,7 @@ public class IOUtils {
      * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported.
      * @since 1.1
      */
-    public static void write(final char[] data, final OutputStream output, final @Nullable String encoding)
+    public static void write(final char[] data, final OutputStream output, final /*@Nullable*/ String encoding)
             throws IOException {
         write(data, output, Charsets.toCharset(encoding));
     }
@@ -1904,7 +1907,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 2.0
      */
-    public static void write(final @Nullable CharSequence data, final Writer output) throws IOException {
+    public static void write(final /*@Nullable*/ CharSequence data, final Writer output) throws IOException {
         if (data != null) {
             write(data.toString(), output);
         }
@@ -1925,7 +1928,7 @@ public class IOUtils {
      * @deprecated 2.5 use {@link #write(CharSequence, OutputStream, Charset)} instead
      */
     @Deprecated
-    public static void write(final @Nullable CharSequence data, final OutputStream output)
+    public static void write(final /*@Nullable*/ CharSequence data, final OutputStream output)
             throws IOException {
         write(data, output, Charset.defaultCharset());
     }
@@ -1943,7 +1946,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static void write(final @Nullable CharSequence data, final OutputStream output, final @Nullable Charset encoding)
+    public static void write(final /*@Nullable*/ CharSequence data, final OutputStream output, final /*@Nullable*/ Charset encoding)
             throws IOException {
         if (data != null) {
             write(data.toString(), output, encoding);
@@ -1968,7 +1971,7 @@ public class IOUtils {
      * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported.
      * @since 2.0
      */
-    public static void write(final @Nullable CharSequence data, final OutputStream output, final @Nullable  String encoding)
+    public static void write(final /*@Nullable*/ CharSequence data, final OutputStream output, final /*@Nullable*/  String encoding)
             throws IOException {
         write(data, output, Charsets.toCharset(encoding));
     }
@@ -1985,7 +1988,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 1.1
      */
-    public static void write(final @Nullable String data, final Writer output) throws IOException {
+    public static void write(final /*@Nullable*/ String data, final Writer output) throws IOException {
         if (data != null) {
             output.write(data);
         }
@@ -2006,7 +2009,7 @@ public class IOUtils {
      * @deprecated 2.5 use {@link #write(String, OutputStream, Charset)} instead
      */
     @Deprecated
-    public static void write(final @Nullable String data, final OutputStream output)
+    public static void write(final /*@Nullable*/ String data, final OutputStream output)
             throws IOException {
         write(data, output, Charset.defaultCharset());
     }
@@ -2024,7 +2027,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static void write(final @Nullable String data, final OutputStream output, final @Nullable Charset encoding) throws IOException {
+    public static void write(final /*@Nullable*/ String data, final OutputStream output, final /*@Nullable*/ Charset encoding) throws IOException {
         if (data != null) {
             output.write(data.getBytes(Charsets.toCharset(encoding)));
         }
@@ -2048,7 +2051,7 @@ public class IOUtils {
      * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported.
      * @since 1.1
      */
-    public static void write(final @Nullable String data, final OutputStream output, final @Nullable String encoding)
+    public static void write(final /*@Nullable*/ String data, final OutputStream output, final /*@Nullable*/ String encoding)
             throws IOException {
         write(data, output, Charsets.toCharset(encoding));
     }
@@ -2067,7 +2070,7 @@ public class IOUtils {
      * @deprecated replaced by write(CharSequence, Writer)
      */
     @Deprecated
-    public static void write(final @Nullable StringBuffer data, final Writer output)
+    public static void write(final /*@Nullable*/ StringBuffer data, final Writer output)
             throws IOException {
         if (data != null) {
             output.write(data.toString());
@@ -2089,7 +2092,7 @@ public class IOUtils {
      * @deprecated replaced by write(CharSequence, OutputStream)
      */
     @Deprecated
-    public static void write(final @Nullable StringBuffer data, final OutputStream output)
+    public static void write(final /*@Nullable*/ StringBuffer data, final OutputStream output)
             throws IOException {
         write(data, output, (String) null);
     }
@@ -2114,7 +2117,7 @@ public class IOUtils {
      * @deprecated replaced by write(CharSequence, OutputStream, String)
      */
     @Deprecated
-    public static void write(final @Nullable StringBuffer data, final OutputStream output, final @Nullable String encoding)
+    public static void write(final /*@Nullable*/ StringBuffer data, final OutputStream output, final /*@Nullable*/ String encoding)
             throws IOException {
         if (data != null) {
             output.write(data.toString().getBytes(Charsets.toCharset(encoding)));
@@ -2138,7 +2141,7 @@ public class IOUtils {
      * @deprecated 2.5 use {@link #writeLines(Collection, String, OutputStream, Charset)} instead
      */
     @Deprecated
-    public static void writeLines(final @Nullable Collection<?> lines, final @Nullable String lineEnding,
+    public static void writeLines(final /*@Nullable*/ Collection<?> lines, final /*@Nullable*/ String lineEnding,
                                   final OutputStream output) throws IOException {
         writeLines(lines, lineEnding, output, Charset.defaultCharset());
     }
@@ -2156,8 +2159,8 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static void writeLines(final @Nullable Collection<?> lines, @Nullable String lineEnding, final OutputStream output,
-                                  final @Nullable Charset encoding) throws IOException {
+    public static void writeLines(final /*@Nullable*/ Collection<?> lines, /*@Nullable*/ String lineEnding, final OutputStream output,
+                                  final /*@Nullable*/ Charset encoding) throws IOException {
         if (lines == null) {
             return;
         }
@@ -2192,8 +2195,8 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static void writeLines(final @Nullable Collection<?> lines, final @Nullable String lineEnding,
-                                  final OutputStream output, final @Nullable String encoding) throws IOException {
+    public static void writeLines(final /*@Nullable*/ Collection<?> lines, final /*@Nullable*/ String lineEnding,
+                                  final OutputStream output, final /*@Nullable*/ String encoding) throws IOException {
         writeLines(lines, lineEnding, output, Charsets.toCharset(encoding));
     }
 
@@ -2208,7 +2211,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 1.1
      */
-    public static void writeLines(final @Nullable Collection<?> lines, @Nullable String lineEnding,
+    public static void writeLines(final /*@Nullable*/ Collection<?> lines, /*@Nullable*/ String lineEnding,
                                   final Writer writer) throws IOException {
         if (lines == null) {
             return;
@@ -2439,7 +2442,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static void copy(final InputStream input, final Writer output, final @Nullable Charset inputEncoding)
+    public static void copy(final InputStream input, final Writer output, final /*@Nullable*/ Charset inputEncoding)
             throws IOException {
         final InputStreamReader in = new InputStreamReader(input, Charsets.toCharset(inputEncoding));
         copy(in, output);
@@ -2467,7 +2470,7 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static void copy(final InputStream input, final Writer output, final @Nullable String inputEncoding)
+    public static void copy(final InputStream input, final Writer output, final /*@Nullable*/ String inputEncoding)
             throws IOException {
         copy(input, output, Charsets.toCharset(inputEncoding));
     }
@@ -2663,7 +2666,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static void copy(final Reader input, final OutputStream output, final @Nullable Charset outputEncoding)
+    public static void copy(final Reader input, final OutputStream output, final /*@Nullable*/ Charset outputEncoding)
             throws IOException {
         final OutputStreamWriter out = new OutputStreamWriter(output, Charsets.toCharset(outputEncoding));
         copy(input, out);
@@ -2698,7 +2701,7 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static void copy(final Reader input, final OutputStream output, final @Nullable String outputEncoding)
+    public static void copy(final Reader input, final OutputStream output, final /*@Nullable*/ String outputEncoding)
             throws IOException {
         copy(input, output, Charsets.toCharset(outputEncoding));
     }

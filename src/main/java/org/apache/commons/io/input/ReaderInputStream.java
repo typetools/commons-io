@@ -28,9 +28,12 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 
+/*>>>
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+*/
+
 /**
  * {@link InputStream} implementation that reads a character stream from a {@link Reader}
  * and transforms it to a byte stream using a specified charset encoding. The stream

@@ -19,8 +19,11 @@ package org.apache.commons.io;
 import java.io.IOException;
 import java.io.Serializable;
 
+/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
+*/
+
 /**
  * An {@link IOException} decorator that adds a serializable tag to the
  * wrapped exception. Both the tag and the original exception can be used
@@ -133,7 +136,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * @return wrapped exception
      */
     @Override
-    public @Nullable IOException getCause() {
+    public /*@Nullable*/ IOException getCause() {
         return (IOException) super.getCause();
     }
 

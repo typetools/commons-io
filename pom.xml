@@ -248,13 +248,13 @@ file comparators, endian transformation classes, and much more.
       <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/checker.jar</systemPath>
     </dependency>
     <!-- The Type Annotations compiler. Uncomment if using annotations in comments. -->
-    <!-- <dependency>
+    <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>compiler</artifactId>
       <version>${checkerframework.version}</version>
       <scope>system</scope>
-      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/compiler.jar</systemPath>
-    </dependency> -->
+      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/javac.jar</systemPath>
+    </dependency>
     <!-- The annotated JDK to use. -->
     <dependency>
       <groupId>org.checkerframework</groupId>
@@ -297,8 +297,8 @@ file comparators, endian transformation classes, and much more.
     <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
     <!-- These properties will be set by the Maven Dependency plugin -->
     <annotatedJdk>${org.checkerframework:jdk8:jar}</annotatedJdk>
-    <!-- <typeAnnotationsJavac>${org.checkerframework:compiler:jar}</typeAnnotationsJavac> -->
-    <checkerframework.version>2.2.0</checkerframework.version>
+    <typeAnnotationsJavac>${org.checkerframework:compiler:jar}</typeAnnotationsJavac>
+    <checkerframework.version>2.3.2</checkerframework.version>
   </properties>
 
   <build>
@@ -335,8 +335,8 @@ file comparators, endian transformation classes, and much more.
         <version>3.6.1</version>
         <configuration>
           <!-- Change source and target to 1.7 to create .class files that can be run on a Java 7 JVM -->
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>1.7</source>
+          <target>1.7</target>
           <fork>true</fork>
           <annotationProcessors>
             <!-- Add all the checkers you want to enable here -->
@@ -346,7 +346,7 @@ file comparators, endian transformation classes, and much more.
               <!-- location of the annotated JDK, which comes from a Maven dependency -->
               <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
               <!-- Uncomment the following line to use the type annotations compiler. -->
-              <!-- <arg>-J-Xbootclasspath/p:${typeAnnotationsJavac}</arg> -->
+              <arg>-J-Xbootclasspath/p:${typeAnnotationsJavac}</arg>
               <!--<arg>-AuseDefaultsForUncheckedCode=source,bytecode</arg>
               <arg>-Awarns</arg>
               <arg>-Xmaxwarns</arg>

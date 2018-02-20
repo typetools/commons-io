@@ -29,8 +29,11 @@ import java.util.Set;
 
 import org.apache.commons.io.IOCase;
 
+/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
+*/
+
 /**
  * Useful utilities for working with file filters. It provides access to all
  * file filter implementations in this package so you don't have to import
@@ -306,7 +309,7 @@ public class FileFilterUtils {
      * @see PrefixFileFilter
      * @since 2.0
      */
-    public static IOFileFilter prefixFileFilter(final String prefix, final @Nullable IOCase caseSensitivity) {
+    public static IOFileFilter prefixFileFilter(final String prefix, final /*@Nullable*/ IOCase caseSensitivity) {
         return new PrefixFileFilter(prefix, caseSensitivity);
     }
 
@@ -330,7 +333,7 @@ public class FileFilterUtils {
      * @see SuffixFileFilter
      * @since 2.0
      */
-    public static IOFileFilter suffixFileFilter(final String suffix, final @Nullable IOCase caseSensitivity) {
+    public static IOFileFilter suffixFileFilter(final String suffix, final /*@Nullable*/ IOCase caseSensitivity) {
         return new SuffixFileFilter(suffix, caseSensitivity);
     }
 
@@ -354,7 +357,7 @@ public class FileFilterUtils {
      * @see NameFileFilter
      * @since 2.0
      */
-    public static IOFileFilter nameFileFilter(final String name, final @Nullable IOCase caseSensitivity) {
+    public static IOFileFilter nameFileFilter(final String name, final /*@Nullable*/ IOCase caseSensitivity) {
         return new NameFileFilter(name, caseSensitivity);
     }
 
@@ -740,7 +743,7 @@ public class FileFilterUtils {
      * @return the decorated filter, never null
      * @since 1.1 (method existed but had bug in 1.0)
      */
-    public static IOFileFilter makeCVSAware(final @Nullable IOFileFilter filter) {
+    public static IOFileFilter makeCVSAware(final /*@Nullable*/ IOFileFilter filter) {
         if (filter == null) {
             return cvsFilter;
         } else {
@@ -757,7 +760,7 @@ public class FileFilterUtils {
      * @return the decorated filter, never null
      * @since 1.1
      */
-    public static IOFileFilter makeSVNAware(final @Nullable IOFileFilter filter) {
+    public static IOFileFilter makeSVNAware(final /*@Nullable*/ IOFileFilter filter) {
         if (filter == null) {
             return svnFilter;
         } else {
@@ -774,7 +777,7 @@ public class FileFilterUtils {
      * @see DirectoryFileFilter#DIRECTORY
      * @since 1.3
      */
-    public static IOFileFilter makeDirectoryOnly(final @Nullable IOFileFilter filter) {
+    public static IOFileFilter makeDirectoryOnly(final /*@Nullable*/ IOFileFilter filter) {
         if (filter == null) {
             return DirectoryFileFilter.DIRECTORY;
         }
@@ -789,7 +792,7 @@ public class FileFilterUtils {
      * @see FileFileFilter#FILE
      * @since 1.3
      */
-    public static IOFileFilter makeFileOnly(final @Nullable IOFileFilter filter) {
+    public static IOFileFilter makeFileOnly(final /*@Nullable*/ IOFileFilter filter) {
         if (filter == null) {
             return FileFileFilter.FILE;
         }

@@ -16,8 +16,11 @@
  */
 package org.apache.commons.io;
 
+/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
+*/
+
 /**
  * Monitors a thread, interrupting it if it reaches the specified timeout.
  * <p>
@@ -53,7 +56,7 @@ class ThreadMonitor implements Runnable {
      * @return The monitor thread or {@code null}
      * if the timeout amount is not greater than zero
      */
-    public static @Nullable Thread start(final long timeout) {
+    public static /*@Nullable*/ Thread start(final long timeout) {
         return start(Thread.currentThread(), timeout);
     }
 
@@ -66,7 +69,7 @@ class ThreadMonitor implements Runnable {
      * @return The monitor thread or {@code null}
      * if the timeout amount is not greater than zero
      */
-    public static @Nullable Thread start(final Thread thread, final long timeout) {
+    public static /*@Nullable*/ Thread start(final Thread thread, final long timeout) {
         Thread monitor = null;
         if (timeout > 0) {
             final ThreadMonitor timout = new ThreadMonitor(thread, timeout);
@@ -82,7 +85,7 @@ class ThreadMonitor implements Runnable {
      *
      * @param thread The monitor thread, may be {@code null}
      */
-    public static void stop(final @Nullable Thread thread) {
+    public static void stop(final /*@Nullable*/ Thread thread) {
         if (thread != null) {
             thread.interrupt();
         }

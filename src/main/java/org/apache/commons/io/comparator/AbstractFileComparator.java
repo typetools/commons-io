@@ -22,8 +22,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
+*/
+
 /**
  * Abstract file {@link Comparator} which provides sorting for file arrays and lists.
  *
@@ -42,7 +45,7 @@ abstract class AbstractFileComparator implements Comparator<File> {
      * @return The sorted array
      * @since 2.0
      */
-    public File @Nullable [] sort(final File @Nullable ... files) {
+    public File /*@Nullable*/ [] sort(final File /*@Nullable*/ ... files) {
         if (files != null) {
             Arrays.sort(files, this);
         }
@@ -59,7 +62,7 @@ abstract class AbstractFileComparator implements Comparator<File> {
      * @return The sorted list
      * @since 2.0
      */
-    public @Nullable List<File> sort(final @Nullable List<File> files) {
+    public /*@Nullable*/ List<File> sort(final /*@Nullable*/ List<File> files) {
         if (files != null) {
             Collections.sort(files, this);
         }

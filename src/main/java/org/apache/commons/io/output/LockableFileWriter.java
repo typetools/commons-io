@@ -26,10 +26,13 @@ import java.nio.charset.Charset;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 
+/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
+*/
+
 /**
  * FileWriter that will create and honor lock files to allow simple
  * cross thread file lock handling.
@@ -95,7 +98,7 @@ public class LockableFileWriter extends Writer {
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      */
-    public LockableFileWriter(final String fileName, final boolean append, final @Nullable String lockDir) throws IOException {
+    public LockableFileWriter(final String fileName, final boolean append, final /*@Nullable*/ String lockDir) throws IOException {
         this(new File(fileName), append, lockDir);
     }
 
@@ -134,7 +137,7 @@ public class LockableFileWriter extends Writer {
      * @deprecated 2.5 use {@link #LockableFileWriter(File, Charset, boolean, String)} instead
      */
     @Deprecated
-    public LockableFileWriter(final File file, final boolean append, final @Nullable String lockDir) throws IOException {
+    public LockableFileWriter(final File file, final boolean append, final /*@Nullable*/ String lockDir) throws IOException {
         this(file, Charset.defaultCharset(), append, lockDir);
     }
 
@@ -147,7 +150,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public LockableFileWriter(final File file, final @Nullable Charset encoding) throws IOException {
+    public LockableFileWriter(final File file, final /*@Nullable*/ Charset encoding) throws IOException {
         this(file, encoding, false, null);
     }
 
@@ -162,7 +165,7 @@ public class LockableFileWriter extends Writer {
      *             thrown instead of {@link java.io.UnsupportedEncodingException} in version 2.2 if the encoding is not
      *             supported.
      */
-    public LockableFileWriter(final File file, final @Nullable String encoding) throws IOException {
+    public LockableFileWriter(final File file, final /*@Nullable*/ String encoding) throws IOException {
         this(file, encoding, false, null);
     }
 
@@ -177,8 +180,8 @@ public class LockableFileWriter extends Writer {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public LockableFileWriter(File file, final @Nullable Charset encoding, final boolean append,
-          @Nullable String lockDir) throws IOException {
+    public LockableFileWriter(File file, final /*@Nullable*/ Charset encoding, final boolean append,
+          /*@Nullable*/ String lockDir) throws IOException {
         super();
         // init file to create/append
         file = file.getAbsoluteFile();
@@ -218,8 +221,8 @@ public class LockableFileWriter extends Writer {
      *             thrown instead of {@link java.io.UnsupportedEncodingException} in version 2.2 if the encoding is not
      *             supported.
      */
-    public LockableFileWriter(final File file, final @Nullable String encoding, final boolean append,
-            final @Nullable String lockDir) throws IOException {
+    public LockableFileWriter(final File file, final /*@Nullable*/ String encoding, final boolean append,
+            final /*@Nullable*/ String lockDir) throws IOException {
         this(file, Charsets.toCharset(encoding), append, lockDir);
     }
 
@@ -231,7 +234,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException if we cannot write to the lock directory
      * @throws IOException if we cannot find the lock file
      */
-    private void testLockDir(@UnderInitialization(java.io.Writer.class) LockableFileWriter this, final File lockDir) throws IOException {
+    private void testLockDir(/*@UnderInitialization(java.io.Writer.class)*/ LockableFileWriter this, final File lockDir) throws IOException {
         if (!lockDir.exists()) {
             throw new IOException(
                     "Could not find lockDir: " + lockDir.getAbsolutePath());
@@ -248,7 +251,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException if we cannot create the file
      */
     @RequiresNonNull("lockFile") 
-    private void createLock(@UnderInitialization(java.io.Writer.class) LockableFileWriter this) throws IOException {
+    private void createLock(/*@UnderInitialization(java.io.Writer.class)*/ LockableFileWriter this) throws IOException {
         synchronized (LockableFileWriter.class) {
             if (!lockFile.createNewFile()) {
                 throw new IOException("Can't write file, lock " +
@@ -268,7 +271,7 @@ public class LockableFileWriter extends Writer {
      * @return The initialised writer
      * @throws IOException if an error occurs
      */
-    private Writer initWriter(@UnderInitialization(java.io.Writer.class) LockableFileWriter this, final File file, final @Nullable Charset encoding, final boolean append) throws IOException {
+    private Writer initWriter(/*@UnderInitialization(java.io.Writer.class)*/ LockableFileWriter this, final File file, final /*@Nullable*/ Charset encoding, final boolean append) throws IOException {
         final boolean fileExistedAlready = file.exists();
         try {
             return new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath(), append),

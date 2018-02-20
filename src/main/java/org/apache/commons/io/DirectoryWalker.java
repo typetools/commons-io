@@ -25,8 +25,11 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
+/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
+*/
+
 /**
  * Abstract class that walks through a directory hierarchy and provides
  * subclasses with convenient hooks to add specific behaviour.
@@ -256,7 +259,7 @@ public abstract class DirectoryWalker<T> {
     /**
      * The file filter to use to filter files and directories.
      */
-    private final @Nullable FileFilter filter;
+    private final /*@Nullable*/ FileFilter filter;
     /**
      * The limit on the directory depth to walk.
      */
@@ -281,7 +284,7 @@ public abstract class DirectoryWalker<T> {
      * @param depthLimit  controls how <i>deep</i> the hierarchy is
      *  navigated to (less than 0 means unlimited)
      */
-    protected DirectoryWalker(final @Nullable FileFilter filter, final int depthLimit) {
+    protected DirectoryWalker(final /*@Nullable*/ FileFilter filter, final int depthLimit) {
         this.filter = filter;
         this.depthLimit = depthLimit;
     }
@@ -300,7 +303,7 @@ public abstract class DirectoryWalker<T> {
      * @param depthLimit  controls how <i>deep</i> the hierarchy is
      *  navigated to (less than 0 means unlimited)
      */
-    protected DirectoryWalker(@Nullable IOFileFilter directoryFilter, @Nullable IOFileFilter fileFilter, final int depthLimit) {
+    protected DirectoryWalker(/*@Nullable*/ IOFileFilter directoryFilter, /*@Nullable*/ IOFileFilter fileFilter, final int depthLimit) {
         if (directoryFilter == null && fileFilter == null) {
             this.filter = null;
         } else {
@@ -357,7 +360,7 @@ public abstract class DirectoryWalker<T> {
             final int childDepth = depth + 1;
             if (depthLimit < 0 || childDepth <= depthLimit) {
                 checkIfCancelled(directory, depth, results);
-                File @Nullable [] childFiles = filter == null ? directory.listFiles() : directory.listFiles(filter);
+                File /*@Nullable*/ [] childFiles = filter == null ? directory.listFiles() : directory.listFiles(filter);
                 childFiles = filterDirectoryContents(directory, depth, childFiles);
                 if (childFiles == null) {
                     handleRestricted(directory, childDepth, results);
@@ -522,7 +525,7 @@ public abstract class DirectoryWalker<T> {
      * @throws IOException if an I/O Error occurs
      * @since 2.0
      */
-    protected File @Nullable [] filterDirectoryContents(final File directory, final int depth, final File @Nullable [] files) throws
+    protected File /*@Nullable*/ [] filterDirectoryContents(final File directory, final int depth, final File /*@Nullable*/ [] files) throws
             IOException {
         return files;
     }
