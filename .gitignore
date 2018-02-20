@@ -12,3 +12,5 @@ site-content
 /.classpath
 /.project
 /.settings/
+
+*.asc
