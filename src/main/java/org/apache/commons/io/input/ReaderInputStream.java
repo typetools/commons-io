@@ -28,6 +28,9 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 /**
  * {@link InputStream} implementation that reads a character stream from a {@link Reader}
  * and transforms it to a byte stream using a specified charset encoding. The stream
@@ -95,7 +98,7 @@ public class ReaderInputStream extends InputStream {
      */
     private final ByteBuffer encoderOut;
 
-    private CoderResult lastCoderResult;
+    private @MonotonicNonNull CoderResult lastCoderResult;
     private boolean endOfInput;
 
     /**
@@ -192,6 +195,7 @@ public class ReaderInputStream extends InputStream {
      * @throws IOException
      *             If an I/O error occurs
      */
+    @EnsuresNonNull("lastCoderResult")
     private void fillBuffer() throws IOException {
         if (!endOfInput && (lastCoderResult == null || lastCoderResult.isUnderflow())) {
             encoderIn.compact();

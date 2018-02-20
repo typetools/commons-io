@@ -21,15 +21,18 @@ import static org.apache.commons.io.IOUtils.EOF;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Data written to this stream is forwarded to a stream that has been associated
  * with this thread.
  *
  */
+@AnnotatedFor({"nullness"})
 public class DemuxInputStream
     extends InputStream
 {
-    private final InheritableThreadLocal<InputStream> m_streams = new InheritableThreadLocal<>();
+    private final InheritableThreadLocal<@Nullable InputStream> m_streams = new InheritableThreadLocal<>();
 
     /**
      * Bind the specified stream to the current thread.
@@ -37,7 +40,7 @@ public class DemuxInputStream
      * @param input the stream to bind
      * @return the InputStream that was previously active
      */
-    public InputStream bindStream( final InputStream input )
+    public @Nullable InputStream bindStream( final InputStream input )
     {
         final InputStream oldValue = m_streams.get();
         m_streams.set( input );

@@ -16,11 +16,14 @@
  */
 package org.apache.commons.io.input;
 
+import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 /**
  * {@link TailerListener} Adapter.
  *
  * @since 2.0
  */
+@AnnotatedFor({"nullness"}) 
 public class TailerListenerAdapter implements TailerListener {
 
     /**
@@ -29,7 +32,7 @@ public class TailerListenerAdapter implements TailerListener {
      * @param tailer the tailer.
      */
     @Override
-    public void init(final Tailer tailer) {
+    public void init(final @UnderInitialization(java.lang.Object.class) Tailer tailer) {
     }
 
     /**

@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Stack;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.PolyNull;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * General filename and filepath manipulation utilities.
  * <p>
@@ -79,6 +82,7 @@ import java.util.Stack;
  *
  * @since 1.1
  */
+@AnnotatedFor({"nullness"})
 public class FilenameUtils {
 
     private static final int NOT_FOUND = -1;
@@ -191,7 +195,7 @@ public class FilenameUtils {
      * @param filename  the filename to normalize, null returns null
      * @return the normalized filename, or null if invalid. Null bytes inside string will be removed
      */
-    public static String normalize(final String filename) {
+    public @Nullable static String normalize(final @Nullable String filename) {
         return doNormalize(filename, SYSTEM_SEPARATOR, true);
     }
     /**
@@ -238,7 +242,7 @@ public class FilenameUtils {
      * @return the normalized filename, or null if invalid. Null bytes inside string will be removed
      * @since 2.0
      */
-    public static String normalize(final String filename, final boolean unixSeparator) {
+    public static @Nullable String normalize(final @Nullable String filename, final boolean unixSeparator) {
         final char separator = unixSeparator ? UNIX_SEPARATOR : WINDOWS_SEPARATOR;
         return doNormalize(filename, separator, true);
     }
@@ -285,7 +289,7 @@ public class FilenameUtils {
      * @param filename  the filename to normalize, null returns null
      * @return the normalized filename, or null if invalid. Null bytes inside string will be removed
      */
-    public static String normalizeNoEndSeparator(final String filename) {
+    public static @Nullable String normalizeNoEndSeparator(final @Nullable String filename) {
         return doNormalize(filename, SYSTEM_SEPARATOR, false);
     }
 
@@ -332,7 +336,7 @@ public class FilenameUtils {
      * @return the normalized filename, or null if invalid. Null bytes inside string will be removed
      * @since 2.0
      */
-    public static String normalizeNoEndSeparator(final String filename, final boolean unixSeparator) {
+    public static @Nullable String normalizeNoEndSeparator(final @Nullable String filename, final boolean unixSeparator) {
          final char separator = unixSeparator ? UNIX_SEPARATOR : WINDOWS_SEPARATOR;
         return doNormalize(filename, separator, false);
     }
@@ -345,7 +349,7 @@ public class FilenameUtils {
      * @param keepSeparator  true to keep the final separator
      * @return the normalized filename. Null bytes inside string will be removed.
      */
-    private static String doNormalize(final String filename, final char separator, final boolean keepSeparator) {
+    private static @Nullable String doNormalize(final @Nullable String filename, final char separator, final boolean keepSeparator) {
         if (filename == null) {
             return null;
         }
@@ -482,7 +486,7 @@ public class FilenameUtils {
      * @param fullFilenameToAdd  the filename (or path) to attach to the base
      * @return the concatenated path, or null if invalid.  Null bytes inside string will be removed
      */
-    public static String concat(final String basePath, final String fullFilenameToAdd) {
+    public static @Nullable String concat(final String basePath, final String fullFilenameToAdd) {
         final int prefix = getPrefixLength(fullFilenameToAdd);
         if (prefix < 0) {
             return null;
@@ -580,7 +584,7 @@ public class FilenameUtils {
      * @param path  the path to be changed, null ignored
      * @return the updated path
      */
-    public static String separatorsToSystem(final String path) {
+    public static @Nullable String separatorsToSystem(final @Nullable String path) {
         if (path == null) {
             return null;
         }
@@ -630,7 +634,7 @@ public class FilenameUtils {
      * @param filename  the filename to find the prefix in, null returns -1
      * @return the length of the prefix, -1 if invalid or null
      */
-    public static int getPrefixLength(final String filename) {
+    public static int getPrefixLength(final @Nullable String filename) {
         if (filename == null) {
             return NOT_FOUND;
         }
@@ -698,7 +702,7 @@ public class FilenameUtils {
      * @return the index of the last separator character, or -1 if there
      * is no such character
      */
-    public static int indexOfLastSeparator(final String filename) {
+    public static int indexOfLastSeparator(final @Nullable String filename) {
         if (filename == null) {
             return NOT_FOUND;
         }
@@ -721,7 +725,7 @@ public class FilenameUtils {
      *            the filename to find the last extension separator in, null returns -1
      * @return the index of the last extension separator character, or -1 if there is no such character
      */
-    public static int indexOfExtension(final String filename) {
+    public static int indexOfExtension(final @Nullable String filename) {
         if (filename == null) {
             return NOT_FOUND;
         }
@@ -760,7 +764,7 @@ public class FilenameUtils {
      * @param filename  the filename to query, null returns null
      * @return the prefix of the file, null if invalid. Null bytes inside string will be removed
      */
-    public static String getPrefix(final String filename) {
+    public static @Nullable String getPrefix(final @Nullable String filename) {
         if (filename == null) {
             return null;
         }
@@ -800,7 +804,7 @@ public class FilenameUtils {
      * @return the path of the file, an empty string if none exists, null if invalid.
      * Null bytes inside string will be removed
      */
-    public static String getPath(final String filename) {
+    public static @Nullable String getPath(final @Nullable String filename) {
         return doGetPath(filename, 1);
     }
 
@@ -828,7 +832,7 @@ public class FilenameUtils {
      * @return the path of the file, an empty string if none exists, null if invalid.
      * Null bytes inside string will be removed
      */
-    public static String getPathNoEndSeparator(final String filename) {
+    public static @Nullable String getPathNoEndSeparator(final @Nullable String filename) {
         return doGetPath(filename, 0);
     }
 
@@ -839,7 +843,7 @@ public class FilenameUtils {
      * @param separatorAdd  0 to omit the end separator, 1 to return it
      * @return the path. Null bytes inside string will be removed
      */
-    private static String doGetPath(final String filename, final int separatorAdd) {
+    private static @Nullable String doGetPath(final @Nullable String filename, final int separatorAdd) {
         if (filename == null) {
             return null;
         }
@@ -882,7 +886,7 @@ public class FilenameUtils {
      * @param filename  the filename to query, null returns null
      * @return the path of the file, an empty string if none exists, null if invalid
      */
-    public static String getFullPath(final String filename) {
+    public static @Nullable String getFullPath(final @Nullable String filename) {
         return doGetFullPath(filename, true);
     }
 
@@ -912,7 +916,7 @@ public class FilenameUtils {
      * @param filename  the filename to query, null returns null
      * @return the path of the file, an empty string if none exists, null if invalid
      */
-    public static String getFullPathNoEndSeparator(final String filename) {
+    public static @Nullable String getFullPathNoEndSeparator(final @Nullable String filename) {
         return doGetFullPath(filename, false);
     }
 
@@ -923,7 +927,7 @@ public class FilenameUtils {
      * @param includeSeparator  true to include the end separator
      * @return the path
      */
-    private static String doGetFullPath(final String filename, final boolean includeSeparator) {
+    private static @Nullable String doGetFullPath(final @Nullable String filename, final boolean includeSeparator) {
         if (filename == null) {
             return null;
         }
@@ -967,7 +971,7 @@ public class FilenameUtils {
      * @return the name of the file without the path, or an empty string if none exists.
      * Null bytes inside string will be removed
      */
-    public static String getName(final String filename) {
+    public static @PolyNull String getName(final @PolyNull String filename) {
         if (filename == null) {
             return null;
         }
@@ -1010,7 +1014,7 @@ public class FilenameUtils {
      * @return the name of the file without the path, or an empty string if none exists. Null bytes inside string
      * will be removed
      */
-    public static String getBaseName(final String filename) {
+    public static @Nullable String getBaseName(final @Nullable String filename) {
         return removeExtension(getName(filename));
     }
 
@@ -1032,7 +1036,7 @@ public class FilenameUtils {
      * @return the extension of the file or an empty string if none exists or {@code null}
      * if the filename is {@code null}.
      */
-    public static String getExtension(final String filename) {
+    public static @PolyNull String getExtension(final @PolyNull String filename) {
         if (filename == null) {
             return null;
         }
@@ -1062,7 +1066,7 @@ public class FilenameUtils {
      * @param filename  the filename to query, null returns null
      * @return the filename minus the extension
      */
-    public static String removeExtension(final String filename) {
+    public static @PolyNull String removeExtension(final @PolyNull String filename) {
         if (filename == null) {
             return null;
         }
@@ -1088,7 +1092,7 @@ public class FilenameUtils {
      * @return true if the filenames are equal, null equals null
      * @see IOCase#SENSITIVE
      */
-    public static boolean equals(final String filename1, final String filename2) {
+    public static boolean equals(final @Nullable String filename1, final @Nullable String filename2) {
         return equals(filename1, filename2, false, IOCase.SENSITIVE);
     }
 
@@ -1103,7 +1107,7 @@ public class FilenameUtils {
      * @return true if the filenames are equal, null equals null
      * @see IOCase#SYSTEM
      */
-    public static boolean equalsOnSystem(final String filename1, final String filename2) {
+    public static boolean equalsOnSystem(final @Nullable String filename1, final @Nullable String filename2) {
         return equals(filename1, filename2, false, IOCase.SYSTEM);
     }
 
@@ -1119,7 +1123,7 @@ public class FilenameUtils {
      * @return true if the filenames are equal, null equals null
      * @see IOCase#SENSITIVE
      */
-    public static boolean equalsNormalized(final String filename1, final String filename2) {
+    public static boolean equalsNormalized(final @Nullable String filename1, final @Nullable String filename2) {
         return equals(filename1, filename2, true, IOCase.SENSITIVE);
     }
 
@@ -1136,7 +1140,7 @@ public class FilenameUtils {
      * @return true if the filenames are equal, null equals null
      * @see IOCase#SYSTEM
      */
-    public static boolean equalsNormalizedOnSystem(final String filename1, final String filename2) {
+    public static boolean equalsNormalizedOnSystem(final @Nullable String filename1, final @Nullable String filename2) {
         return equals(filename1, filename2, true, IOCase.SYSTEM);
     }
 
@@ -1152,8 +1156,8 @@ public class FilenameUtils {
      * @since 1.3
      */
     public static boolean equals(
-            String filename1, String filename2,
-            final boolean normalized, IOCase caseSensitivity) {
+            @Nullable String filename1, @Nullable String filename2,
+            final boolean normalized, @Nullable IOCase caseSensitivity) {
 
         if (filename1 == null || filename2 == null) {
             return filename1 == null && filename2 == null;
@@ -1185,7 +1189,7 @@ public class FilenameUtils {
      * @return true if the filename has the specified extension
      * @throws java.lang.IllegalArgumentException if the supplied filename contains null bytes
      */
-    public static boolean isExtension(final String filename, final String extension) {
+    public static boolean isExtension(final @Nullable String filename, final @Nullable String extension) {
         if (filename == null) {
             return false;
         }
@@ -1210,7 +1214,7 @@ public class FilenameUtils {
      * @return true if the filename is one of the extensions
      * @throws java.lang.IllegalArgumentException if the supplied filename contains null bytes
      */
-    public static boolean isExtension(final String filename, final String[] extensions) {
+    public static boolean isExtension(final @Nullable String filename, final @Nullable String @Nullable [] extensions) {
         if (filename == null) {
             return false;
         }
@@ -1240,7 +1244,7 @@ public class FilenameUtils {
      * @return true if the filename is one of the extensions
      * @throws java.lang.IllegalArgumentException if the supplied filename contains null bytes
      */
-    public static boolean isExtension(final String filename, final Collection<String> extensions) {
+    public static boolean isExtension(final @Nullable String filename, final @Nullable Collection< @Nullable String> extensions) {
         if (filename == null) {
             return false;
         }
@@ -1325,7 +1329,7 @@ public class FilenameUtils {
      * @return true if the filename matches the wildcard string
      * @since 1.3
      */
-    public static boolean wildcardMatch(final String filename, final String wildcardMatcher, IOCase caseSensitivity) {
+    public static boolean wildcardMatch(final String filename, final String wildcardMatcher, @Nullable IOCase caseSensitivity) {
         if (filename == null && wildcardMatcher == null) {
             return true;
         }

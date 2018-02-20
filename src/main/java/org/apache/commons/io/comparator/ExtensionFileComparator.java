@@ -23,6 +23,8 @@ import java.util.Comparator;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Compare the file name <b>extensions</b> for order
  * (see {@link FilenameUtils#getExtension(String)}).
@@ -50,6 +52,7 @@ import org.apache.commons.io.IOCase;
  *
  * @since 1.4
  */
+@AnnotatedFor({"nullness"})
 public class ExtensionFileComparator extends AbstractFileComparator implements Serializable {
 
     private static final long serialVersionUID = 1928235200184222815L;
@@ -89,7 +92,7 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
      *
      * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
      */
-    public ExtensionFileComparator(final IOCase caseSensitivity) {
+    public ExtensionFileComparator(final @Nullable IOCase caseSensitivity) {
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 

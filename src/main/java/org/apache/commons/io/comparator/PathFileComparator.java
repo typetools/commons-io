@@ -22,6 +22,8 @@ import java.util.Comparator;
 
 import org.apache.commons.io.IOCase;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Compare the <b>path</b> of two files for order (see {@link File#getPath()}).
  * <p>
@@ -48,6 +50,7 @@ import org.apache.commons.io.IOCase;
  *
  * @since 1.4
  */
+@AnnotatedFor({"nullness"})
 public class PathFileComparator extends AbstractFileComparator implements Serializable {
 
     private static final long serialVersionUID = 6527501707585768673L;
@@ -85,7 +88,7 @@ public class PathFileComparator extends AbstractFileComparator implements Serial
      *
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      */
-    public PathFileComparator(final IOCase caseSensitivity) {
+    public PathFileComparator(final @Nullable IOCase caseSensitivity) {
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 

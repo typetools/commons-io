@@ -23,6 +23,8 @@ import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Filters files using the supplied wildcards.
  * <p>
@@ -47,6 +49,7 @@ import org.apache.commons.io.IOCase;
  *
  * @since 1.3
  */
+@AnnotatedFor({"nullness"})
 public class WildcardFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = -7426486598995782105L;
@@ -72,7 +75,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the pattern is null
      */
-    public WildcardFileFilter(final String wildcard, final IOCase caseSensitivity) {
+    public WildcardFileFilter(final String wildcard, final @Nullable IOCase caseSensitivity) {
         if (wildcard == null) {
             throw new IllegalArgumentException("The wildcard must not be null");
         }
@@ -99,7 +102,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the pattern array is null
      */
-    public WildcardFileFilter(final String[] wildcards, final IOCase caseSensitivity) {
+    public WildcardFileFilter(final String[] wildcards, final @Nullable IOCase caseSensitivity) {
         if (wildcards == null) {
             throw new IllegalArgumentException("The wildcard array must not be null");
         }
@@ -127,7 +130,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @throws IllegalArgumentException if the pattern list is null
      * @throws ClassCastException if the list does not contain Strings
      */
-    public WildcardFileFilter(final List<String> wildcards, final IOCase caseSensitivity) {
+    public WildcardFileFilter(final List<String> wildcards, final @Nullable IOCase caseSensitivity) {
         if (wildcards == null) {
             throw new IllegalArgumentException("The wildcard list must not be null");
         }

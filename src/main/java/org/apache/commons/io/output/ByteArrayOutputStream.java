@@ -31,6 +31,11 @@ import java.util.List;
 
 import org.apache.commons.io.input.ClosedInputStream;
 
+import org.checkerframework.framework.qual.AnnotatedFor;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 /**
  * This class implements an output stream in which the data is
  * written into a byte array. The buffer automatically grows as data
@@ -53,6 +58,7 @@ import org.apache.commons.io.input.ClosedInputStream;
  * deprecated toString(int) method that has been ignored.
  *
  */
+@AnnotatedFor({"nullness"})
 public class ByteArrayOutputStream extends OutputStream {
 
     static final int DEFAULT_SIZE = 1024;
@@ -104,8 +110,10 @@ public class ByteArrayOutputStream extends OutputStream {
      *
      * @param newcount  the size of the buffer if one is created
      */
-    private void needNewBuffer(final int newcount) {
+    @EnsuresNonNull("currentBuffer")
+    private void needNewBuffer(@UnknownInitialization(java.io.OutputStream.class) ByteArrayOutputStream this, final int newcount) {
         if (currentBufferIndex < buffers.size() - 1) {
+            assert currentBuffer != null : "@AssumeAssertion(nullness): currentBuffer is null only if this method is called from the constructor, in which case this code is not executed (the else clause is executed instead)";
             //Recycling old buffer
             filledBufferSum += currentBuffer.length;
 
@@ -190,6 +198,7 @@ public class ByteArrayOutputStream extends OutputStream {
      * @throws IOException if an I/O error occurs while reading the input stream
      * @since 1.4
      */
+    @RequiresNonNull("currentBuffer") 
     public synchronized int write(final InputStream in) throws IOException {
         int readCount = 0;
         int inBufferPos = count - filledBufferSum;
@@ -231,6 +240,8 @@ public class ByteArrayOutputStream extends OutputStream {
     /**
      * @see java.io.ByteArrayOutputStream#reset()
      */
+    @SuppressWarnings("nullness:assignment.type.incompatible")
+    // currentBuffer is set to null, but is immediately set to non-null by needNewBuffer().
     public synchronized void reset() {
         count = 0;
         filledBufferSum = 0;

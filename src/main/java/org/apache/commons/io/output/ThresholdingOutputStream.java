@@ -57,6 +57,8 @@ public abstract class ThresholdingOutputStream
     /**
      * Whether or not the configured threshold has been exceeded.
      */
+    // True iff the thresholdReached() method has been called.
+    // Not used in the isThresholdExceeded() method.
     private boolean thresholdExceeded;
 
 
@@ -265,7 +267,8 @@ public abstract class ThresholdingOutputStream
     /**
      * Indicates that the configured threshold has been reached, and that a
      * subclass should take whatever action necessary on this event. This may
-     * include changing the underlying output stream.
+     * include changing the underlying output stream. Guaranteed to be called
+     * at most once.
      *
      * @throws IOException if an error occurs.
      */
