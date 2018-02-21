@@ -1,39 +1,43 @@
 This is a version of Commons IO that is annotated with type annotations for the Checker Framework.
 
 
-To build a version of commons-io that contains type annotations
----------------------------------------------------------------
+To build this project
+---------------------
 
 ```
 mvn -B -Dmaven.test.skip=true package
 ```
 
-The `.jar` file is found at, for example, `target/commons-io-2.6.jar`.
+This creates file
+`target/commons-io-VERSION.jar`
 
 
 To update to a newer version of the upstream library
 ----------------------------------------------------
 
-In the upstream repository, find the commit corresponding to the release.
-For version 2.6, that is 2ae025fe5c4a7d2046c53072b0898e37a079fe62
-which was committed on Fri Oct 20 08:23:16 2017 +0200.
+In the upstream repository, find the commit corresponding to a public release.
 
-So, run: 
+Commons IO version 2.6 is commit 2ae025fe5c4a7d2046c53072b0898e37a079fe62
 
-git pull https://github.com/apache/commons-io 2ae025fe5c4a7d2046c53072b0898e37a079fe62
+Pull in that commit:
+```
+git pull https://github.com/apache/commons-io <commitid>
+```
 
-Also update the version number for the PACKAGE environment variable below.
+Update the PACKAGE environment variable below.
 
 
-To upload this version of Commons IO to Maven Central
------------------------------------------------------
+To upload to Maven Central
+--------------------------
 
 # Set a new Maven Central version number in file cfMavenCentral.xml.
 
 PACKAGE=commons-io-2.6
 
 # Compile, and create Javadoc jar file
-mvn -B -Dmaven.test.skip=true package source:jar javadoc:javadoc && (cd target/site/apidocs && jar -cf ${PACKAGE}-javadoc.jar org)
+mvn -B -Dmaven.test.skip=true package
+mvn source:jar
+mvn javadoc:javadoc && (cd target/site/apidocs && jar -cf ${PACKAGE}-javadoc.jar org)
 
 ## This does not seem to work for me:
 # -Dhomedir=/projects/swlab1/checker-framework/hosting-info
