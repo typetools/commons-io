@@ -298,7 +298,7 @@ file comparators, endian transformation classes, and much more.
     <!-- These properties will be set by the Maven Dependency plugin -->
     <annotatedJdk>${org.checkerframework:jdk8:jar}</annotatedJdk>
     <typeAnnotationsJavac>${org.checkerframework:compiler:jar}</typeAnnotationsJavac>
-    <checkerframework.version>2.3.2</checkerframework.version>
+    <checkerframework.version>2.5.0</checkerframework.version>
   </properties>
 
   <build>
