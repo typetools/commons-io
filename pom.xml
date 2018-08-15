@@ -266,8 +266,8 @@ file comparators, endian transformation classes, and much more.
   </dependencies>
 
   <properties>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <commons.componentid>io</commons.componentid>
     <commons.module.name>org.apache.commons.io</commons.module.name>
     <commons.rc.version>RC1</commons.rc.version>
@@ -335,8 +335,8 @@ file comparators, endian transformation classes, and much more.
         <version>3.6.1</version>
         <configuration>
           <!-- Change source and target to 1.7 to create .class files that can be run on a Java 7 JVM -->
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
           <fork>true</fork>
           <annotationProcessors>
             <!-- Add all the checkers you want to enable here -->
