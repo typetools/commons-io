@@ -27,7 +27,6 @@ import java.util.List;
 
 import org.apache.commons.io.ByteOrderMark;
 
-/*>>>
 import org.checkerframework.checker.nullness.qual.AssertNonNullIfNonNull;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -36,7 +35,6 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.framework.qual.AnnotatedFor;
-*/
 
 /**
  * This class is used to wrap a stream that includes an encoded {@link ByteOrderMark} as its first bytes.
@@ -105,8 +103,8 @@ public class BOMInputStream extends ProxyInputStream {
      * BOMs are sorted from longest to shortest.
      */
     private final List<ByteOrderMark> boms;
-    private /*@Nullable*/ ByteOrderMark byteOrderMark;
-    private int /*@MonotonicNonNull*/ [] firstBytes;
+    private @Nullable ByteOrderMark byteOrderMark;
+    private int @MonotonicNonNull [] firstBytes;
     private int fbLength;
     private int fbIndex;
     private int markFbIndex;
@@ -227,7 +225,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     @AssertNonNullIfNonNull("byteOrderMark")
     @EnsuresNonNull("firstBytes")
-    public /*@Nullable*/ ByteOrderMark getBOM() throws IOException {
+    public @Nullable ByteOrderMark getBOM() throws IOException {
         if (firstBytes == null) {
             fbLength = 0;
             // BOMs are sorted from longest to shortest
@@ -264,7 +262,7 @@ public class BOMInputStream extends ProxyInputStream {
      *             if an error reading the first bytes of the stream occurs
      *
      */
-    public /*@Nullable*/ String getBOMCharsetName() throws IOException {
+    public @Nullable String getBOMCharsetName() throws IOException {
         getBOM();
         return byteOrderMark == null ? null : byteOrderMark.getCharsetName();
     }
@@ -290,7 +288,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     @SideEffectFree 
     @RequiresNonNull("firstBytes")
-    private /*@Nullable*/ ByteOrderMark find() {
+    private @Nullable ByteOrderMark find() {
         for (final ByteOrderMark bom : boms) {
             if (matches(bom)) {
                 return bom;

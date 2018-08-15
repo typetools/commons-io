@@ -51,7 +51,7 @@ public class ReversedLinesFileReader implements Closeable {
     private final int avoidNewlineSplitBufferSize;
     private final int byteDecrement;
 
-    private /*@Nullable*/ FilePart currentFilePart;
+    private @Nullable FilePart currentFilePart;
 
     private boolean trailingNewlineOfFileSkipped = false;
 
@@ -176,7 +176,7 @@ public class ReversedLinesFileReader implements Closeable {
      * @throws IOException  if an I/O error occurs
      */
     @RequiresNonNull("currentFilePart")
-    public /*@Nullable*/ String readLine() throws IOException {
+    public @Nullable String readLine() throws IOException {
 
         String line = currentFilePart.readLine();
         while (line == null) {
@@ -214,7 +214,7 @@ public class ReversedLinesFileReader implements Closeable {
 
         private final byte[] data;
 
-        private byte /*@Nullable*/ [] leftOver;
+        private byte @Nullable [] leftOver;
 
         private int currentLastBytePos;
 
@@ -225,7 +225,7 @@ public class ReversedLinesFileReader implements Closeable {
          * @param leftOverOfLastFilePart remainder
          * @throws IOException if there is a problem reading the file
          */
-        private FilePart(final long no, final int length, final byte /*@Nullable*/ [] leftOverOfLastFilePart) throws IOException {
+        private FilePart(final long no, final int length, final byte @Nullable [] leftOverOfLastFilePart) throws IOException {
             this.no = no;
             final int dataLength = length + (leftOverOfLastFilePart != null ? leftOverOfLastFilePart.length : 0);
             this.data = new byte[dataLength];
@@ -253,7 +253,7 @@ public class ReversedLinesFileReader implements Closeable {
          * @return the new FilePart or null
          * @throws IOException if there was a problem reading the file
          */
-        private /*@Nullable*/ FilePart rollOver() throws IOException {
+        private @Nullable FilePart rollOver() throws IOException {
 
             if (currentLastBytePos > -1) {
                 throw new IllegalStateException("Current currentLastCharPos unexpectedly positive... "
@@ -278,7 +278,7 @@ public class ReversedLinesFileReader implements Closeable {
          * @return the line or null
          * @throws IOException if there is an error reading from the file
          */
-        private /*@Nullable*/ String readLine() throws IOException {
+        private @Nullable String readLine() throws IOException {
 
             String line = null;
             int newLineMatchByteCount;

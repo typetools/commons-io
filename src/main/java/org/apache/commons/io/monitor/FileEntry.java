@@ -19,10 +19,8 @@ package org.apache.commons.io.monitor;
 import java.io.File;
 import java.io.Serializable;
 
-/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
-*/
 
 /**
  * The state of a file or directory, capturing the following {@link File} attributes at a point in time.
@@ -52,8 +50,8 @@ public class FileEntry implements Serializable {
 
     static final FileEntry[] EMPTY_ENTRIES = new FileEntry[0];
 
-    private final /*@Nullable*/ FileEntry parent;
-    private FileEntry /*@Nullable*/ [] children;
+    private final @Nullable FileEntry parent;
+    private FileEntry @Nullable [] children;
     private final File file;
     private String name;
     private boolean exists;
@@ -76,7 +74,7 @@ public class FileEntry implements Serializable {
      * @param parent The parent
      * @param file The file being monitored
      */
-    public FileEntry(final /*@Nullable*/ FileEntry parent, final File file) {
+    public FileEntry(final @Nullable FileEntry parent, final File file) {
         if (file == null) {
             throw new IllegalArgumentException("File is missing");
         }
@@ -139,7 +137,7 @@ public class FileEntry implements Serializable {
      *
      * @return the parent entry
      */
-    public /*@Nullable*/ FileEntry getParent() {
+    public @Nullable FileEntry getParent() {
         return parent;
     }
 
@@ -168,7 +166,7 @@ public class FileEntry implements Serializable {
      *
      * @param children This directory's files, may be null
      */
-    public void setChildren(final FileEntry /*@Nullable*/ [] children) {
+    public void setChildren(final FileEntry @Nullable [] children) {
         this.children = children;
     }
 

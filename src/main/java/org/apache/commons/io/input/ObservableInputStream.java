@@ -22,10 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/*>>>
 import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
-*/
 
 /**
  * The {@link ObservableInputStream} allows, that an InputStream may be consumed
@@ -97,7 +95,7 @@ public class ObservableInputStream extends ProxyInputStream {
      * Adds an Observer.
      * @param pObserver the observer to add
      */
-    public void add(/*@UnderInitialization(org.apache.commons.io.input.MessageDigestCalculatingInputStream.class)*/ ObservableInputStream this, final Observer pObserver) {
+    public void add(@UnderInitialization(org.apache.commons.io.input.MessageDigestCalculatingInputStream.class) ObservableInputStream this, final Observer pObserver) {
         observers.add(pObserver);
     }
 

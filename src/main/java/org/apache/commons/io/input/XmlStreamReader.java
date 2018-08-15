@@ -35,11 +35,9 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.ByteOrderMark;
 
-/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
-*/
 
 /**
  * Character stream that handles all the necessary Voodoo to figure out the
@@ -114,7 +112,7 @@ public class XmlStreamReader extends Reader {
 
     private final String encoding;
 
-    private final /*@Nullable*/ String defaultEncoding;
+    private final @Nullable String defaultEncoding;
 
     /**
      * Returns the default encoding to use if none is set in HTTP content-type,
@@ -124,7 +122,7 @@ public class XmlStreamReader extends Reader {
      *
      * @return the default encoding to use.
      */
-    public /*@Nullable*/ String getDefaultEncoding() {
+    public @Nullable String getDefaultEncoding() {
         return defaultEncoding;
     }
 
@@ -218,7 +216,7 @@ public class XmlStreamReader extends Reader {
      * @throws XmlStreamReaderException thrown if the charset encoding could not
      *         be determined according to the specs.
      */
-    public XmlStreamReader(final InputStream is, final boolean lenient, final /*@Nullable*/ String defaultEncoding)
+    public XmlStreamReader(final InputStream is, final boolean lenient, final @Nullable String defaultEncoding)
             throws IOException {
         this.defaultEncoding = defaultEncoding;
         final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(is, BUFFER_SIZE), false, BOMS);
@@ -267,7 +265,7 @@ public class XmlStreamReader extends Reader {
      * @throws IOException thrown if there is a problem reading the stream of
      *         the URLConnection.
      */
-    public XmlStreamReader(final URLConnection conn, final /*@Nullable*/ String defaultEncoding) throws IOException {
+    public XmlStreamReader(final URLConnection conn, final @Nullable String defaultEncoding) throws IOException {
         this.defaultEncoding = defaultEncoding;
         final boolean lenient = true;
         final String contentType = conn.getContentType();
@@ -299,7 +297,7 @@ public class XmlStreamReader extends Reader {
      *        the charset encoding.
      * @throws IOException thrown if there is a problem reading the file.
      */
-    public XmlStreamReader(final InputStream is, final /*@Nullable*/ String httpContentType)
+    public XmlStreamReader(final InputStream is, final @Nullable String httpContentType)
             throws IOException {
         this(is, httpContentType, true);
     }
@@ -338,8 +336,8 @@ public class XmlStreamReader extends Reader {
      * @throws XmlStreamReaderException thrown if the charset encoding could not
      *         be determined according to the specs.
      */
-    public XmlStreamReader(final InputStream is, final /*@Nullable*/ String httpContentType,
-            final boolean lenient, final /*@Nullable*/ String defaultEncoding) throws IOException {
+    public XmlStreamReader(final InputStream is, final @Nullable String httpContentType,
+            final boolean lenient, final @Nullable String defaultEncoding) throws IOException {
         this.defaultEncoding = defaultEncoding;
         final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(is, BUFFER_SIZE), false, BOMS);
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
@@ -380,7 +378,7 @@ public class XmlStreamReader extends Reader {
      * @throws XmlStreamReaderException thrown if the charset encoding could not
      *         be determined according to the specs.
      */
-    public XmlStreamReader(final InputStream is, final /*@Nullable*/ String httpContentType,
+    public XmlStreamReader(final InputStream is, final @Nullable String httpContentType,
             final boolean lenient) throws IOException {
         this(is, httpContentType, lenient, null);
     }
@@ -427,7 +425,7 @@ public class XmlStreamReader extends Reader {
      * @return the encoding to be used
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String doRawStream(/*@UnderInitialization(java.io.Reader.class)*/ XmlStreamReader this, final BOMInputStream bom, final BOMInputStream pis, final boolean lenient)
+    private String doRawStream(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final BOMInputStream bom, final BOMInputStream pis, final boolean lenient)
             throws IOException {
         final String bomEnc      = bom.getBOMCharsetName();
         final String xmlGuessEnc = pis.getBOMCharsetName();
@@ -454,7 +452,7 @@ public class XmlStreamReader extends Reader {
      * @return the encoding to be used
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String doHttpStream(/*@UnderInitialization(java.io.Reader.class)*/ XmlStreamReader this, final BOMInputStream bom, final BOMInputStream pis, final /*@Nullable*/ String httpContentType,
+    private String doHttpStream(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final BOMInputStream bom, final BOMInputStream pis, final @Nullable String httpContentType,
             final boolean lenient) throws IOException {
         final String bomEnc      = bom.getBOMCharsetName();
         final String xmlGuessEnc = pis.getBOMCharsetName();
@@ -480,7 +478,7 @@ public class XmlStreamReader extends Reader {
      * @return the encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String doLenientDetection(/*@UnderInitialization(java.io.Reader.class)*/ XmlStreamReader this, /*@Nullable*/ String httpContentType,
+    private String doLenientDetection(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, @Nullable String httpContentType,
             XmlStreamReaderException ex) throws IOException {
         if (httpContentType != null && httpContentType.startsWith("text/html")) {
             httpContentType = httpContentType.substring("text/html".length());
@@ -511,8 +509,8 @@ public class XmlStreamReader extends Reader {
      * @return the raw encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    String calculateRawEncoding(/*@UnderInitialization(java.io.Reader.class)*/ XmlStreamReader this, final /*@Nullable*/ String bomEnc, final /*@Nullable*/ String xmlGuessEnc,
-            final /*@Nullable*/ String xmlEnc) throws IOException {
+    String calculateRawEncoding(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final @Nullable String bomEnc, final @Nullable String xmlGuessEnc,
+            final @Nullable String xmlEnc) throws IOException {
 
         // BOM is Null
         if (bomEnc == null) {
@@ -583,8 +581,8 @@ public class XmlStreamReader extends Reader {
      * @return the HTTP encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    String calculateHttpEncoding(/*@UnderInitialization(java.io.Reader.class)*/ XmlStreamReader this, final /*@Nullable*/ String httpContentType,
-            final /*@Nullable*/ String bomEnc, final /*@Nullable*/ String xmlGuessEnc, final /*@Nullable*/ String xmlEnc,
+    String calculateHttpEncoding(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final @Nullable String httpContentType,
+            final @Nullable String bomEnc, final @Nullable String xmlGuessEnc, final @Nullable String xmlEnc,
             final boolean lenient) throws IOException {
 
         // Lenient and has XML encoding
@@ -658,7 +656,7 @@ public class XmlStreamReader extends Reader {
      * @param httpContentType the HTTP content type
      * @return The mime content type
      */
-    static /*@Nullable*/ String getContentTypeMime(final /*@Nullable*/ String httpContentType) {
+    static @Nullable String getContentTypeMime(final @Nullable String httpContentType) {
         String mime = null;
         if (httpContentType != null) {
             final int i = httpContentType.indexOf(";");
@@ -682,7 +680,7 @@ public class XmlStreamReader extends Reader {
      * @param httpContentType the HTTP content type
      * @return The content type encoding (upcased)
      */
-    static /*@Nullable*/ String getContentTypeEncoding(final /*@Nullable*/ String httpContentType) {
+    static @Nullable String getContentTypeEncoding(final @Nullable String httpContentType) {
         String encoding = null;
         if (httpContentType != null) {
             final int i = httpContentType.indexOf(";");
@@ -709,7 +707,7 @@ public class XmlStreamReader extends Reader {
      * @throws IOException thrown if there is a problem reading the stream.
      */
     @SuppressWarnings("nullness:dereference.of.nullable") // ENCODING_PATTERN has capturing group 1, so m.group(1) is non-null
-    private static /*@Nullable*/ String getXmlProlog(final InputStream is, final /*@Nullable*/ String guessedEnc)
+    private static @Nullable String getXmlProlog(final InputStream is, final @Nullable String guessedEnc)
             throws IOException {
         String encoding = null;
         if (guessedEnc != null) {
@@ -764,7 +762,7 @@ public class XmlStreamReader extends Reader {
      * @return true if the mime type belongs to the APPLICATION XML family,
      * otherwise false
      */
-    static boolean isAppXml(final /*@Nullable*/ String mime) {
+    static boolean isAppXml(final @Nullable String mime) {
         return mime != null &&
                (mime.equals("application/xml") ||
                 mime.equals("application/xml-dtd") ||
@@ -779,7 +777,7 @@ public class XmlStreamReader extends Reader {
      * @return true if the mime type belongs to the TEXT XML family,
      * otherwise false
      */
-    static boolean isTextXml(final /*@Nullable*/ String mime) {
+    static boolean isTextXml(final @Nullable String mime) {
         return mime != null &&
               (mime.equals("text/xml") ||
                mime.equals("text/xml-external-parsed-entity") ||

@@ -21,11 +21,9 @@ import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.Serializable;
 
-/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.framework.qual.AnnotatedFor;
-*/
 
 /**
  * This class turns a Java FileFilter or FilenameFilter into an IO FileFilter.
@@ -42,9 +40,9 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     private static final long serialVersionUID = -8723373124984771318L;
     // Exactly one of the following two fields is non-null.
     /** The Filename filter */
-    private final /*@Nullable*/ FilenameFilter filenameFilter;
+    private final @Nullable FilenameFilter filenameFilter;
     /** The File filter */
-    private final /*@Nullable*/ FileFilter fileFilter;
+    private final @Nullable FileFilter fileFilter;
 
     /**
      * Constructs a delegate file filter around an existing FilenameFilter.

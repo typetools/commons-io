@@ -22,10 +22,8 @@ import java.util.List;
 
 import org.apache.commons.io.IOCase;
 
-/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
-*/
 
 /**
  * Filters files based on the suffix (what the filename ends with).
@@ -77,7 +75,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * @throws IllegalArgumentException if the suffix is null
      * @since 1.4
      */
-    public SuffixFileFilter(final String suffix, final /*@Nullable*/ IOCase caseSensitivity) {
+    public SuffixFileFilter(final String suffix, final @Nullable IOCase caseSensitivity) {
         if (suffix == null) {
             throw new IllegalArgumentException("The suffix must not be null");
         }
@@ -107,7 +105,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * @throws IllegalArgumentException if the suffix array is null
      * @since 1.4
      */
-    public SuffixFileFilter(final String[] suffixes, final /*@Nullable*/ IOCase caseSensitivity) {
+    public SuffixFileFilter(final String[] suffixes, final @Nullable IOCase caseSensitivity) {
         if (suffixes == null) {
             throw new IllegalArgumentException("The array of suffixes must not be null");
         }
@@ -137,7 +135,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * @throws ClassCastException if the list does not contain Strings
      * @since 1.4
      */
-    public SuffixFileFilter(final List<String> suffixes, final /*@Nullable*/ IOCase caseSensitivity) {
+    public SuffixFileFilter(final List<String> suffixes, final @Nullable IOCase caseSensitivity) {
         if (suffixes == null) {
             throw new IllegalArgumentException("The list of suffixes must not be null");
         }

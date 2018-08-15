@@ -29,13 +29,11 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.input.XmlStreamReader;
 
-/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.framework.qual.AnnotatedFor;
-*/
 
 /**
  * Character stream that handles all the necessary Voodoo to figure out the
@@ -53,7 +51,7 @@ public class XmlStreamWriter extends Writer {
     private final String defaultEncoding;
     // xmlPrologWriter can be null, after encoding is chosen and writer and encoding are non-null.
     // At least one of xmlPrologWriter and writer is non-null; this is enforced by detectEncoding().
-    private /*@Nullable*/ StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
+    private @Nullable StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
 
     // writer and encoding have the same nullness:  either both are null, or both are non-null.
     private @MonotonicNonNull Writer writer;
@@ -77,7 +75,7 @@ public class XmlStreamWriter extends Writer {
      * @param out The output stream
      * @param defaultEncoding The default encoding if not encoding could be detected
      */
-    public XmlStreamWriter(final OutputStream out, final /*@Nullable*/ String defaultEncoding) {
+    public XmlStreamWriter(final OutputStream out, final @Nullable String defaultEncoding) {
         this.out = out;
         this.defaultEncoding = defaultEncoding != null ? defaultEncoding : "UTF-8";
     }
@@ -103,7 +101,7 @@ public class XmlStreamWriter extends Writer {
      * @throws FileNotFoundException if there is an error creating or
      * opening the file
      */
-    public XmlStreamWriter(final File file, final /*@Nullable*/ String defaultEncoding) throws FileNotFoundException {
+    public XmlStreamWriter(final File file, final @Nullable String defaultEncoding) throws FileNotFoundException {
         this(new FileOutputStream(file), defaultEncoding);
     }
 
@@ -112,7 +110,7 @@ public class XmlStreamWriter extends Writer {
      *
      * @return the detected encoding
      */
-    public /*@Nullable*/ String getEncoding() {
+    public @Nullable String getEncoding() {
         return encoding;
     }
 

@@ -23,10 +23,8 @@ import java.util.Comparator;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 
-/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
-*/
 
 /**
  * Compare the file name <b>extensions</b> for order
@@ -95,7 +93,7 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
      *
      * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
      */
-    public ExtensionFileComparator(final /*@Nullable*/ IOCase caseSensitivity) {
+    public ExtensionFileComparator(final @Nullable IOCase caseSensitivity) {
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
