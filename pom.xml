@@ -236,17 +236,17 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>checker-qual</artifactId>
-      <version>${checkerFrameworkVersion}</version>
+      <version>2.5.4</version>
     </dependency>
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>checker</artifactId>
-      <version>${checkerFrameworkVersion}</version>
+      <version>2.5.4</version>
     </dependency>
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>jdk8</artifactId>
-      <version>${checkerFrameworkVersion}</version>
+      <version>2.5.4</version>
     </dependency>
   </dependencies>
 
@@ -283,7 +283,6 @@ file comparators, endian transformation classes, and much more.
     <!-- These properties will be set by the Maven Dependency plugin -->
     <annotatedJdk>${org.checkerframework:jdk8:jar}</annotatedJdk>
     <typeAnnotationsJavac>${org.checkerframework:compiler:jar}</typeAnnotationsJavac>
-    <checkerFrameworkVersion>2.5.4</checkerFrameworkVersion>
   </properties>
 
   <build>
@@ -329,7 +328,7 @@ file comparators, endian transformation classes, and much more.
             <path>
               <groupId>org.checkerframework</groupId>
               <artifactId>checker</artifactId>
-              <version>${checkerframeworkVersion}</version>
+              <version>2.5.4</version>
             </path>
           </annotationProcessorPaths>
           <annotationProcessors>
