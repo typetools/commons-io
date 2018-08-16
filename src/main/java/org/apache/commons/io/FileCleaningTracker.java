@@ -25,13 +25,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-/*>>>
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.UnknownKeyFor;
 import org.checkerframework.framework.qual.AnnotatedFor;
-*/
 
 /**
  * Keeps track of files awaiting deletion, and deletes them when an associated
@@ -98,7 +96,7 @@ public class FileCleaningTracker {
      * @param deleteStrategy  the strategy to delete the file, null means normal
      * @throws NullPointerException if the file is null
      */
-    public void track(final File file, final Object marker, final /*@Nullable*/ FileDeleteStrategy deleteStrategy) {
+    public void track(final File file, final Object marker, final @Nullable FileDeleteStrategy deleteStrategy) {
         if (file == null) {
             throw new NullPointerException("The file must not be null");
         }
@@ -128,7 +126,7 @@ public class FileCleaningTracker {
      * @param deleteStrategy  the strategy to delete the file, null means normal
      * @throws NullPointerException if the path is null
      */
-    public void track(final String path, final Object marker, final /*@Nullable*/ FileDeleteStrategy deleteStrategy) {
+    public void track(final String path, final Object marker, final @Nullable FileDeleteStrategy deleteStrategy) {
         if (path == null) {
             throw new NullPointerException("The path must not be null");
         }
@@ -143,7 +141,7 @@ public class FileCleaningTracker {
      * @param deleteStrategy  the strategy to delete the file, null means normal
      */
     @EnsuresNonNull({"reaper"})
-    private synchronized void addTracker(final String path, final Object marker, final /*@Nullable*/ FileDeleteStrategy
+    private synchronized void addTracker(final String path, final Object marker, final @Nullable FileDeleteStrategy
             deleteStrategy) {
         // synchronized block protects reaper
         if (exitWhenFinished) {
@@ -267,8 +265,8 @@ public class FileCleaningTracker {
          * @param marker  the marker object used to track the file, not null
          * @param queue  the queue on to which the tracker will be pushed, not null
          */
-        Tracker(final String path, final /*@Nullable*/ FileDeleteStrategy deleteStrategy, final Object marker,
-                final ReferenceQueue<? super /*@UnknownKeyFor*/ Object> queue) {
+        Tracker(final String path, final @Nullable FileDeleteStrategy deleteStrategy, final Object marker,
+                final ReferenceQueue<? super @UnknownKeyFor Object> queue) {
             super(marker, queue);
             this.path = path;
             this.deleteStrategy = deleteStrategy == null ? FileDeleteStrategy.NORMAL : deleteStrategy;

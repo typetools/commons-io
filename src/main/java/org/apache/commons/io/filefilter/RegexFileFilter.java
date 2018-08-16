@@ -22,10 +22,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOCase;
 
-/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
-*/
 
 /**
  * Filters files using supplied regular expression(s).
@@ -74,7 +72,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the pattern is null
      */
-    public RegexFileFilter(final String pattern, final /*@Nullable*/ IOCase caseSensitivity) {
+    public RegexFileFilter(final String pattern, final @Nullable IOCase caseSensitivity) {
         if (pattern == null) {
             throw new IllegalArgumentException("Pattern is missing");
         }

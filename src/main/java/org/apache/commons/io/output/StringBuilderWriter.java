@@ -19,10 +19,8 @@ package org.apache.commons.io.output;
 import java.io.Serializable;
 import java.io.Writer;
 
-/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
-*/
 
 /**
  * {@link Writer} implementation that outputs to a {@link StringBuilder}.
@@ -64,7 +62,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
      *
      * @param builder The String builder. May be null.
      */
-    public StringBuilderWriter(final /*@Nullable*/ StringBuilder builder) {
+    public StringBuilderWriter(final @Nullable StringBuilder builder) {
         this.builder = builder != null ? builder : new StringBuilder();
     }
 
@@ -87,7 +85,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
      * @return This writer instance
      */
     @Override
-    public Writer append(final /*@Nullable*/ CharSequence value) {
+    public Writer append(final @Nullable CharSequence value) {
         builder.append(value);
         return this;
     }
@@ -101,7 +99,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
      * @return This writer instance
      */
     @Override
-    public Writer append(final /*@Nullable*/ CharSequence value, final int start, final int end) {
+    public Writer append(final @Nullable CharSequence value, final int start, final int end) {
         builder.append(value, start, end);
         return this;
     }

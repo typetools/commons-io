@@ -19,10 +19,8 @@ package org.apache.commons.io;
 import java.io.File;
 import java.io.IOException;
 
-/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
-*/
 
 /**
  * Strategy for deleting files.
@@ -73,7 +71,7 @@ public class FileDeleteStrategy {
      * @param fileToDelete  the file to delete, null returns true
      * @return true if the file was deleted, or there was no such file
      */
-    public boolean deleteQuietly(final /*@Nullable*/ File fileToDelete) {
+    public boolean deleteQuietly(final @Nullable File fileToDelete) {
         if (fileToDelete == null || fileToDelete.exists() == false) {
             return true;
         }

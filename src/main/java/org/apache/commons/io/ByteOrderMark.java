@@ -18,10 +18,8 @@ package org.apache.commons.io;
 
 import java.io.Serializable;
 
-/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
-*/
 
 /**
  * Byte Order Mark (BOM) representation - see {@link org.apache.commons.io.input.BOMInputStream}.
@@ -140,7 +138,7 @@ public class ByteOrderMark implements Serializable {
      * false
      */
     @Override
-    public boolean equals(final /*@Nullable*/ Object obj) {
+    public boolean equals(final @Nullable Object obj) {
         if (!(obj instanceof ByteOrderMark)) {
             return false;
         }

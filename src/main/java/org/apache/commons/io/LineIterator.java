@@ -23,11 +23,9 @@ import java.io.Reader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.framework.qual.AnnotatedFor;
-*/
 
 /**
  * An Iterator over the lines in a <code>Reader</code>.
@@ -61,7 +59,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     /** The reader that is being read. */
     private final BufferedReader bufferedReader;
     /** The current line. */
-    private /*@Nullable*/ String cachedLine;
+    private @Nullable String cachedLine;
     /** A flag indicating if the iterator has been fully read. */
     private boolean finished = false;
 
@@ -195,7 +193,7 @@ public class LineIterator implements Iterator<String>, Closeable {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final /*@Nullable*/ LineIterator iterator) {
+    public static void closeQuietly(final @Nullable LineIterator iterator) {
         try {
             if (iterator != null) {
                 iterator.close();

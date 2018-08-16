@@ -31,13 +31,11 @@ import java.util.List;
 
 import org.apache.commons.io.input.ClosedInputStream;
 
-/*>>>
 import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
-*/
 
 /**
  * This class implements an output stream in which the data is
@@ -114,7 +112,7 @@ public class ByteArrayOutputStream extends OutputStream {
      * @param newcount  the size of the buffer if one is created
      */
     @EnsuresNonNull("currentBuffer")
-    private void needNewBuffer(/*@UnknownInitialization(java.io.OutputStream.class)*/ ByteArrayOutputStream this, final int newcount) {
+    private void needNewBuffer(@UnknownInitialization(java.io.OutputStream.class) ByteArrayOutputStream this, final int newcount) {
         if (currentBufferIndex < buffers.size() - 1) {
             assert currentBuffer != null : "@AssumeAssertion(nullness): currentBuffer is null only if this method is called from the constructor, in which case this code is not executed (the else clause is executed instead)";
             //Recycling old buffer

@@ -21,10 +21,8 @@ import static org.apache.commons.io.IOUtils.EOF;
 import java.io.Reader;
 import java.io.Serializable;
 
-/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
-*/
 
 /**
  * {@link Reader} implementation that can read from String, StringBuffer,
@@ -47,7 +45,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      *
      * @param charSequence The character sequence, may be {@code null}
      */
-    public CharSequenceReader(final /*@Nullable*/ CharSequence charSequence) {
+    public CharSequenceReader(final @Nullable CharSequence charSequence) {
         this.charSequence = charSequence != null ? charSequence : "";
     }
 

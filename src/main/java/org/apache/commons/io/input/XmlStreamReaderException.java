@@ -18,10 +18,8 @@ package org.apache.commons.io.input;
 
 import java.io.IOException;
 
-/*>>>
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.AnnotatedFor;
-*/
 
 /**
  * The XmlStreamReaderException is thrown by the XmlStreamReader constructors if
@@ -40,15 +38,15 @@ public class XmlStreamReaderException extends IOException {
 
     private static final long serialVersionUID = 1L;
 
-    private final /*@Nullable*/ String bomEncoding;
+    private final @Nullable String bomEncoding;
 
-    private final /*@Nullable*/ String xmlGuessEncoding;
+    private final @Nullable String xmlGuessEncoding;
 
-    private final /*@Nullable*/ String xmlEncoding;
+    private final @Nullable String xmlEncoding;
 
-    private final /*@Nullable*/ String contentTypeMime;
+    private final @Nullable String contentTypeMime;
 
-    private final /*@Nullable*/ String contentTypeEncoding;
+    private final @Nullable String contentTypeEncoding;
 
     /**
      * Creates an exception instance if the charset encoding could not be
@@ -61,8 +59,8 @@ public class XmlStreamReaderException extends IOException {
      * @param xmlGuessEnc XML guess encoding.
      * @param xmlEnc XML prolog encoding.
      */
-    public XmlStreamReaderException(final String msg, final /*@Nullable*/ String bomEnc,
-            final /*@Nullable*/ String xmlGuessEnc, final /*@Nullable*/ String xmlEnc) {
+    public XmlStreamReaderException(final String msg, final @Nullable String bomEnc,
+            final @Nullable String xmlGuessEnc, final @Nullable String xmlEnc) {
         this(msg, null, null, bomEnc, xmlGuessEnc, xmlEnc);
     }
 
@@ -79,8 +77,8 @@ public class XmlStreamReaderException extends IOException {
      * @param xmlGuessEnc XML guess encoding.
      * @param xmlEnc XML prolog encoding.
      */
-    public XmlStreamReaderException(final String msg, final /*@Nullable*/ String ctMime, final /*@Nullable*/ String ctEnc,
-            final /*@Nullable*/ String bomEnc, final /*@Nullable*/ String xmlGuessEnc, final /*@Nullable*/ String xmlEnc) {
+    public XmlStreamReaderException(final String msg, final @Nullable String ctMime, final @Nullable String ctEnc,
+            final @Nullable String bomEnc, final @Nullable String xmlGuessEnc, final @Nullable String xmlEnc) {
         super(msg);
         contentTypeMime = ctMime;
         contentTypeEncoding = ctEnc;
@@ -94,7 +92,7 @@ public class XmlStreamReaderException extends IOException {
      *
      * @return the BOM encoding, null if none.
      */
-    public /*@Nullable*/ String getBomEncoding() {
+    public @Nullable String getBomEncoding() {
         return bomEncoding;
     }
 
@@ -103,7 +101,7 @@ public class XmlStreamReaderException extends IOException {
      *
      * @return the encoding guess, null if it couldn't be guessed.
      */
-    public /*@Nullable*/ String getXmlGuessEncoding() {
+    public @Nullable String getXmlGuessEncoding() {
         return xmlGuessEncoding;
     }
 
@@ -112,7 +110,7 @@ public class XmlStreamReaderException extends IOException {
      *
      * @return the encoding of the XML prolog, null if none.
      */
-    public /*@Nullable*/ String getXmlEncoding() {
+    public @Nullable String getXmlEncoding() {
         return xmlEncoding;
     }
 
@@ -123,7 +121,7 @@ public class XmlStreamReaderException extends IOException {
      * @return the MIME type in the content-type, null if there was not
      *         content-type or the encoding detection did not involve HTTP.
      */
-    public /*@Nullable*/ String getContentTypeMime() {
+    public @Nullable String getContentTypeMime() {
         return contentTypeMime;
     }
 
@@ -135,7 +133,7 @@ public class XmlStreamReaderException extends IOException {
      *         content-type, no encoding in it or the encoding detection did not
      *         involve HTTP.
      */
-    public /*@Nullable*/ String getContentTypeEncoding() {
+    public @Nullable String getContentTypeEncoding() {
         return contentTypeEncoding;
     }
 }
