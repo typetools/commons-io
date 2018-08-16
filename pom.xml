@@ -236,32 +236,17 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>checker-qual</artifactId>
-      <version>${checkerframework.version}</version>
-      <scope>system</scope>
-      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/checker-qual.jar</systemPath>
+      <version>2.5.4</version>
     </dependency>
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>checker</artifactId>
-      <version>${checkerframework.version}</version>
-      <scope>system</scope>
-      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/checker.jar</systemPath>
+      <version>2.5.4</version>
     </dependency>
-    <!-- The Type Annotations compiler. Uncomment if using annotations in comments. -->
-    <dependency>
-      <groupId>org.checkerframework</groupId>
-      <artifactId>compiler</artifactId>
-      <version>${checkerframework.version}</version>
-      <scope>system</scope>
-      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/javac.jar</systemPath>
-    </dependency>
-    <!-- The annotated JDK to use. -->
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>jdk8</artifactId>
-      <version>${checkerframework.version}</version>
-      <scope>system</scope>
-      <systemPath>${env.CHECKERFRAMEWORK}/checker/dist/jdk8.jar</systemPath>
+      <version>2.5.4</version>
     </dependency>
   </dependencies>
 
@@ -298,7 +283,6 @@ file comparators, endian transformation classes, and much more.
     <!-- These properties will be set by the Maven Dependency plugin -->
     <annotatedJdk>${org.checkerframework:jdk8:jar}</annotatedJdk>
     <typeAnnotationsJavac>${org.checkerframework:compiler:jar}</typeAnnotationsJavac>
-    <checkerframework.version>2.5.0</checkerframework.version>
   </properties>
 
   <build>
@@ -334,10 +318,19 @@ file comparators, endian transformation classes, and much more.
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.6.1</version>
         <configuration>
-          <!-- Change source and target to 1.7 to create .class files that can be run on a Java 7 JVM -->
           <source>1.8</source>
           <target>1.8</target>
-          <fork>true</fork>
+          <compilerArguments>
+            <Xmaxerrs>10000</Xmaxerrs>
+            <Xmaxwarns>10000</Xmaxwarns>
+          </compilerArguments>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.checkerframework</groupId>
+              <artifactId>checker</artifactId>
+              <version>2.5.4</version>
+            </path>
+          </annotationProcessorPaths>
           <annotationProcessors>
             <!-- Add all the checkers you want to enable here -->
             <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
@@ -345,12 +338,9 @@ file comparators, endian transformation classes, and much more.
           <compilerArgs>
               <!-- location of the annotated JDK, which comes from a Maven dependency -->
               <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
-              <!-- Uncomment the following line to use the type annotations compiler. -->
-              <arg>-J-Xbootclasspath/p:${typeAnnotationsJavac}</arg>
-              <!--<arg>-AuseDefaultsForUncheckedCode=source,bytecode</arg>
+              <!--<arg>-AuseDefaultsForUncheckedCode=source,bytecode</arg>-->
+              <!-- Turn type-checking warnings into errors. -->
               <arg>-Awarns</arg>
-              <arg>-Xmaxwarns</arg>
-              <arg>10000</arg>-->
             </compilerArgs>
         </configuration>
       </plugin>
