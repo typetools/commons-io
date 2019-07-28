@@ -196,7 +196,7 @@ public class FilenameUtils {
      * @param filename  the filename to normalize, null returns null
      * @return the normalized filename, or null if invalid. Null bytes inside string will be removed
      */
-    public @Nullable static String normalize(final @Nullable String filename) {
+    public static @Nullable String normalize(final @Nullable String filename) {
         return doNormalize(filename, SYSTEM_SEPARATOR, true);
     }
     /**
