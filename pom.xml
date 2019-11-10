@@ -236,17 +236,17 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>checker-qual</artifactId>
-      <version>2.5.4</version>
+      <version>2.9.0</version>
     </dependency>
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>checker</artifactId>
-      <version>2.5.4</version>
+      <version>2.9.0</version>
     </dependency>
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>jdk8</artifactId>
-      <version>2.5.4</version>
+      <version>2.9.0</version>
     </dependency>
   </dependencies>
 
@@ -328,7 +328,7 @@ file comparators, endian transformation classes, and much more.
             <path>
               <groupId>org.checkerframework</groupId>
               <artifactId>checker</artifactId>
-              <version>2.5.4</version>
+              <version>2.9.0</version>
             </path>
           </annotationProcessorPaths>
           <annotationProcessors>
