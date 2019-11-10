@@ -339,8 +339,6 @@ file comparators, endian transformation classes, and much more.
               <!-- location of the annotated JDK, which comes from a Maven dependency -->
               <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
               <!--<arg>-AuseDefaultsForUncheckedCode=source,bytecode</arg>-->
-              <!-- Turn type-checking warnings into errors. -->
-              <arg>-Awarns</arg>
             </compilerArgs>
         </configuration>
       </plugin>
