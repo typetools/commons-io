@@ -17,9 +17,8 @@ language: java
 sudo: false
 
 jdk:
-# Pluggable type-checking requires JDK 8 or later, but doesn't yet work on JDK 9
   - openjdk8
-#  - openjdk11
+  - openjdk11
 
 ## Original script from upstream commons-io project
 # script:
