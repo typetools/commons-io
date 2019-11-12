@@ -238,6 +238,11 @@ file comparators, endian transformation classes, and much more.
       <artifactId>checker-qual</artifactId>
       <version>3.0.0</version>
     </dependency>
+    <dependency>
+      <groupId>com.google.errorprone</groupId>
+      <artifactId>javac</artifactId>
+      <version>9+181-r4173-1</version>
+    </dependency>
   </dependencies>
 
   <properties>
