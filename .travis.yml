@@ -18,7 +18,8 @@ sudo: false
 
 jdk:
   - openjdk8
-  - openjdk11
+## JDK 11 requires different buildfile logic, so test on just 1 JDK for now.
+#  - openjdk11
 
 ## Original script from upstream commons-io project
 # script:
