@@ -347,7 +347,7 @@ file comparators, endian transformation classes, and much more.
             <!-- If using JDK 11 remove the two arguments above and uncomment the one below. -->
             <!-- <arg>-J- -add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg> -->
             <!-- -Awarns turns type-checking errors into warnings. -->
-            <!-- <arg>-Awarns</arg> -->
+            <arg>-Awarns</arg>
           </compilerArgs>
         </configuration>
       </plugin>
