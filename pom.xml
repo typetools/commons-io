@@ -236,12 +236,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>checker-qual</artifactId>
-      <version>3.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.checkerframework</groupId>
-      <artifactId>jdk8</artifactId>
-      <version>3.0.0</version>
+      <version>3.4.0</version>
     </dependency>
     <dependency>
       <groupId>com.google.errorprone</groupId>
@@ -281,7 +276,6 @@ file comparators, endian transformation classes, and much more.
     <commons.clirr.version>2.8</commons.clirr.version>
     <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
     <!-- These properties will be set by the Maven Dependency plugin -->
-    <annotatedJdk>${org.checkerframework:jdk8:jar}</annotatedJdk>
     <errorProneJavac>${com.google.errorprone:javac:jar}</errorProneJavac>
   </properties>
 
@@ -319,7 +313,8 @@ file comparators, endian transformation classes, and much more.
         <version>3.8.1</version>
         <configuration>
           <fork>true</fork>
-          <!-- If using JDK 8, add source and target. -->
+          <!-- Must fork or else JVM arguments are ignored. -->
+          <!--If using JDK 8, add source and target. -->
           <source>1.8</source>
           <target>1.8</target>
           <!-- If using JDK 11, remove source and target and uncomment "release" below. -->
@@ -328,11 +323,14 @@ file comparators, endian transformation classes, and much more.
             <Xmaxerrs>10000</Xmaxerrs>
             <Xmaxwarns>10000</Xmaxwarns>
           </compilerArguments>
+          <!-- Without showWarnings and verbose, maven-compiler-plugin may not show output. -->
+          <showWarnings>true</showWarnings>
+          <verbose>true</verbose>
           <annotationProcessorPaths>
             <path>
               <groupId>org.checkerframework</groupId>
               <artifactId>checker</artifactId>
-              <version>3.0.0</version>
+              <version>3.4.0</version>
             </path>
           </annotationProcessorPaths>
           <annotationProcessors>
@@ -340,13 +338,12 @@ file comparators, endian transformation classes, and much more.
             <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
           </annotationProcessors>
           <compilerArgs>
-            <!-- using github.com/google/error-prone-javac is required when running on JDK 8 -->
+            <!-- If using JDK 8, use only the argument immediately below. -->
             <arg>-J-Xbootclasspath/p:${errorProneJavac}</arg>
-            <!-- location of the annotated JDK 8, which comes from a Maven dependency -->
-            <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
-            <!-- If using JDK 11 remove the two arguments above and uncomment the one below. -->
+            <!-- If using JDK 11, remove the argument above, remove the
+                 space in the one below, and uncomment it. -->
             <!-- <arg>-J- -add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg> -->
-            <!-- -Awarns turns type-checking errors into warnings. -->
+            <!-- Optionally, -Awarns turns type-checking errors into warnings. -->
             <arg>-Awarns</arg>
           </compilerArgs>
         </configuration>
