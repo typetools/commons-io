@@ -32,7 +32,6 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.framework.qual.EnsuresQualifierIf;
-import org.checkerframework.framework.qual.EnsuresQualifiersIf;
 
 /**
  * An output stream which will retain data in memory until a specified
@@ -259,10 +258,8 @@ public class DeferredFileOutputStream
      * @return {@code true} if the data is available in memory;
      *         {@code false} otherwise.
      */
-    @EnsuresQualifiersIf({
-      @EnsuresQualifierIf(result=true, qualifier=NonNull.class, expression="memoryOutputStream"),
-      @EnsuresQualifierIf(result=false, qualifier=NonNull.class, expression="outputFile")
-    })
+    @EnsuresQualifierIf(result=true, qualifier=NonNull.class, expression="memoryOutputStream")
+    @EnsuresQualifierIf(result=false, qualifier=NonNull.class, expression="outputFile")
     @Pure
     public boolean isInMemory()
     {
@@ -280,14 +277,12 @@ public class DeferredFileOutputStream
     //   @EnsuresNonNullIf(expression="outputFile", result=true)
     //   @EnsuresNonNullIf(expression="memoryOutputStream", result=false)
     // but @EnsuresNonNullIf is not repeatable (see https://tinyurl.com/cfissue/1307 ).
-    @EnsuresQualifiersIf({
-      @EnsuresQualifierIf(result=true, qualifier=NonNull.class, expression="outputFile"),
-      @EnsuresQualifierIf(result=false, qualifier=NonNull.class, expression="memoryOutputStream")
-    })
+    @EnsuresQualifierIf(result=true, qualifier=NonNull.class, expression="outputFile")
+    @EnsuresQualifierIf(result=false, qualifier=NonNull.class, expression="memoryOutputStream")
     @Pure
     public boolean isThresholdExceeded()
     {
-        return !isThresholdExceeded();
+        return super.isThresholdExceeded();
     }
 
 
