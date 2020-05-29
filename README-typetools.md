@@ -20,7 +20,7 @@ find the commit corresponding to a public release.
 
 Commons IO version 2.7 is commit 6efbccc88318d15c0f5fdcfa0b87e3dc980dca22
 
-Pull in that commit:
+On a branch, pull in that commit:
 ```
 git pull https://github.com/apache/commons-io <commitid>
 ```
@@ -30,6 +30,14 @@ Update the version number throughout this file.
 Use the latest Checker Framework version by changing `pom.xml`.
 
 Search the codebase for all uses of "@since 2.7" and annotate those methods/classes.
+
+When merging the branch, create a merge commit (don't squash-and-merge).
+
+In my clone of Apache's fork (used for local comparisons), pull in version 2.7:
+```
+git fetch origin
+git checkout <commitid>
+```
 
 
 To upload to Maven Central
@@ -42,7 +50,7 @@ This must be done on a CSE machine, which has access to the necessary passwords.
 #  * in file pom.xml (if different from upstream)
 #  * environment variable PACKAGE below
 
-PACKAGE=commons-io-2.6 && \
+PACKAGE=commons-io-2.7 && \
 mvn -B -Dmaven.test.skip=true package && \
 mvn source:jar && \
 mvn javadoc:javadoc && (cd target/site/apidocs && jar -cf ${PACKAGE}-javadoc.jar org)
