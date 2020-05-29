@@ -24,12 +24,12 @@ jdk:
 #  - openjdk-ea
 #  - oraclejdk11
 
-matrix:
-  exclude:
-    - jdk: openjdk-ea
-  include:
-    - jdk: openjdk-ea
-      env: JACOCO_SKIP=true
+# matrix:
+#   exclude:
+#     - jdk: openjdk-ea
+#   include:
+#     - jdk: openjdk-ea
+#       env: JACOCO_SKIP=true
 
 ## Original script from upstream commons-io project
 # script:
@@ -38,5 +38,5 @@ matrix:
 # after_success:
 #   - mvn clean cobertura:cobertura coveralls:report -Ptravis-cobertura
 
-install: true
+install: mvn dependency:resolve
 script: ./.travis-build.sh
