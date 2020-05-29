@@ -60,7 +60,7 @@ import java.io.InputStream;
  * </pre>
  *
  * @since 1.3
- * @version $Id$
+ *
  */
 public class NullInputStream extends InputStream {
 
@@ -71,6 +71,16 @@ public class NullInputStream extends InputStream {
     private boolean eof;
     private final boolean throwEofException;
     private final boolean markSupported;
+
+    /**
+     * Create an {@link InputStream} that emulates a size 0 stream
+     * which supports marking and does not throw EOFException.
+     *
+     * @since 2.7
+     */
+    public NullInputStream() {
+       this(0, true, false);
+    }
 
     /**
      * Create an {@link InputStream} that emulates a specified size

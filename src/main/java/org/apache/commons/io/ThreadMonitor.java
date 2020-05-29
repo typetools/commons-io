@@ -17,7 +17,6 @@
 package org.apache.commons.io;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * Monitors a thread, interrupting it if it reaches the specified timeout.
@@ -40,7 +39,6 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * </pre>
  *
  */
-@AnnotatedFor({"nullness"})
 class ThreadMonitor implements Runnable {
 
     private final Thread thread;

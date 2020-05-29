@@ -14,12 +14,22 @@
 # limitations under the License.
 
 language: java
-sudo: false
 
 jdk:
   - openjdk8
 ## JDK 11 requires different buildfile logic, so test on just one JDK for now.
 #  - openjdk11
+#  - openjdk13
+#  - openjdk14
+#  - openjdk-ea
+#  - oraclejdk11
+
+matrix:
+  exclude:
+    - jdk: openjdk-ea
+  include:
+    - jdk: openjdk-ea
+      env: JACOCO_SKIP=true
 
 ## Original script from upstream commons-io project
 # script:

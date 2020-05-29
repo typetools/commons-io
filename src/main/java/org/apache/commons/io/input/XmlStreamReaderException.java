@@ -19,7 +19,6 @@ package org.apache.commons.io.input;
 import java.io.IOException;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * The XmlStreamReaderException is thrown by the XmlStreamReader constructors if
@@ -33,7 +32,6 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  *
  * @since 2.0
  */
-@AnnotatedFor({"nullness"})
 public class XmlStreamReaderException extends IOException {
 
     private static final long serialVersionUID = 1L;

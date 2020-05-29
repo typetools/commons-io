@@ -24,12 +24,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.UnknownKeyFor;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * Keeps track of files awaiting deletion, and deletes them when an associated
@@ -46,7 +46,6 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)} or similar.
  *
  */
-@AnnotatedFor("nullness")
 public class FileCleaningTracker {
 
     // Note: fields are package protected to allow use by test cases
@@ -97,9 +96,7 @@ public class FileCleaningTracker {
      * @throws NullPointerException if the file is null
      */
     public void track(final File file, final Object marker, final @Nullable FileDeleteStrategy deleteStrategy) {
-        if (file == null) {
-            throw new NullPointerException("The file must not be null");
-        }
+        Objects.requireNonNull(file, "file");
         addTracker(file.getPath(), marker, deleteStrategy);
     }
 
@@ -127,9 +124,7 @@ public class FileCleaningTracker {
      * @throws NullPointerException if the path is null
      */
     public void track(final String path, final Object marker, final @Nullable FileDeleteStrategy deleteStrategy) {
-        if (path == null) {
-            throw new NullPointerException("The path must not be null");
-        }
+        Objects.requireNonNull(path, "path");
         addTracker(path, marker, deleteStrategy);
     }
 

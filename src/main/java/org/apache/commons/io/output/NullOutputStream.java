@@ -24,10 +24,21 @@ import java.io.OutputStream;
  * <p>
  * This output stream has no destination (file/socket etc.) and all
  * bytes written to it are ignored and lost.
- *</p>
- * @version $Id$
+ * </p>
  */
 public class NullOutputStream extends OutputStream {
+
+    /**
+     * Deprecated in favor of {@link #NULL_OUTPUT_STREAM}.
+     *
+     * TODO: Will be private in 3.0.
+     *
+     * @deprecated Use {@link #NULL_OUTPUT_STREAM}.
+     */
+    @Deprecated
+    public NullOutputStream() {
+        super();
+    }
 
     /**
      * A singleton.
@@ -36,32 +47,35 @@ public class NullOutputStream extends OutputStream {
 
     /**
      * Does nothing - output to <code>/dev/null</code>.
+     *
      * @param b The bytes to write
      * @param off The start offset
      * @param len The number of bytes to write
      */
     @Override
     public void write(final byte[] b, final int off, final int len) {
-        //to /dev/null
+        // To /dev/null
     }
 
     /**
      * Does nothing - output to <code>/dev/null</code>.
+     *
      * @param b The byte to write
      */
     @Override
     public void write(final int b) {
-        //to /dev/null
+        // To /dev/null
     }
 
     /**
      * Does nothing - output to <code>/dev/null</code>.
+     *
      * @param b The bytes to write
      * @throws IOException never
      */
     @Override
     public void write(final byte[] b) throws IOException {
-        //to /dev/null
+        // To /dev/null
     }
 
 }

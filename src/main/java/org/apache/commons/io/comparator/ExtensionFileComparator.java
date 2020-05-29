@@ -24,7 +24,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * Compare the file name <b>extensions</b> for order
@@ -53,7 +52,6 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  *
  * @since 1.4
  */
-@AnnotatedFor({"nullness"})
 public class ExtensionFileComparator extends AbstractFileComparator implements Serializable {
 
     private static final long serialVersionUID = 1928235200184222815L;

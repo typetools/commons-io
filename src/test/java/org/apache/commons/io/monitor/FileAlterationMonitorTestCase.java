@@ -16,18 +16,20 @@
  */
 package org.apache.commons.io.monitor;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link FileAlterationMonitor} Test Case.
@@ -48,7 +50,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
     @Test
     public void testDefaultConstructor() {
         final FileAlterationMonitor monitor = new FileAlterationMonitor();
-        assertEquals("Interval", 10000, monitor.getInterval());
+        assertEquals(10000, monitor.getInterval(), "Interval");
     }
 
     /**
@@ -61,30 +63,30 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
 
         // Null Observers
         monitor = new FileAlterationMonitor(123, observers);
-        assertEquals("Interval", 123, monitor.getInterval());
-        assertFalse("Observers[1]", monitor.getObservers().iterator().hasNext());
+        assertEquals(123, monitor.getInterval(), "Interval");
+        assertFalse(monitor.getObservers().iterator().hasNext(), "Observers[1]");
 
         // Null Observer
         observers = new FileAlterationObserver[1]; // observer is null
         monitor = new FileAlterationMonitor(456, observers);
-        assertFalse("Observers[2]", monitor.getObservers().iterator().hasNext());
+        assertFalse(monitor.getObservers().iterator().hasNext(), "Observers[2]");
 
         // Null Observer
         monitor.addObserver(null);
-        assertFalse("Observers[3]", monitor.getObservers().iterator().hasNext());
+        assertFalse(monitor.getObservers().iterator().hasNext(), "Observers[3]");
         monitor.removeObserver(null);
 
         // Add Observer
         final FileAlterationObserver observer = new FileAlterationObserver("foo");
         monitor.addObserver(observer);
         final Iterator<FileAlterationObserver> it = monitor.getObservers().iterator();
-        assertTrue("Observers[4]", it.hasNext());
-        assertEquals("Added", observer, it.next());
-        assertFalse("Observers[5]", it.hasNext());
+        assertTrue(it.hasNext(), "Observers[4]");
+        assertEquals(observer, it.next(), "Added");
+        assertFalse(it.hasNext(), "Observers[5]");
 
         // Remove Observer
         monitor.removeObserver(observer);
-        assertFalse("Observers[6]", monitor.getObservers().iterator().hasNext());
+        assertFalse(monitor.getObservers().iterator().hasNext(), "Observers[6]");
     }
 
     /**
@@ -96,7 +98,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
         final long interval = 100;
         listener.clear();
         final FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
-        assertEquals("Interval", interval, monitor.getInterval());
+        assertEquals(interval, monitor.getInterval(), "Interval");
         monitor.start();
 
         try {
@@ -145,7 +147,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
         listener.clear();
         final FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
         monitor.setThreadFactory(Executors.defaultThreadFactory());
-        assertEquals("Interval", interval, monitor.getInterval());
+        assertEquals(interval, monitor.getInterval(), "Interval");
         monitor.start();
 
         // Create a File
@@ -175,5 +177,39 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
             TestUtils.sleepQuietly(pauseTime);
         }
         fail(label + " " + file + " not found");
+    }
+
+    /**
+     * Test case for IO-535
+     *
+     * Verify that {@link FileAlterationMonitor#stop()} stops the created thread
+     */
+    @Test
+    public void testStopWhileWaitingForNextInterval() throws Exception {
+        final Collection<Thread> createdThreads = new ArrayList<>(1);
+        final ThreadFactory threadFactory = new ThreadFactory() {
+            private final ThreadFactory delegate = Executors.defaultThreadFactory();
+
+            @Override
+            public Thread newThread(final Runnable r) {
+                final Thread thread = delegate.newThread(r);
+                thread.setDaemon(true); //do not leak threads if the test fails
+                createdThreads.add(thread);
+                return thread;
+            }
+        };
+
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(1_000);
+        monitor.setThreadFactory(threadFactory);
+
+        monitor.start();
+        assertFalse(createdThreads.isEmpty());
+
+        Thread.sleep(10); // wait until the watcher thread enters Thread.sleep()
+        monitor.stop(100);
+
+        for (final Thread thread : createdThreads) {
+            assertFalse(thread.isAlive(), "The FileAlterationMonitor did not stop the threads it created.");
+        }
     }
 }

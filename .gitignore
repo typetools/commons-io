@@ -13,4 +13,7 @@ site-content
 /.project
 /.settings/
 
-*.asc
+### Ignore IntelliJ files
+/.idea/
+*.iml
+/bin/

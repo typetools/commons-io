@@ -19,7 +19,6 @@ package org.apache.commons.io.output;
 import java.io.Writer;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * This {@link Writer} writes all data to the famous <b>/dev/null</b>.
@@ -28,7 +27,6 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * characters written to it are ignored and lost.
  *
  */
-@AnnotatedFor({"nullness"})
 public class NullWriter extends Writer {
 
     /**

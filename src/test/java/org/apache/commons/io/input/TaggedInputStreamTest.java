@@ -16,10 +16,10 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -27,7 +27,7 @@ import java.io.InputStream;
 import java.util.UUID;
 
 import org.apache.commons.io.TaggedIOException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit Test Case for {@link TaggedInputStream}.
@@ -36,7 +36,7 @@ public class TaggedInputStreamTest  {
 
     @Test
     public void testEmptyStream() throws IOException {
-        final InputStream stream = new TaggedInputStream(new ClosedInputStream());
+        final InputStream stream = new TaggedInputStream(ClosedInputStream.CLOSED_INPUT_STREAM);
         assertEquals(0, stream.available());
         assertEquals(-1, stream.read());
         assertEquals(-1, stream.read(new byte[1]));
@@ -111,8 +111,7 @@ public class TaggedInputStreamTest  {
     @Test
     public void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
-        final InputStream closed = new ClosedInputStream();
-        final TaggedInputStream stream = new TaggedInputStream(closed);
+        final TaggedInputStream stream = new TaggedInputStream(ClosedInputStream.CLOSED_INPUT_STREAM);
 
         assertFalse(stream.isCauseOf(exception));
         assertFalse(stream.isCauseOf(

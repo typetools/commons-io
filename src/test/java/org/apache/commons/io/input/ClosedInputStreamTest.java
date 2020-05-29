@@ -16,9 +16,9 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit Test Case for {@link ClosedInputStream}.
@@ -27,9 +27,9 @@ public class ClosedInputStreamTest {
 
     @Test
     public void testRead() throws Exception {
-        final ClosedInputStream cis = new ClosedInputStream();
-        assertEquals("read()", -1, cis.read());
-        cis.close();
+        try (final ClosedInputStream cis = new ClosedInputStream()) {
+            assertEquals(-1, cis.read(), "read()");
+        }
     }
 
 }

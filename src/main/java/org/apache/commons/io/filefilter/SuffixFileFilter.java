@@ -23,10 +23,9 @@ import java.util.List;
 import org.apache.commons.io.IOCase;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
- * Filters files based on the suffix (what the filename ends with).
+ * Filters files based on the suffix (what the file name ends with).
  * This is used in retrieving all the files of a particular type.
  * <p>
  * For example, to retrieve and print all <code>*.java</code> files
@@ -41,16 +40,15 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * </pre>
  *
  * @since 1.0
- * @version $Id$
+ *
  * @see FileFilterUtils#suffixFileFilter(String)
  * @see FileFilterUtils#suffixFileFilter(String, IOCase)
  */
-@AnnotatedFor({"nullness"})
 public class SuffixFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = -3389157631240246157L;
 
-    /** The filename suffixes to search for */
+    /** The file name suffixes to search for */
     private final String[] suffixes;
 
     /** Whether the comparison is case sensitive. */
@@ -92,7 +90,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * @param suffixes  the suffixes to allow, must not be null
      * @throws IllegalArgumentException if the suffix array is null
      */
-    public SuffixFileFilter(final String[] suffixes) {
+    public SuffixFileFilter(final String... suffixes) {
         this(suffixes, IOCase.SENSITIVE);
     }
 
@@ -139,15 +137,15 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
         if (suffixes == null) {
             throw new IllegalArgumentException("The list of suffixes must not be null");
         }
-        this.suffixes = suffixes.toArray(new String[suffixes.size()]);
+        this.suffixes = suffixes.toArray(EMPTY_STRING_ARRAY);
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**
-     * Checks to see if the filename ends with the suffix.
+     * Checks to see if the file name ends with the suffix.
      *
      * @param file  the File to check
-     * @return true if the filename ends with one of our suffixes
+     * @return true if the file name ends with one of our suffixes
      */
     @Override
     public boolean accept(final File file) {
@@ -161,11 +159,11 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the filename ends with the suffix.
+     * Checks to see if the file name ends with the suffix.
      *
      * @param file  the File directory
-     * @param name  the filename
-     * @return true if the filename ends with one of our suffixes
+     * @param name  the file name
+     * @return true if the file name ends with one of our suffixes
      */
     @Override
     public boolean accept(final File file, final String name) {

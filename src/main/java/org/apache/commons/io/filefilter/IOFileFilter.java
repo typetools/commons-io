@@ -20,14 +20,21 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 
+import org.checkerframework.common.value.qual.ArrayLen;
+
 /**
  * An interface which brings the FileFilter and FilenameFilter
  * interfaces together.
  *
  * @since 1.0
- * @version $Id$
+ *
  */
 public interface IOFileFilter extends FileFilter, FilenameFilter {
+
+    /**
+     * An empty String array.
+     */
+    String @ArrayLen(0) [] EMPTY_STRING_ARRAY = new String[0];
 
     /**
      * Checks to see if the File should be accepted by this filter.
@@ -46,7 +53,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter {
      * Defined in {@link java.io.FilenameFilter}.
      *
      * @param dir  the directory File to check
-     * @param name  the filename within the directory to check
+     * @param name  the file name within the directory to check
      * @return true if this file matches the test
      */
     @Override

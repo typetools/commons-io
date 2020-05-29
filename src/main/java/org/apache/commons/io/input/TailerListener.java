@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io.input;
 
-import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 
 /**
@@ -24,7 +23,6 @@ import org.checkerframework.checker.initialization.qual.UnderInitialization;
  *
  * @since 2.0
  */
-@AnnotatedFor({"nullness"}) 
 public interface TailerListener {
 
     /**

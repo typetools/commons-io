@@ -27,10 +27,11 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
+import java.util.Objects;
 
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
-import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * {@link InputStream} implementation that reads a character stream from a {@link Reader}
@@ -137,7 +138,7 @@ public class ReaderInputStream extends InputStream {
      * @param charset the charset encoding
      * @param bufferSize the size of the input buffer in number of characters
      */
-    public ReaderInputStream(final Reader reader, final Charset charset, final int bufferSize) {
+    public ReaderInputStream(final Reader reader, final @NonNull Charset charset, final int bufferSize) {
         this(reader,
              charset.newEncoder()
                     .onMalformedInput(CodingErrorAction.REPLACE)
@@ -147,12 +148,12 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Construct a new {@link ReaderInputStream} with a default input buffer size of
-     * 1024 characters.
+     * {@value #DEFAULT_BUFFER_SIZE} characters.
      *
      * @param reader the target {@link Reader}
      * @param charset the charset encoding
      */
-    public ReaderInputStream(final Reader reader, final Charset charset) {
+    public ReaderInputStream(final Reader reader, final @NonNull Charset charset) {
         this(reader, charset, DEFAULT_BUFFER_SIZE);
     }
 
@@ -169,7 +170,7 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Construct a new {@link ReaderInputStream} with a default input buffer size of
-     * 1024 characters.
+     * {@value #DEFAULT_BUFFER_SIZE} characters.
      *
      * @param reader the target {@link Reader}
      * @param charsetName the name of the charset encoding
@@ -180,7 +181,7 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Construct a new {@link ReaderInputStream} that uses the default character encoding
-     * with a default input buffer size of 1024 characters.
+     * with a default input buffer size of {@value #DEFAULT_BUFFER_SIZE} characters.
      *
      * @param reader the target {@link Reader}
      * @deprecated 2.5 use {@link #ReaderInputStream(Reader, Charset)} instead
@@ -220,7 +221,7 @@ public class ReaderInputStream extends InputStream {
     /**
      * Read the specified number of bytes into an array.
      *
-     * @param b the byte array to read into
+     * @param array the byte array to read into
      * @param off the offset to start reading bytes into
      * @param len the number of bytes to read
      * @return the number of bytes read or <code>-1</code>
@@ -228,12 +229,10 @@ public class ReaderInputStream extends InputStream {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public int read(final byte[] b, int off, int len) throws IOException {
-        if (b == null) {
-            throw new NullPointerException("Byte array must not be null");
-        }
-        if (len < 0 || off < 0 || (off + len) > b.length) {
-            throw new IndexOutOfBoundsException("Array Size=" + b.length +
+    public int read(final byte[] array, int off, int len) throws IOException {
+        Objects.requireNonNull(array, "array");
+        if (len < 0 || off < 0 || (off + len) > array.length) {
+            throw new IndexOutOfBoundsException("Array Size=" + array.length +
                     ", offset=" + off + ", length=" + len);
         }
         int read = 0;
@@ -243,7 +242,7 @@ public class ReaderInputStream extends InputStream {
         while (len > 0) {
             if (encoderOut.hasRemaining()) {
                 final int c = Math.min(encoderOut.remaining(), len);
-                encoderOut.get(b, off, c);
+                encoderOut.get(array, off, c);
                 off += c;
                 len -= c;
                 read += c;

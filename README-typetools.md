@@ -18,16 +18,18 @@ To update to a newer version of the upstream library
 At https://github.com/apache/commons-io/releases ,
 find the commit corresponding to a public release.
 
-Commons IO version 2.6 is commit 2ae025fe5c4a7d2046c53072b0898e37a079fe62
+Commons IO version 2.7 is commit 6efbccc88318d15c0f5fdcfa0b87e3dc980dca22
 
 Pull in that commit:
 ```
 git pull https://github.com/apache/commons-io <commitid>
 ```
 
-Update the PACKAGE environment variable below.
+Update the version number throughout this file.
 
 Use the latest Checker Framework version by changing `pom.xml`.
+
+Search the codebase for all uses of "@since 2.7" and annotate those methods/classes.
 
 
 To upload to Maven Central

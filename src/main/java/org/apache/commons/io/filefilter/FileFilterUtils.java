@@ -27,10 +27,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * Useful utilities for working with file filters. It provides access to all
@@ -38,9 +38,8 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * every class you use.
  *
  * @since 1.0
- * @version $Id$
+ *
  */
-@AnnotatedFor({"nullness"})
 public class FileFilterUtils {
 
     /**
@@ -82,7 +81,7 @@ public class FileFilterUtils {
             throw new IllegalArgumentException("file filter is null");
         }
         if (files == null) {
-            return new File[0];
+            return FileUtils.EMPTY_FILE_ARRAY;
         }
         final List<File> acceptedFiles = new ArrayList<>();
         for (final File file : files) {
@@ -93,7 +92,7 @@ public class FileFilterUtils {
                 acceptedFiles.add(file);
             }
         }
-        return acceptedFiles.toArray(new File[acceptedFiles.size()]);
+        return acceptedFiles.toArray(FileUtils.EMPTY_FILE_ARRAY);
     }
 
     /**
@@ -124,7 +123,7 @@ public class FileFilterUtils {
      */
     public static File[] filter(final IOFileFilter filter, final Iterable<File> files) {
         final List<File> acceptedFiles = filterList(filter, files);
-        return acceptedFiles.toArray(new File[acceptedFiles.size()]);
+        return acceptedFiles.toArray(FileUtils.EMPTY_FILE_ARRAY);
     }
 
     /**
@@ -288,9 +287,9 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns a filter that returns true if the filename starts with the specified text.
+     * Returns a filter that returns true if the file name starts with the specified text.
      *
-     * @param prefix  the filename prefix
+     * @param prefix  the file name prefix
      * @return a prefix checking filter
      * @see PrefixFileFilter
      */
@@ -299,9 +298,9 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns a filter that returns true if the filename starts with the specified text.
+     * Returns a filter that returns true if the file name starts with the specified text.
      *
-     * @param prefix  the filename prefix
+     * @param prefix  the file name prefix
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @return a prefix checking filter
      * @see PrefixFileFilter
@@ -312,9 +311,9 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns a filter that returns true if the filename ends with the specified text.
+     * Returns a filter that returns true if the file name ends with the specified text.
      *
-     * @param suffix  the filename suffix
+     * @param suffix  the file name suffix
      * @return a suffix checking filter
      * @see SuffixFileFilter
      */
@@ -323,9 +322,9 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns a filter that returns true if the filename ends with the specified text.
+     * Returns a filter that returns true if the file name ends with the specified text.
      *
-     * @param suffix  the filename suffix
+     * @param suffix  the file name suffix
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @return a suffix checking filter
      * @see SuffixFileFilter
@@ -336,9 +335,9 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns a filter that returns true if the filename matches the specified text.
+     * Returns a filter that returns true if the file name matches the specified text.
      *
-     * @param name  the filename
+     * @param name  the file name
      * @return a name checking filter
      * @see NameFileFilter
      */
@@ -347,9 +346,9 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns a filter that returns true if the filename matches the specified text.
+     * Returns a filter that returns true if the file name matches the specified text.
      *
-     * @param name  the filename
+     * @param name  the file name
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @return a name checking filter
      * @see NameFileFilter
@@ -742,11 +741,7 @@ public class FileFilterUtils {
      * @since 1.1 (method existed but had bug in 1.0)
      */
     public static IOFileFilter makeCVSAware(final @Nullable IOFileFilter filter) {
-        if (filter == null) {
-            return cvsFilter;
-        } else {
-            return and(filter, cvsFilter);
-        }
+        return filter == null ? cvsFilter : and(filter, cvsFilter);
     }
 
     /**
@@ -759,11 +754,7 @@ public class FileFilterUtils {
      * @since 1.1
      */
     public static IOFileFilter makeSVNAware(final @Nullable IOFileFilter filter) {
-        if (filter == null) {
-            return svnFilter;
-        } else {
-            return and(filter, svnFilter);
-        }
+        return filter == null ? svnFilter : and(filter, svnFilter);
     }
 
     //-----------------------------------------------------------------------

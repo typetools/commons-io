@@ -16,22 +16,27 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.DefaultLocale;
 
 public class XmlStreamReaderTest {
     private static final String XML5 = "xml-prolog-encoding-spaced-single-quotes";
@@ -70,11 +75,31 @@ public class XmlStreamReaderTest {
     protected void _testRawNoBomInvalid(final String encoding) throws Exception {
         final InputStream is = getXmlStream("no-bom", XML3, encoding, encoding);
         try {
-            (new XmlStreamReader(is, false)).close();;
+            (new XmlStreamReader(is, false)).close();
             fail("It should have failed");
         } catch (final IOException ex) {
             assertTrue(ex.getMessage().contains("Invalid encoding,"));
         }
+    }
+
+    @Test
+    protected void testNullFileInput() throws IOException {
+        assertThrows(NullPointerException.class, () -> new XmlStreamReader((File)null));
+    }
+
+    @Test
+    protected void testNullInputStreamInput() throws IOException {
+        assertThrows(NullPointerException.class, () -> new XmlStreamReader((InputStream) null));
+    }
+
+    @Test
+    protected void testNullURLInput() throws IOException {
+         assertThrows(NullPointerException.class, () -> new XmlStreamReader((URL)null));
+    }
+
+    @Test
+    protected void testNullURLConnectionInput() throws IOException {
+          assertThrows(NullPointerException.class, () -> new XmlStreamReader((URLConnection)null, "US-ASCII"));
     }
 
     @Test
@@ -277,14 +302,29 @@ public class XmlStreamReaderTest {
         _testHttpLenient("text/html;charset=UTF-32BE", "no-bom", "US-ASCII", "UTF-8", "UTF-8");
     }
 
+    // Turkish language has specific rules to convert dotted and dottless i character.
+    @Test
+    @DefaultLocale(language = "tr")
+    public void testLowerCaseEncodingWithTurkishLocale_IO_557() throws Exception {
+        final String[] encodings = { "iso8859-1", "us-ascii", "utf-8" };
+        for (final String encoding : encodings) {
+            final String xml = getXML("no-bom", XML3, encoding, encoding);
+            try (final ByteArrayInputStream is = new ByteArrayInputStream(xml.getBytes(encoding));
+                    final XmlStreamReader xmlReader = new XmlStreamReader(is);) {
+                assertTrue(encoding.equalsIgnoreCase(xmlReader.getEncoding()), "Check encoding : " + encoding);
+                assertEquals(xml, IOUtils.toString(xmlReader), "Check content");
+            }
+        }
+    }
+
     @Test
     public void testRawContent() throws Exception {
         final String encoding = "UTF-8";
         final String xml = getXML("no-bom", XML3, encoding, encoding);
         final ByteArrayInputStream is = new ByteArrayInputStream(xml.getBytes(encoding));
         final XmlStreamReader xmlReader = new XmlStreamReader(is);
-        assertEquals("Check encoding", xmlReader.getEncoding(), encoding);
-        assertEquals("Check content", xml, IOUtils.toString(xmlReader));
+        assertEquals(xmlReader.getEncoding(), encoding, "Check encoding");
+        assertEquals(xml, IOUtils.toString(xmlReader), "Check content");
     }
 
     @Test
@@ -293,8 +333,8 @@ public class XmlStreamReaderTest {
         final String xml = getXML("no-bom", XML3, encoding, encoding);
         final ByteArrayInputStream is = new ByteArrayInputStream(xml.getBytes(encoding));
         final XmlStreamReader xmlReader = new XmlStreamReader(is, encoding);
-        assertEquals("Check encoding", xmlReader.getEncoding(), encoding);
-        assertEquals("Check content", xml, IOUtils.toString(xmlReader));
+        assertEquals(xmlReader.getEncoding(), encoding, "Check encoding");
+        assertEquals(xml, IOUtils.toString(xmlReader), "Check content");
     }
 
     public void _testAlternateDefaultEncoding(final String cT, final String bomEnc,
@@ -339,7 +379,7 @@ public class XmlStreamReaderTest {
         final InputStream is = getXmlStream(bomEnc,
                 prologEnc == null ? XML2 : XML3, streamEnc, prologEnc);
         try {
-            (new XmlStreamReader(is, cT, false)).close();;
+            (new XmlStreamReader(is, cT, false)).close();
             fail("It should have failed for HTTP Content-type " + cT + ", BOM "
                     + bomEnc + ", streamEnc " + streamEnc + " and prologEnc "
                     + prologEnc);

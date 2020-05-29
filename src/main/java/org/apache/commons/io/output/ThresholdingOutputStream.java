@@ -33,7 +33,6 @@ import java.io.OutputStream;
  * NOTE: This implementation may trigger the event <em>before</em> the threshold
  * is actually reached, since it triggers when a pending write operation would
  * cause the threshold to be exceeded.
- *
  */
 public abstract class ThresholdingOutputStream
     extends OutputStream
@@ -105,7 +104,7 @@ public abstract class ThresholdingOutputStream
      * @throws IOException if an error occurs.
      */
     @Override
-    public void write(final byte b[]) throws IOException
+    public void write(final byte[] b) throws IOException
     {
         checkThreshold(b.length);
         getStream().write(b);
@@ -124,7 +123,7 @@ public abstract class ThresholdingOutputStream
      * @throws IOException if an error occurs.
      */
     @Override
-    public void write(final byte b[], final int off, final int len) throws IOException
+    public void write(final byte[] b, final int off, final int len) throws IOException
     {
         checkThreshold(len);
         getStream().write(b, off, len);

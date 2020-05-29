@@ -30,7 +30,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.framework.qual.EnsuresQualifierIf;
 
 /**
@@ -43,9 +42,7 @@ import org.checkerframework.framework.qual.EnsuresQualifierIf;
  * not know in advance the size of the file being uploaded. If the file is small
  * you want to store it in memory (for speed), but if the file is large you want
  * to store it to file (to avoid memory issues).
- *
  */
-@AnnotatedFor({"nullness"})
 public class DeferredFileOutputStream
     extends ThresholdingOutputStream
 {
@@ -101,16 +98,16 @@ public class DeferredFileOutputStream
 
 
     /**
-     * Constructs an instance of this class which will trigger an event at the
-     * specified threshold, and save data to a file beyond that point.
-     * The initial buffer size will default to 1024 bytes which is ByteArrayOutputStream's default buffer size.
+     * Constructs an instance of this class which will trigger an event at the specified threshold, and save data to a
+     * file beyond that point. The initial buffer size will default to
+     * {@value AbstractByteArrayOutputStream#DEFAULT_SIZE} bytes which is ByteArrayOutputStream's default buffer size.
      *
-     * @param threshold  The number of bytes at which to trigger an event.
+     * @param threshold The number of bytes at which to trigger an event.
      * @param outputFile The file to which data is saved beyond the threshold.
      */
     public DeferredFileOutputStream(final int threshold, final File outputFile)
     {
-        this(threshold,  outputFile, null, null, null, ByteArrayOutputStream.DEFAULT_SIZE);
+        this(threshold,  outputFile, null, null, null, AbstractByteArrayOutputStream.DEFAULT_SIZE);
     }
 
     /**
@@ -145,7 +142,7 @@ public class DeferredFileOutputStream
      */
     public DeferredFileOutputStream(final int threshold, final String prefix, final String suffix, final File directory)
     {
-        this(threshold, null, prefix, suffix, directory, ByteArrayOutputStream.DEFAULT_SIZE);
+        this(threshold, null, prefix, suffix, directory, AbstractByteArrayOutputStream.DEFAULT_SIZE);
         if (prefix == null) {
             throw new IllegalArgumentException("Temporary file prefix is missing");
         }

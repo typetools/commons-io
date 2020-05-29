@@ -16,7 +16,7 @@
  */
 package org.apache.commons.io;
 
-import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Enumeration of IO case sensitivity.
@@ -25,15 +25,15 @@ import java.io.Serializable;
  * Windows is case-insensitive, Unix is case-sensitive.
  * <p>
  * This class captures that difference, providing an enumeration to
- * control how filename comparisons should be performed. It also provides
+ * control how file name comparisons should be performed. It also provides
  * methods that use the enumeration to perform comparisons.
  * <p>
  * Wherever possible, you should use the <code>check</code> methods in this
- * class to compare filenames.
+ * class to compare file names.
  *
  * @since 1.3
  */
-public enum IOCase implements Serializable {
+public enum IOCase {
 
     /**
      * The constant for case sensitive regardless of operating system.
@@ -47,7 +47,7 @@ public enum IOCase implements Serializable {
 
     /**
      * The constant for case sensitivity determined by the current operating system.
-     * Windows is case-insensitive when comparing filenames, Unix is case-sensitive.
+     * Windows is case-insensitive when comparing file names, Unix is case-sensitive.
      * <p>
      * <strong>Note:</strong> This only caters for Windows and Unix. Other operating
      * systems (e.g. OSX and OpenVMS) are treated as case sensitive if they use the
@@ -89,12 +89,12 @@ public enum IOCase implements Serializable {
 
     //-----------------------------------------------------------------------
     /**
-     * Private constructor.
+     * Constructs a new instance.
      *
      * @param name  the name
      * @param sensitive  the sensitivity
      */
-    private IOCase(final String name, final boolean sensitive) {
+    IOCase(final String name, final boolean sensitive) {
         this.name = name;
         this.sensitive = sensitive;
     }
@@ -141,9 +141,8 @@ public enum IOCase implements Serializable {
      * @throws NullPointerException if either string is null
      */
     public int checkCompareTo(final String str1, final String str2) {
-        if (str1 == null || str2 == null) {
-            throw new NullPointerException("The strings must not be null");
-        }
+        Objects.requireNonNull(str1, "str1");
+        Objects.requireNonNull(str2, "str2");
         return sensitive ? str1.compareTo(str2) : str1.compareToIgnoreCase(str2);
     }
 
@@ -159,9 +158,8 @@ public enum IOCase implements Serializable {
      * @throws NullPointerException if either string is null
      */
     public boolean checkEquals(final String str1, final String str2) {
-        if (str1 == null || str2 == null) {
-            throw new NullPointerException("The strings must not be null");
-        }
+        Objects.requireNonNull(str1, "str1");
+        Objects.requireNonNull(str2, "str2");
         return sensitive ? str1.equals(str2) : str1.equalsIgnoreCase(str2);
     }
 
