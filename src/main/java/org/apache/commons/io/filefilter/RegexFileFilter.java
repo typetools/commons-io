@@ -23,12 +23,11 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOCase;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * Filters files using supplied regular expression(s).
  * <p>
- * See java.util.regex.Pattern for regex matching rules
+ * See java.util.regex.Pattern for regex matching rules.
  * </p>
  *
  * <p>
@@ -44,11 +43,10 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  *
  * @since 1.4
  */
-@AnnotatedFor({"nullness"})
 public class RegexFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = 4269646126155225062L;
-    /** The regular expression pattern that will be used to match filenames */
+    /** The regular expression pattern that will be used to match file names */
     private final Pattern pattern;
 
     /**
@@ -112,11 +110,11 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     }
 
     /**
-     * Checks to see if the filename matches one of the regular expressions.
+     * Checks to see if the file name matches one of the regular expressions.
      *
      * @param dir   the file directory (ignored)
-     * @param name  the filename
-     * @return true if the filename matches one of the regular expressions
+     * @param name  the file name
+     * @return true if the file name matches one of the regular expressions
      */
     @Override
     public boolean accept(final File dir, final String name) {

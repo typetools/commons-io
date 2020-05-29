@@ -16,10 +16,11 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -30,10 +31,9 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * This is used to test FilenameUtils for correctness.
@@ -42,8 +42,8 @@ import org.junit.rules.TemporaryFolder;
  */
 public class FilenameUtilsTestCase {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @TempDir
+    public File temporaryFolder;
 
     private static final String SEP = "" + File.separatorChar;
     private static final boolean WINDOWS = File.separatorChar == '\\';
@@ -54,10 +54,10 @@ public class FilenameUtilsTestCase {
     private int testFile1Size;
     private int testFile2Size;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        testFile1 = temporaryFolder.newFile("file1-test.txt");
-        testFile2 = temporaryFolder.newFile("file1a-test.txt");
+        testFile1 = File.createTempFile("test", "1", temporaryFolder);
+        testFile2 = File.createTempFile("test", "2", temporaryFolder);
 
         testFile1Size = (int) testFile1.length();
         testFile2Size = (int) testFile2.length();
@@ -244,6 +244,33 @@ public class FilenameUtilsTestCase {
         assertEquals(null, FilenameUtils.normalize("//server/../a"));
         assertEquals(null, FilenameUtils.normalize("//server/.."));
         assertEquals(SEP + SEP + "server" + SEP + "", FilenameUtils.normalize("//server/"));
+
+        assertEquals(SEP + SEP + "127.0.0.1" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\127.0.0.1\\a\\b\\c.txt"));
+        assertEquals(SEP + SEP + "::1" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\::1\\a\\b\\c.txt"));
+        assertEquals(SEP + SEP + "1::" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\1::\\a\\b\\c.txt"));
+        assertEquals(SEP + SEP + "server.example.org" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\server.example.org\\a\\b\\c.txt"));
+        assertEquals(SEP + SEP + "server.sub.example.org" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\server.sub.example.org\\a\\b\\c.txt"));
+        assertEquals(SEP + SEP + "server." + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\server.\\a\\b\\c.txt"));
+        assertEquals(SEP + SEP + "1::127.0.0.1" + SEP + "a" + SEP + "b" + SEP + "c.txt",
+            FilenameUtils.normalize("\\\\1::127.0.0.1\\a\\b\\c.txt"));
+
+        // not valid IPv4 addresses but technically a valid "reg-name"s according to RFC1034
+        assertEquals(SEP + SEP + "127.0.0.256" + SEP + "a" + SEP + "b" + SEP + "c.txt",
+            FilenameUtils.normalize("\\\\127.0.0.256\\a\\b\\c.txt"));
+        assertEquals(SEP + SEP + "127.0.0.01" + SEP + "a" + SEP + "b" + SEP + "c.txt",
+            FilenameUtils.normalize("\\\\127.0.0.01\\a\\b\\c.txt"));
+
+        assertEquals(null, FilenameUtils.normalize("\\\\-server\\a\\b\\c.txt"));
+        assertEquals(null, FilenameUtils.normalize("\\\\.\\a\\b\\c.txt"));
+        assertEquals(null, FilenameUtils.normalize("\\\\..\\a\\b\\c.txt"));
+        assertEquals(null, FilenameUtils.normalize("\\\\127.0..1\\a\\b\\c.txt"));
+        assertEquals(null, FilenameUtils.normalize("\\\\::1::2\\a\\b\\c.txt"));
+        assertEquals(null, FilenameUtils.normalize("\\\\:1\\a\\b\\c.txt"));
+        assertEquals(null, FilenameUtils.normalize("\\\\1:\\a\\b\\c.txt"));
+        assertEquals(null, FilenameUtils.normalize("\\\\1:2:3:4:5:6:7:8:9\\a\\b\\c.txt"));
+        assertEquals(null, FilenameUtils.normalize("\\\\g:2:3:4:5:6:7:8\\a\\b\\c.txt"));
+        assertEquals(null, FilenameUtils.normalize("\\\\1ffff:2:3:4:5:6:7:8\\a\\b\\c.txt"));
+        assertEquals(null, FilenameUtils.normalize("\\\\1:2\\a\\b\\c.txt"));
     }
 
     @Test
@@ -560,6 +587,15 @@ public class FilenameUtilsTestCase {
         assertEquals(1, FilenameUtils.getPrefixLength("/:foo"));
         assertEquals(1, FilenameUtils.getPrefixLength("/:/"));
         assertEquals(1, FilenameUtils.getPrefixLength("/:::::::.txt"));
+
+        assertEquals(12, FilenameUtils.getPrefixLength("\\\\127.0.0.1\\a\\b\\c.txt"));
+        assertEquals(6, FilenameUtils.getPrefixLength("\\\\::1\\a\\b\\c.txt"));
+        assertEquals(21, FilenameUtils.getPrefixLength("\\\\server.example.org\\a\\b\\c.txt"));
+        assertEquals(10, FilenameUtils.getPrefixLength("\\\\server.\\a\\b\\c.txt"));
+
+        assertEquals(-1, FilenameUtils.getPrefixLength("\\\\-server\\a\\b\\c.txt"));
+        assertEquals(-1, FilenameUtils.getPrefixLength("\\\\.\\a\\b\\c.txt"));
+        assertEquals(-1, FilenameUtils.getPrefixLength("\\\\..\\a\\b\\c.txt"));
     }
 
     @Test
@@ -580,6 +616,20 @@ public class FilenameUtilsTestCase {
         assertEquals(-1, FilenameUtils.indexOfExtension("a\\b\\c"));
         assertEquals(-1, FilenameUtils.indexOfExtension("a/b.notextension/c"));
         assertEquals(-1, FilenameUtils.indexOfExtension("a\\b.notextension\\c"));
+
+        if (FilenameUtils.isSystemWindows()) {
+            // Special case handling for NTFS ADS names
+        	try {
+        		FilenameUtils.indexOfExtension("foo.exe:bar.txt");
+        		throw new AssertionError("Expected Exception");
+        	} catch (final IllegalArgumentException e) {
+        		assertEquals("NTFS ADS separator (':') in file name is forbidden.", e.getMessage());
+        	}
+        } else {
+        	// Upwards compatibility on other systems
+        	assertEquals(11, FilenameUtils.indexOfExtension("foo.exe:bar.txt"));
+        }
+
     }
 
     //-----------------------------------------------------------------------
@@ -667,9 +717,9 @@ public class FilenameUtilsTestCase {
         assertEquals("a/b/", FilenameUtils.getPath("~user/a/b/c.txt"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGetPath_with_nullbyte() {
-        assertEquals("a/b/", FilenameUtils.getPath("~user/a/\u0000b/c.txt"));
+        assertThrows(IllegalArgumentException.class, () -> FilenameUtils.getPath("~user/a/\u0000b/c.txt"));
     }
 
 
@@ -862,6 +912,19 @@ public class FilenameUtilsTestCase {
         assertEquals("", FilenameUtils.getExtension("a\\b\\c"));
         assertEquals("", FilenameUtils.getExtension("C:\\temp\\foo.bar\\README"));
         assertEquals("ext", FilenameUtils.getExtension("../filename.ext"));
+
+        if (FilenameUtils.isSystemWindows()) {
+            // Special case handling for NTFS ADS names
+        	try {
+        		FilenameUtils.getExtension("foo.exe:bar.txt");
+        		throw new AssertionError("Expected Exception");
+        	} catch (final IllegalArgumentException e) {
+        		assertEquals("NTFS ADS separator (':') in file name is forbidden.", e.getMessage());
+        	}
+        } else {
+        	// Upwards compatibility:
+        	assertEquals("txt", FilenameUtils.getExtension("foo.exe:bar.txt"));
+        }
     }
 
     @Test
@@ -1045,6 +1108,33 @@ public class FilenameUtilsTestCase {
     }
 
     @Test
+    public void testIsExtensionVarArgs() {
+        assertTrue(FilenameUtils.isExtension("file.txt", "txt"));
+        assertFalse(FilenameUtils.isExtension("file.txt", "rtf"));
+        assertTrue(FilenameUtils.isExtension("file", "rtf", ""));
+        assertTrue(FilenameUtils.isExtension("file.txt", "rtf", "txt"));
+
+        assertTrue(FilenameUtils.isExtension("a/b/file.txt", "txt"));
+        assertFalse(FilenameUtils.isExtension("a/b/file.txt", "rtf"));
+        assertTrue(FilenameUtils.isExtension("a/b/file.txt", "rtf", "txt"));
+
+        assertTrue(FilenameUtils.isExtension("a.b/file.txt", "txt"));
+        assertFalse(FilenameUtils.isExtension("a.b/file.txt", "rtf"));
+        assertTrue(FilenameUtils.isExtension("a.b/file.txt", "rtf", "txt"));
+
+        assertTrue(FilenameUtils.isExtension("a\\b\\file.txt", "txt"));
+        assertFalse(FilenameUtils.isExtension("a\\b\\file.txt", "rtf"));
+        assertTrue(FilenameUtils.isExtension("a\\b\\file.txt", "rtf", "txt"));
+
+        assertTrue(FilenameUtils.isExtension("a.b\\file.txt", "txt"));
+        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", "rtf"));
+        assertTrue(FilenameUtils.isExtension("a.b\\file.txt", "rtf", "txt"));
+
+        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", "TXT"));
+        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", "TXT", "RTF"));
+    }
+
+    @Test
     public void testIsExtensionCollection() {
         assertFalse(FilenameUtils.isExtension(null, (Collection<String>) null));
         assertFalse(FilenameUtils.isExtension("file.txt", (Collection<String>) null));
@@ -1082,5 +1172,4 @@ public class FilenameUtilsTestCase {
         assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<>(Arrays.asList(new String[]{"TXT"}))));
         assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<>(Arrays.asList(new String[]{"TXT", "RTF"}))));
     }
-
 }

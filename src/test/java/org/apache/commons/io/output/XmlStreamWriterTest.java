@@ -16,17 +16,16 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.DefaultLocale;
 
 /**
- * @version $Id$
  */
 public class XmlStreamWriterTest {
     /** french */
@@ -56,7 +55,7 @@ public class XmlStreamWriterTest {
         writer.write(xml);
         writer.close();
         final byte[] xmlContent = out.toByteArray();
-        assertEquals(encoding, writer.getEncoding());
+        assertTrue(encoding.equalsIgnoreCase(writer.getEncoding()));
         assertTrue(Arrays.equals(xml.getBytes(encoding), xmlContent));
 
     }
@@ -85,13 +84,13 @@ public class XmlStreamWriterTest {
     @Test
     public void testEmpty() throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        final XmlStreamWriter writer = new XmlStreamWriter(out);
-        writer.flush();
-        writer.write("");
-        writer.flush();
-        writer.write(".");
-        writer.flush();
-        writer.close();
+        try (final XmlStreamWriter writer = new XmlStreamWriter(out)) {
+            writer.flush();
+            writer.write("");
+            writer.flush();
+            writer.write(".");
+            writer.flush();
+        }
     }
 
     @Test
@@ -101,6 +100,15 @@ public class XmlStreamWriterTest {
         checkXmlWriter(TEXT_UNICODE, null, "UTF-16");
         checkXmlWriter(TEXT_UNICODE, null, "UTF-16BE");
         checkXmlWriter(TEXT_UNICODE, null, "ISO-8859-1");
+    }
+
+    // Turkish language has specific rules to convert dotted and dottless i character.
+    @Test
+    @DefaultLocale(language = "tr")
+    public void testLowerCaseEncodingWithTurkishLocale_IO_557() throws IOException {
+        checkXmlWriter(TEXT_UNICODE, "utf-8");
+        checkXmlWriter(TEXT_LATIN1, "iso-8859-1");
+        checkXmlWriter(TEXT_LATIN7, "iso-8859-7");
     }
 
     @Test

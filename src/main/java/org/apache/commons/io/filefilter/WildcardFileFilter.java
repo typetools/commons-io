@@ -24,21 +24,23 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * Filters files using the supplied wildcards.
  * <p>
  * This filter selects files and directories based on one or more wildcards.
  * Testing is case-sensitive by default, but this can be configured.
+ * </p>
  * <p>
  * The wildcard matcher uses the characters '?' and '*' to represent a
  * single or multiple wildcard characters.
  * This is the same as often found on Dos/Unix command lines.
  * The check is case-sensitive by default.
- * See {@link FilenameUtils#wildcardMatchOnSystem} for more information.
+ * See {@link FilenameUtils#wildcardMatchOnSystem(String,String)} for more information.
+ * </p>
  * <p>
  * For example:
+ * </p>
  * <pre>
  * File dir = new File(".");
  * FileFilter fileFilter = new WildcardFileFilter("*test*.java~*~");
@@ -50,11 +52,10 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  *
  * @since 1.3
  */
-@AnnotatedFor({"nullness"})
 public class WildcardFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = -7426486598995782105L;
-    /** The wildcards that will be used to match filenames. */
+    /** The wildcards that will be used to match file names. */
     private final String[] wildcards;
     /** Whether the comparison is case sensitive. */
     private final IOCase caseSensitivity;
@@ -91,7 +92,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @param wildcards  the array of wildcards to match
      * @throws IllegalArgumentException if the pattern array is null
      */
-    public WildcardFileFilter(final String[] wildcards) {
+    public WildcardFileFilter(final String... wildcards) {
         this(wildcards, IOCase.SENSITIVE);
     }
 
@@ -135,17 +136,17 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
         if (wildcards == null) {
             throw new IllegalArgumentException("The wildcard list must not be null");
         }
-        this.wildcards = wildcards.toArray(new String[wildcards.size()]);
+        this.wildcards = wildcards.toArray(EMPTY_STRING_ARRAY);
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     //-----------------------------------------------------------------------
     /**
-     * Checks to see if the filename matches one of the wildcards.
+     * Checks to see if the file name matches one of the wildcards.
      *
      * @param dir  the file directory (ignored)
-     * @param name  the filename
-     * @return true if the filename matches one of the wildcards
+     * @param name  the file name
+     * @return true if the file name matches one of the wildcards
      */
     @Override
     public boolean accept(final File dir, final String name) {
@@ -158,10 +159,10 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
     }
 
     /**
-     * Checks to see if the filename matches one of the wildcards.
+     * Checks to see if the file name matches one of the wildcards.
      *
      * @param file  the file to check
-     * @return true if the filename matches one of the wildcards
+     * @return true if the file name matches one of the wildcards
      */
     @Override
     public boolean accept(final File file) {

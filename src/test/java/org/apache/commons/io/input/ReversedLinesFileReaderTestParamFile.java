@@ -16,103 +16,86 @@
  */
 package org.apache.commons.io.input;
 
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.Collection;
+import java.nio.charset.Charset;
+import java.nio.file.*;
 import java.util.Stack;
+import java.util.stream.Stream;
 
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import com.google.common.jimfs.Configuration;
+import com.google.common.jimfs.Jimfs;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * Test checks symmetric behaviour with  BufferedReader
+ * Test checks symmetric behavior with  BufferedReader
  */
-@RunWith(Parameterized.class)
 public class ReversedLinesFileReaderTestParamFile {
-
-    @Parameters(name = "{0}, charset={1}")
-    public static Collection<Object[]> blockSizes() {
-        return Arrays.asList(new Object[][]{
-                {"test-file-20byteslength.bin", "ISO_8859_1", null},
-                {"test-file-iso8859-1-shortlines-win-linebr.bin", "ISO_8859_1", null},
-                {"test-file-iso8859-1.bin", "ISO_8859_1", null},
-                {"test-file-shiftjis.bin", "Shift_JIS", null},
-                {"test-file-utf16be.bin", "UTF-16BE", null},
-                {"test-file-utf16le.bin", "UTF-16LE", null},
-                {"test-file-utf8-cr-only.bin", "UTF-8", null},
-                {"test-file-utf8-win-linebr.bin", "UTF-8", null},
-                {"test-file-utf8-win-linebr.bin", "UTF-8", 1},
-                {"test-file-utf8-win-linebr.bin", "UTF-8", 2},
-                {"test-file-utf8-win-linebr.bin", "UTF-8", 3},
-                {"test-file-utf8-win-linebr.bin", "UTF-8", 4},
-                {"test-file-utf8.bin", "UTF-8", null},
-                {"test-file-windows-31j.bin", "windows-31j", null},
-                {"test-file-gbk.bin", "gbk", null},
-                {"test-file-x-windows-949.bin", "x-windows-949", null},
-                {"test-file-x-windows-950.bin", "x-windows-950", null},
-        });
+    public static Stream<Arguments> testDataIntegrityWithBufferedReader() {
+        return Stream.of(
+                Arguments.of("test-file-20byteslength.bin", "ISO_8859_1", null, false),
+                Arguments.of("test-file-iso8859-1-shortlines-win-linebr.bin", "ISO_8859_1", null, false),
+                Arguments.of("test-file-iso8859-1.bin", "ISO_8859_1", null, false),
+                Arguments.of("test-file-shiftjis.bin", "Shift_JIS", null, false),
+                Arguments.of("test-file-utf16be.bin", "UTF-16BE", null, false),
+                Arguments.of("test-file-utf16le.bin", "UTF-16LE", null, false),
+                Arguments.of("test-file-utf8-cr-only.bin", "UTF-8", null, false),
+                Arguments.of("test-file-utf8-win-linebr.bin", "UTF-8", null, false),
+                Arguments.of("test-file-utf8-win-linebr.bin", "UTF-8", 1, false),
+                Arguments.of("test-file-utf8-win-linebr.bin", "UTF-8", 2, false),
+                Arguments.of("test-file-utf8-win-linebr.bin", "UTF-8", 3, false),
+                Arguments.of("test-file-utf8-win-linebr.bin", "UTF-8", 4, false),
+                Arguments.of("test-file-utf8.bin", "UTF-8", null, false),
+                Arguments.of("test-file-utf8.bin", "UTF-8", null, true),
+                Arguments.of("test-file-windows-31j.bin", "windows-31j", null, false),
+                Arguments.of("test-file-gbk.bin", "gbk", null, false),
+                Arguments.of("test-file-x-windows-949.bin", "x-windows-949", null, false),
+                Arguments.of("test-file-x-windows-950.bin", "x-windows-950", null, false)
+        );
     }
 
-    private ReversedLinesFileReader reversedLinesFileReader;
-    private BufferedReader bufferedReader;
+    @ParameterizedTest(name = "{0}, encoding={1}, blockSize={2}, useNonDefaultFileSystem={3}")
+    @MethodSource
+    public void testDataIntegrityWithBufferedReader
+            (final String fileName, final String encodingName, final Integer blockSize, final boolean useNonDefaultFileSystem)
+            throws IOException, URISyntaxException {
 
-    private final String fileName;
-    private final String encoding;
-    private final int buffSize;
-
-    public ReversedLinesFileReaderTestParamFile(final String fileName, final String encoding, final Integer buffsize) {
-        this.fileName = fileName;
-        this.encoding = encoding;
-        this.buffSize = buffsize == null ? 4096 : buffsize;
-    }
-
-    @Test
-    public void testDataIntegrityWithBufferedReader() throws URISyntaxException, IOException {
-        final File testFileIso = new File(this.getClass().getResource("/" + fileName).toURI());
-        reversedLinesFileReader = new ReversedLinesFileReader(testFileIso, buffSize, encoding);
-
-        final Stack<String> lineStack = new Stack<>();
-
-        bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(testFileIso), encoding));
-        String line = null;
-
-        // read all lines in normal order
-        while ((line = bufferedReader.readLine()) != null) {
-            lineStack.push(line);
+        Path file = Paths.get(getClass().getResource("/" + fileName).toURI());
+        FileSystem fileSystem = null;
+        if (useNonDefaultFileSystem) {
+            fileSystem = Jimfs.newFileSystem(Configuration.unix());
+            file = Files.copy(file, fileSystem.getPath("/" + fileName));
         }
 
-        // read in reverse order and compare with lines from stack
-        while ((line = reversedLinesFileReader.readLine()) != null) {
-            final String lineFromBufferedReader = lineStack.pop();
-            assertEquals(lineFromBufferedReader, line);
-        }
+        Charset encoding = Charset.forName(encodingName);
+        try (ReversedLinesFileReader reversedLinesFileReader = blockSize == null
+                ? new ReversedLinesFileReader(file, encoding)
+                : new ReversedLinesFileReader(file, blockSize, encoding)) {
 
-    }
+            final Stack<String> lineStack = new Stack<>();
+            String line;
 
-    @After
-    public void closeReader() {
-        try {
-            bufferedReader.close();
-        } catch (final Exception e) {
-            // ignore
-        }
-        try {
-            reversedLinesFileReader.close();
-        } catch (final Exception e) {
-            // ignore
+            try (BufferedReader bufferedReader = Files.newBufferedReader(file, encoding)) {
+                // read all lines in normal order
+                while ((line = bufferedReader.readLine()) != null) {
+                    lineStack.push(line);
+                }
+            }
+
+            // read in reverse order and compare with lines from stack
+            while ((line = reversedLinesFileReader.readLine()) != null) {
+                final String lineFromBufferedReader = lineStack.pop();
+                assertEquals(lineFromBufferedReader, line);
+            }
+
+            if (fileSystem != null) {
+                fileSystem.close();
+            }
         }
     }
-
-
 }

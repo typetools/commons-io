@@ -23,18 +23,16 @@ import java.io.Serializable;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * This class turns a Java FileFilter or FilenameFilter into an IO FileFilter.
  *
  * @since 1.0
- * @version $Id$
+ *
  *
  * @see FileFilterUtils#asFileFilter(FileFilter)
  * @see FileFilterUtils#asFileFilter(FilenameFilter)
  */
-@AnnotatedFor({"nullness"})
 public class DelegateFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = -8723373124984771318L;
@@ -80,25 +78,23 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     public boolean accept(final File file) {
         if (fileFilter != null) {
             return fileFilter.accept(file);
-        } else {
-            return super.accept(file);
         }
+        return super.accept(file);
     }
 
     /**
      * Checks the filter.
      *
      * @param dir  the directory
-     * @param name  the filename in the directory
+     * @param name  the file name in the directory
      * @return true if the filter matches
      */
     @Override
     public boolean accept(final File dir, final String name) {
         if (filenameFilter != null) {
             return filenameFilter.accept(dir, name);
-        } else {
-            return super.accept(dir, name);
         }
+        return super.accept(dir, name);
     }
 
     /**

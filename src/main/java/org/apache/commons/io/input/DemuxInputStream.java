@@ -21,19 +21,16 @@ import static org.apache.commons.io.IOUtils.EOF;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.IOUtils;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
- * Data written to this stream is forwarded to a stream that has been associated
- * with this thread.
+ * Data written to this stream is forwarded to a stream that has been associated with this thread.
  *
  */
-@AnnotatedFor({"nullness"})
-public class DemuxInputStream
-    extends InputStream
-{
-    private final InheritableThreadLocal<@Nullable InputStream> m_streams = new InheritableThreadLocal<>();
+public class DemuxInputStream extends InputStream {
+    private final InheritableThreadLocal<@Nullable InputStream> inputStream = new InheritableThreadLocal<>();
 
     /**
      * Bind the specified stream to the current thread.
@@ -41,10 +38,9 @@ public class DemuxInputStream
      * @param input the stream to bind
      * @return the InputStream that was previously active
      */
-    public @Nullable InputStream bindStream( final InputStream input )
-    {
-        final InputStream oldValue = m_streams.get();
-        m_streams.set( input );
+    public @Nullable InputStream bindStream(final InputStream input) {
+        final InputStream oldValue = inputStream.get();
+        inputStream.set(input);
         return oldValue;
     }
 
@@ -54,14 +50,8 @@ public class DemuxInputStream
      * @throws IOException if an error occurs
      */
     @Override
-    public void close()
-        throws IOException
-    {
-        final InputStream input = m_streams.get();
-        if( null != input )
-        {
-            input.close();
-        }
+    public void close() throws IOException {
+        IOUtils.close(inputStream.get());
     }
 
     /**
@@ -71,17 +61,11 @@ public class DemuxInputStream
      * @throws IOException if an error occurs
      */
     @Override
-    public int read()
-        throws IOException
-    {
-        final InputStream input = m_streams.get();
-        if( null != input )
-        {
+    public int read() throws IOException {
+        final InputStream input = inputStream.get();
+        if (null != input) {
             return input.read();
         }
-        else
-        {
-            return EOF;
-        }
+        return EOF;
     }
 }

@@ -23,7 +23,7 @@ import java.io.Serializable;
  * A file filter that always returns true.
  *
  * @since 1.0
- * @version $Id$
+ *
  * @see FileFilterUtils#trueFileFilter()
  */
 public class TrueFileFilter implements IOFileFilter, Serializable {
@@ -63,7 +63,7 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
      * Returns true.
      *
      * @param dir  the directory to check (ignored)
-     * @param name  the filename (ignored)
+     * @param name  the file name (ignored)
      * @return true
      */
     @Override

@@ -26,6 +26,9 @@ import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Simple implementation of the unix "tail -f" functionality.
@@ -113,7 +116,7 @@ import org.apache.commons.io.FileUtils;
  * <p>The file is read using the default charset; this can be overridden if necessary</p>
  * @see TailerListener
  * @see TailerListenerAdapter
- * @version $Id$
+ *
  * @since 2.0
  * @since 2.5 Updated behavior and documentation for {@link Thread#interrupt()}
  */
@@ -122,8 +125,6 @@ public class Tailer implements Runnable {
     private static final int DEFAULT_DELAY_MILLIS = 1000;
 
     private static final String RAF_MODE = "r";
-
-    private static final int DEFAULT_BUFSIZE = 4096;
 
     // The default charset used for reading files
     private static final Charset DEFAULT_CHARSET = Charset.defaultCharset();
@@ -141,7 +142,7 @@ public class Tailer implements Runnable {
     /**
      * The character set that will be used to read the file.
      */
-    private final Charset cset;
+    private final Charset charset;
 
     /**
      * The amount of time to wait for the file to be updated.
@@ -195,7 +196,7 @@ public class Tailer implements Runnable {
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      */
     public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end) {
-        this(file, listener, delayMillis, end, DEFAULT_BUFSIZE);
+        this(file, listener, delayMillis, end, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -208,7 +209,7 @@ public class Tailer implements Runnable {
      */
     public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end,
                   final boolean reOpen) {
-        this(file, listener, delayMillis, end, reOpen, DEFAULT_BUFSIZE);
+        this(file, listener, delayMillis, end, reOpen, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -241,14 +242,14 @@ public class Tailer implements Runnable {
     /**
      * Creates a Tailer for the given file, with a specified buffer size.
      * @param file the file to follow.
-     * @param cset the Charset to be used for reading the file
+     * @param charset the Charset to be used for reading the file
      * @param listener the TailerListener to use.
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen if true, close and reopen the file between reading chunks
      * @param bufSize Buffer size
      */
-    public Tailer(final File file, final Charset cset, final TailerListener listener, final long delayMillis,
+    public Tailer(final File file, final @NonNull Charset charset, final TailerListener listener, final long delayMillis,
                   final boolean end, final boolean reOpen
             , final int bufSize) {
         this.file = file;
@@ -261,7 +262,7 @@ public class Tailer implements Runnable {
         this.listener = listener;
         listener.init(this);
         this.reOpen = reOpen;
-        this.cset = cset;
+        this.charset = charset;
     }
 
     /**
@@ -308,7 +309,7 @@ public class Tailer implements Runnable {
      * @param bufSize buffer size.
      * @return The new tailer
      */
-    public static Tailer create(final File file, final Charset charset, final TailerListener listener,
+    public static Tailer create(final File file, final @NonNull Charset charset, final TailerListener listener,
                                 final long delayMillis, final boolean end, final boolean reOpen
             ,final int bufSize) {
         final Tailer tailer = new Tailer(file, charset, listener, delayMillis, end, reOpen, bufSize);
@@ -329,7 +330,7 @@ public class Tailer implements Runnable {
      */
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis,
                                 final boolean end) {
-        return create(file, listener, delayMillis, end, DEFAULT_BUFSIZE);
+        return create(file, listener, delayMillis, end, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -344,7 +345,7 @@ public class Tailer implements Runnable {
      */
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis,
                                 final boolean end, final boolean reOpen) {
-        return create(file, listener, delayMillis, end, reOpen, DEFAULT_BUFSIZE);
+        return create(file, listener, delayMillis, end, reOpen, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -451,25 +452,24 @@ public class Tailer implements Runnable {
                         Thread.sleep(delayMillis);
                     }
                     continue;
-                } else {
-                    // File was not rotated
-                    // See if the file needs to be read again
-                    if (length > position) {
-                        // The file has more content than it did last time
-                        position = readLines(reader);
-                        last = file.lastModified();
-                    } else if (newer) {
-                        /*
-                         * This can happen if the file is truncated or overwritten with the exact same length of
-                         * information. In cases like this, the file position needs to be reset
-                         */
-                        position = 0;
-                        reader.seek(position); // cannot be null here
+                }
+                // File was not rotated
+                // See if the file needs to be read again
+                if (length > position) {
+                    // The file has more content than it did last time
+                    position = readLines(reader);
+                    last = file.lastModified();
+                } else if (newer) {
+                    /*
+                     * This can happen if the file is truncated or overwritten with the exact same length of
+                     * information. In cases like this, the file position needs to be reset
+                     */
+                    position = 0;
+                    reader.seek(position); // cannot be null here
 
-                        // Now we can read new lines
-                        position = readLines(reader);
-                        last = file.lastModified();
-                    }
+                    // Now we can read new lines
+                    position = readLines(reader);
+                    last = file.lastModified();
                 }
                 if (reOpen && reader != null) {
                     reader.close();
@@ -524,7 +524,7 @@ public class Tailer implements Runnable {
                     switch ( ch ) {
                         case '\n':
                             seenCR = false; // swallow CR before LF
-                            listener.handle(new String(lineBuf.toByteArray(), cset));
+                            listener.handle(new String(lineBuf.toByteArray(), charset));
                             lineBuf.reset();
                             rePos = pos + i + 1;
                             break;
@@ -537,7 +537,7 @@ public class Tailer implements Runnable {
                         default:
                             if (seenCR) {
                                 seenCR = false; // swallow final CR
-                                listener.handle(new String(lineBuf.toByteArray(), cset));
+                                listener.handle(new String(lineBuf.toByteArray(), charset));
                                 lineBuf.reset();
                                 rePos = pos + i + 1;
                             }

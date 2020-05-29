@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
-import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 
 /**
@@ -35,10 +34,9 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
  * {@code true}.
  *
  * @since 1.0
- * @version $Id$
+ *
  * @see FileFilterUtils#or(IOFileFilter...)
  */
-@AnnotatedFor({"nullness"})
 public class OrFileFilter
         extends AbstractFileFilter
         implements ConditionalFileFilter, Serializable {

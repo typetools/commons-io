@@ -16,15 +16,16 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ObservableInputStream.Observer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ObservableInputStreamTest {
     private static class LastByteKeepingObserver extends Observer {
@@ -33,18 +34,21 @@ public class ObservableInputStreamTest {
         private boolean closed;
 
         @Override
+		public
         void data(final int pByte) throws IOException {
             super.data(pByte);
             lastByteSeen = pByte;
         }
 
         @Override
+		public
         void finished() throws IOException {
             super.finished();
             finished = true;
         }
 
         @Override
+		public
         void closed() throws IOException {
             super.closed();
             closed = true;
@@ -56,6 +60,7 @@ public class ObservableInputStreamTest {
         private int length = -1;
 
         @Override
+		public
         void data(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
             super.data(pBuffer, pOffset, pLength);
             buffer = pBuffer;
@@ -68,7 +73,7 @@ public class ObservableInputStreamTest {
      */
     @Test
     public void testDataByteCalled() throws Exception {
-        final byte[] buffer = MessageDigestCalculatingInputStreamTest.generateRandomByteStream(4096);
+        final byte[] buffer = MessageDigestCalculatingInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
         final ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer));
         final LastByteKeepingObserver lko = new LastByteKeepingObserver();
         assertEquals(-1, lko.lastByteSeen);
@@ -97,7 +102,7 @@ public class ObservableInputStreamTest {
      */
     @Test
     public void testDataBytesCalled() throws Exception {
-        final byte[] buffer = MessageDigestCalculatingInputStreamTest.generateRandomByteStream(4096);
+        final byte[] buffer = MessageDigestCalculatingInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
         final ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
         final ObservableInputStream ois = new ObservableInputStream(bais);
         final LastBytesKeepingObserver lko = new LastBytesKeepingObserver();

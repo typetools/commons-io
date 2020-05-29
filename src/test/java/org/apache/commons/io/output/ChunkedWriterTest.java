@@ -16,37 +16,38 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ChunkedWriterTest {
     @Test
     public void write_four_chunks() throws Exception {
         final AtomicInteger numWrites = new AtomicInteger();
-        final OutputStreamWriter osw = getOutputStreamWriter(numWrites);
-
-        final ChunkedWriter chunked = new ChunkedWriter(osw, 10);
-        chunked.write("0123456789012345678901234567891".toCharArray());
-        chunked.flush();
-        assertEquals(4, numWrites.get());
-        chunked.close();
+        try (final OutputStreamWriter osw = getOutputStreamWriter(numWrites)) {
+            try (final ChunkedWriter chunked = new ChunkedWriter(osw, 10)) {
+                chunked.write("0123456789012345678901234567891".toCharArray());
+                chunked.flush();
+                assertEquals(4, numWrites.get());
+            }
+        }
     }
 
     @Test
     public void write_two_chunks_default_constructor() throws Exception {
         final AtomicInteger numWrites = new AtomicInteger();
-        final OutputStreamWriter osw = getOutputStreamWriter(numWrites);
-
-        final ChunkedWriter chunked = new ChunkedWriter(osw);
-        chunked.write(new char[1024 * 4 + 1]);
-        chunked.flush();
-        assertEquals(2, numWrites.get());
-        chunked.close();
+        try (final OutputStreamWriter osw = getOutputStreamWriter(numWrites)) {
+            try (final ChunkedWriter chunked = new ChunkedWriter(osw)) {
+                chunked.write(new char[1024 * 4 + 1]);
+                chunked.flush();
+                assertEquals(2, numWrites.get());
+            }
+        }
     }
 
     private OutputStreamWriter getOutputStreamWriter(final AtomicInteger numWrites) {
@@ -60,8 +61,9 @@ public class ChunkedWriterTest {
         };
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void negative_chunksize_not_permitted() throws Exception {
-        (new ChunkedWriter(new OutputStreamWriter(new ByteArrayOutputStream()), 0)).close();;
+    @Test
+    public void negative_chunksize_not_permitted() {
+        assertThrows(IllegalArgumentException.class,
+               () -> new ChunkedWriter(new OutputStreamWriter(new ByteArrayOutputStream()), 0));
     }
 }

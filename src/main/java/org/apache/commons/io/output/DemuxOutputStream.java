@@ -19,14 +19,14 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.commons.io.IOUtils;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * Forwards data to a stream that has been associated with this thread.
  *
  */
-@AnnotatedFor("nullness")
 public class DemuxOutputStream extends OutputStream {
     private final InheritableThreadLocal<@Nullable OutputStream> outputStreamThreadLocal = new InheritableThreadLocal<>();
 
@@ -51,10 +51,7 @@ public class DemuxOutputStream extends OutputStream {
      */
     @Override
     public void close() throws IOException {
-        final OutputStream output = outputStreamThreadLocal.get();
-        if (null != output) {
-            output.close();
-        }
+        IOUtils.close(outputStreamThreadLocal.get());
     }
 
     /**

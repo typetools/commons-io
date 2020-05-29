@@ -16,14 +16,14 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class WriterOutputStreamTest {
     private static final String TEST_STRING = "\u00e0 peine arriv\u00e9s nous entr\u00e2mes dans sa chambre";
@@ -42,25 +42,25 @@ public class WriterOutputStreamTest {
     private void testWithSingleByteWrite(final String testString, final String charsetName) throws IOException {
         final byte[] bytes = testString.getBytes(charsetName);
         final StringWriter writer = new StringWriter();
-        final WriterOutputStream out = new WriterOutputStream(writer, charsetName);
-        for (final byte b : bytes) {
-            out.write(b);
+        try (final WriterOutputStream out = new WriterOutputStream(writer, charsetName)) {
+            for (final byte b : bytes) {
+                out.write(b);
+            }
         }
-        out.close();
         assertEquals(testString, writer.toString());
     }
 
     private void testWithBufferedWrite(final String testString, final String charsetName) throws IOException {
         final byte[] expected = testString.getBytes(charsetName);
         final StringWriter writer = new StringWriter();
-        final WriterOutputStream out = new WriterOutputStream(writer, charsetName);
-        int offset = 0;
-        while (offset < expected.length) {
-            final int length = Math.min(random.nextInt(128), expected.length-offset);
-            out.write(expected, offset, length);
-            offset += length;
+        try (final WriterOutputStream out = new WriterOutputStream(writer, charsetName)) {
+            int offset = 0;
+            while (offset < expected.length) {
+                final int length = Math.min(random.nextInt(128), expected.length - offset);
+                out.write(expected, offset, length);
+                offset += length;
+            }
         }
-        out.close();
         assertEquals(testString, writer.toString());
     }
 
@@ -130,20 +130,20 @@ public class WriterOutputStreamTest {
     @Test
     public void testFlush() throws IOException {
         final StringWriter writer = new StringWriter();
-        final WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, false);
-        out.write("abc".getBytes("us-ascii"));
-        assertEquals(0, writer.getBuffer().length());
-        out.flush();
-        assertEquals("abc", writer.toString());
-        out.close();
+        try (final WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, false)) {
+            out.write("abc".getBytes("us-ascii"));
+            assertEquals(0, writer.getBuffer().length());
+            out.flush();
+            assertEquals("abc", writer.toString());
+        }
     }
 
     @Test
     public void testWriteImmediately() throws IOException {
         final StringWriter writer = new StringWriter();
-        final WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, true);
-        out.write("abc".getBytes("us-ascii"));
-        assertEquals("abc", writer.toString());
-        out.close();
+        try (final WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, true)) {
+            out.write("abc".getBytes("us-ascii"));
+            assertEquals("abc", writer.toString());
+        }
     }
 }

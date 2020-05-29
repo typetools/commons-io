@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * An {@link IOException} decorator that adds a serializable tag to the
@@ -30,7 +29,6 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * @since 2.0
  */
 @SuppressWarnings("deprecation") // needs to extend deprecated IOExceptionWithCause to preserve binary compatibility
-@AnnotatedFor({"nullness"})
 public class TaggedIOException extends IOExceptionWithCause {
 
     /**
@@ -134,7 +132,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * @return wrapped exception
      */
     @Override
-    public @Nullable IOException getCause() {
+    public synchronized @Nullable IOException getCause() {
         return (IOException) super.getCause();
     }
 

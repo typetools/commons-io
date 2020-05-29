@@ -23,10 +23,9 @@ import java.util.List;
 import org.apache.commons.io.IOCase;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
- * Filters filenames for a certain prefix.
+ * Filters file names for a certain prefix.
  * <p>
  * For example, to print all files and directories in the
  * current directory whose name starts with <code>Test</code>:
@@ -40,16 +39,15 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * </pre>
  *
  * @since 1.0
- * @version $Id$
+ *
  * @see FileFilterUtils#prefixFileFilter(String)
  * @see FileFilterUtils#prefixFileFilter(String, IOCase)
  */
-@AnnotatedFor({"nullness"})
 public class PrefixFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = 8533897440809599867L;
 
-    /** The filename prefixes to search for */
+    /** The file name prefixes to search for */
     private final String[] prefixes;
 
     /** Whether the comparison is case sensitive. */
@@ -91,7 +89,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @param prefixes  the prefixes to allow, must not be null
      * @throws IllegalArgumentException if the prefix array is null
      */
-    public PrefixFileFilter(final String[] prefixes) {
+    public PrefixFileFilter(final String... prefixes) {
         this(prefixes, IOCase.SENSITIVE);
     }
 
@@ -138,15 +136,15 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
         if (prefixes == null) {
             throw new IllegalArgumentException("The list of prefixes must not be null");
         }
-        this.prefixes = prefixes.toArray(new String[prefixes.size()]);
+        this.prefixes = prefixes.toArray(EMPTY_STRING_ARRAY);
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**
-     * Checks to see if the filename starts with the prefix.
+     * Checks to see if the file name starts with the prefix.
      *
      * @param file  the File to check
-     * @return true if the filename starts with one of our prefixes
+     * @return true if the file name starts with one of our prefixes
      */
     @Override
     public boolean accept(final File file) {
@@ -160,11 +158,11 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the filename starts with the prefix.
+     * Checks to see if the file name starts with the prefix.
      *
      * @param file  the File directory
-     * @param name  the filename
-     * @return true if the filename starts with one of our prefixes
+     * @param name  the file name
+     * @return true if the file name starts with one of our prefixes
      */
     @Override
     public boolean accept(final File file, final String name) {

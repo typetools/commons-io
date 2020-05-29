@@ -52,7 +52,7 @@ import org.apache.commons.io.FilenameUtils;
 public class WildcardFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = -5037645902506953517L;
-    /** The wildcards that will be used to match filenames. */
+    /** The wildcards that will be used to match file names. */
     private final String[] wildcards;
 
     /**
@@ -74,7 +74,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
      * @param wildcards  the array of wildcards to match
      * @throws IllegalArgumentException if the pattern array is null
      */
-    public WildcardFilter(final String[] wildcards) {
+    public WildcardFilter(final String... wildcards) {
         if (wildcards == null) {
             throw new IllegalArgumentException("The wildcard array must not be null");
         }
@@ -93,16 +93,16 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
         if (wildcards == null) {
             throw new IllegalArgumentException("The wildcard list must not be null");
         }
-        this.wildcards = wildcards.toArray(new String[wildcards.size()]);
+        this.wildcards = wildcards.toArray(EMPTY_STRING_ARRAY);
     }
 
     //-----------------------------------------------------------------------
     /**
-     * Checks to see if the filename matches one of the wildcards.
+     * Checks to see if the file name matches one of the wildcards.
      *
      * @param dir  the file directory
-     * @param name  the filename
-     * @return true if the filename matches one of the wildcards
+     * @param name  the file name
+     * @return true if the file name matches one of the wildcards
      */
     @Override
     public boolean accept(final File dir, final String name) {
@@ -120,10 +120,10 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Checks to see if the filename matches one of the wildcards.
+     * Checks to see if the file name matches one of the wildcards.
      *
      * @param file the file to check
-     * @return true if the filename matches one of the wildcards
+     * @return true if the file name matches one of the wildcards
      */
     @Override
     public boolean accept(final File file) {

@@ -25,7 +25,6 @@ import java.util.NoSuchElementException;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * An Iterator over the lines in a <code>Reader</code>.
@@ -51,7 +50,6 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  *
  * @since 1.2
  */
-@AnnotatedFor({"nullness"})
 public class LineIterator implements Iterator<String>, Closeable {
 
     // N.B. This class deliberately does not implement Iterable, see https://issues.apache.org/jira/browse/IO-181
@@ -109,11 +107,7 @@ public class LineIterator implements Iterator<String>, Closeable {
                     }
                 }
             } catch(final IOException ioe) {
-                try {
-                    close();
-                } catch (final IOException e) {
-                    ioe.addSuppressed(e);
-                }
+                IOUtils.closeQuietly(this, e -> ioe.addSuppressed(e));
                 throw new IllegalStateException(ioe);
             }
         }
@@ -168,9 +162,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     public void close() throws IOException {
         finished = true;
         cachedLine = null;
-        if (this.bufferedReader != null) {
-            this.bufferedReader.close();
-        }
+        IOUtils.close(bufferedReader);
     }
 
     /**
@@ -188,19 +180,13 @@ public class LineIterator implements Iterator<String>, Closeable {
      * Closes a {@code LineIterator} quietly.
      *
      * @param iterator The iterator to close, or {@code null}.
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
     public static void closeQuietly(final @Nullable LineIterator iterator) {
-        try {
-            if (iterator != null) {
-                iterator.close();
-            }
-        } catch(final IOException e) {
-            // Suppressed.
-        }
+        IOUtils.closeQuietly(iterator);
     }
 
 }

@@ -23,7 +23,6 @@ import java.util.Comparator;
 import org.apache.commons.io.IOCase;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * Compare the <b>names</b> of two files for order (see {@link File#getName()}).
@@ -51,7 +50,6 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  *
  * @since 1.4
  */
-@AnnotatedFor({"nullness"})
 public class NameFileComparator extends AbstractFileComparator implements Serializable {
 
     private static final long serialVersionUID = 8397947749814525798L;

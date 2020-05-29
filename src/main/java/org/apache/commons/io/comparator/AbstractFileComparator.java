@@ -23,14 +23,12 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * Abstract file {@link Comparator} which provides sorting for file arrays and lists.
  *
  * @since 2.0
  */
-@AnnotatedFor({"nullness"})
 abstract class AbstractFileComparator implements Comparator<File> {
 
     /**

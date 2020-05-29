@@ -1,4 +1,4 @@
-/*
+        /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -27,7 +27,6 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 
@@ -50,7 +49,6 @@ import org.checkerframework.checker.initialization.qual.UnderInitialization;
  * The encoding may also be specified, and defaults to the platform default.
  *
  */
-@AnnotatedFor({"nullness"})
 public class LockableFileWriter extends Writer {
     // Cannot extend ProxyWriter, as requires writer to be
     // known when super() is called
@@ -143,43 +141,43 @@ public class LockableFileWriter extends Writer {
      * Constructs a LockableFileWriter with a file encoding.
      *
      * @param file  the file to write to, not null
-     * @param encoding  the encoding to use, null means platform default
+     * @param charset  the charset to use, null means platform default
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public LockableFileWriter(final File file, final @Nullable Charset encoding) throws IOException {
-        this(file, encoding, false, null);
+    public LockableFileWriter(final File file, final @Nullable Charset charset) throws IOException {
+        this(file, charset, false, null);
     }
 
     /**
      * Constructs a LockableFileWriter with a file encoding.
      *
      * @param file  the file to write to, not null
-     * @param encoding  the encoding to use, null means platform default
+     * @param charsetName  the name of the requested charset, null means platform default
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      * @throws java.nio.charset.UnsupportedCharsetException
      *             thrown instead of {@link java.io.UnsupportedEncodingException} in version 2.2 if the encoding is not
      *             supported.
      */
-    public LockableFileWriter(final File file, final @Nullable String encoding) throws IOException {
-        this(file, encoding, false, null);
+    public LockableFileWriter(final File file, final @Nullable String charsetName) throws IOException {
+        this(file, charsetName, false, null);
     }
 
     /**
      * Constructs a LockableFileWriter with a file encoding.
      *
      * @param file  the file to write to, not null
-     * @param encoding  the encoding to use, null means platform default
+     * @param charset  the name of the requested charset, null means platform default
      * @param append  true if content should be appended, false to overwrite
      * @param lockDir  the directory in which the lock file should be held
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public LockableFileWriter(File file, final @Nullable Charset encoding, final boolean append,
-          @Nullable String lockDir) throws IOException {
+    public LockableFileWriter(File file, final @Nullable Charset charset, final boolean append,
+            @Nullable String lockDir) throws IOException {
         super();
         // init file to create/append
         file = file.getAbsoluteFile();
@@ -203,14 +201,14 @@ public class LockableFileWriter extends Writer {
         createLock();
 
         // init wrapped writer
-        out = initWriter(file, encoding, append);
+        out = initWriter(file, charset, append);
     }
 
     /**
      * Constructs a LockableFileWriter with a file encoding.
      *
      * @param file  the file to write to, not null
-     * @param encoding  the encoding to use, null means platform default
+     * @param charsetName  the encoding to use, null means platform default
      * @param append  true if content should be appended, false to overwrite
      * @param lockDir  the directory in which the lock file should be held
      * @throws NullPointerException if the file is null
@@ -219,9 +217,9 @@ public class LockableFileWriter extends Writer {
      *             thrown instead of {@link java.io.UnsupportedEncodingException} in version 2.2 if the encoding is not
      *             supported.
      */
-    public LockableFileWriter(final File file, final @Nullable String encoding, final boolean append,
+    public LockableFileWriter(final File file, final @Nullable String charsetName, final boolean append,
             final @Nullable String lockDir) throws IOException {
-        this(file, Charsets.toCharset(encoding), append, lockDir);
+        this(file, Charsets.toCharset(charsetName), append, lockDir);
     }
 
     //-----------------------------------------------------------------------
@@ -264,16 +262,16 @@ public class LockableFileWriter extends Writer {
      * Ensure that a cleanup occurs if the writer creation fails.
      *
      * @param file  the file to be accessed
-     * @param encoding  the encoding to use
+     * @param charset  the charset to use
      * @param append  true to append
      * @return The initialised writer
      * @throws IOException if an error occurs
      */
-    private Writer initWriter(@UnderInitialization(java.io.Writer.class) LockableFileWriter this, final File file, final @Nullable Charset encoding, final boolean append) throws IOException {
+    private Writer initWriter(@UnderInitialization(java.io.Writer.class) LockableFileWriter this, final File file, final @Nullable Charset charset, final boolean append) throws IOException {
         final boolean fileExistedAlready = file.exists();
         try {
             return new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath(), append),
-                                          Charsets.toCharset(encoding));
+                                          Charsets.toCharset(charset));
 
         } catch (final IOException | RuntimeException ex) {
             FileUtils.deleteQuietly(lockFile);

@@ -19,7 +19,6 @@ package org.apache.commons.io;
 import java.io.File;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * Keeps track of files awaiting deletion, and deletes them when an associated
@@ -38,7 +37,6 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * @deprecated Use {@link FileCleaningTracker}
  */
 @Deprecated
-@AnnotatedFor({"nullness"})
 public class FileCleaner {
     /**
      * The instance to use for the deprecated, static methods.

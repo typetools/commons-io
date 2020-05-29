@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadFactory;
 
-import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
@@ -30,10 +29,8 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
  * registered {@link FileAlterationObserver} at a specified interval.
  *
  * @see FileAlterationObserver
- * @version $Id$
  * @since 2.0
  */
-@AnnotatedFor({"nullness"})
 public final class FileAlterationMonitor implements Runnable {
 
     private final long interval;
@@ -43,14 +40,14 @@ public final class FileAlterationMonitor implements Runnable {
     private volatile boolean running = false;
 
     /**
-     * Construct a monitor with a default interval of 10 seconds.
+     * Constructs a monitor with a default interval of 10 seconds.
      */
     public FileAlterationMonitor() {
         this(10000);
     }
 
     /**
-     * Construct a monitor with the specified interval.
+     * Constructs a monitor with the specified interval.
      *
      * @param interval The amount of time in milliseconds to wait between
      * checks of the file system
@@ -60,7 +57,7 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
-     * Construct a monitor with the specified interval and set of observers.
+     * Constructs a monitor with the specified interval and set of observers.
      *
      * @param interval The amount of time in milliseconds to wait between
      * checks of the file system
@@ -76,7 +73,7 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
-     * Return the interval.
+     * Returns the interval.
      *
      * @return the interval
      */
@@ -85,7 +82,7 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
-     * Set the thread factory.
+     * Sets the thread factory.
      *
      * @param threadFactory the thread factory
      */
@@ -95,7 +92,7 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
-     * Add a file system observer to this monitor.
+     * Adds a file system observer to this monitor.
      *
      * @param observer The file system observer to add
      */
@@ -106,13 +103,14 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
-     * Remove a file system observer from this monitor.
+     * Removes a file system observer from this monitor.
      *
      * @param observer The file system observer to remove
      */
     public void removeObserver(final FileAlterationObserver observer) {
         if (observer != null) {
             while (observers.remove(observer)) {
+                // empty
             }
         }
     }
@@ -128,7 +126,7 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
-     * Start monitoring.
+     * Starts monitoring.
      *
      * @throws Exception if an error occurs initializing the observer
      */
@@ -151,7 +149,7 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
-     * Stop monitoring.
+     * Stops monitoring.
      *
      * @throws Exception if an error occurs initializing the observer
      */
@@ -161,7 +159,7 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
-     * Stop monitoring.
+     * Stops monitoring.
      *
      * @param stopInterval the amount of time in milliseconds to wait for the thread to finish.
      * A value of zero will wait until the thread is finished (see {@link Thread#join(long)}).
@@ -175,6 +173,7 @@ public final class FileAlterationMonitor implements Runnable {
         }
         running = false;
         try {
+            thread.interrupt();
             thread.join(stopInterval);
         } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -185,7 +184,7 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
-     * Run.
+     * Runs this monitor.
      */
     @Override
     public void run() {
@@ -199,6 +198,7 @@ public final class FileAlterationMonitor implements Runnable {
             try {
                 Thread.sleep(interval);
             } catch (final InterruptedException ignored) {
+                // ignore
             }
         }
     }

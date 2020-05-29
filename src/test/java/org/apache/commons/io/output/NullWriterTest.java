@@ -16,26 +16,25 @@
  */
 package org.apache.commons.io.output;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Really not a lot to do here, but checking that no
  * Exceptions are thrown.
- *
  */
 public class NullWriterTest {
 
     @Test
     public void testNull() {
-        final char[] chars = new char[] {'A', 'B', 'C'};
-        final NullWriter writer = new NullWriter();
-        writer.write(1);
-        writer.write(chars);
-        writer.write(chars, 1, 1);
-        writer.write("some string");
-        writer.write("some string", 2, 2);
-        writer.flush();
-        writer.close();
+        final char[] chars = new char[] { 'A', 'B', 'C' };
+        try (final NullWriter writer = NullWriter.NULL_WRITER) {
+            writer.write(1);
+            writer.write(chars);
+            writer.write(chars, 1, 1);
+            writer.write("some string");
+            writer.write("some string", 2, 2);
+            writer.flush();
+        }
     }
 
 }

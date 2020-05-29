@@ -17,9 +17,9 @@
 package org.apache.commons.io;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * Byte Order Mark (BOM) representation - see {@link org.apache.commons.io.input.BOMInputStream}.
@@ -28,10 +28,8 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * @see <a href="http://en.wikipedia.org/wiki/Byte_order_mark">Wikipedia: Byte Order Mark</a>
  * @see <a href="http://www.w3.org/TR/2006/REC-xml-20060816/#sec-guessing">W3C: Autodetection of Character Encodings
  *      (Non-Normative)</a>
- * @version $Id$
  * @since 2.0
  */
-@AnnotatedFor({"nullness"})
 public class ByteOrderMark implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -186,7 +184,7 @@ public class ByteOrderMark implements Serializable {
                 builder.append(",");
             }
             builder.append("0x");
-            builder.append(Integer.toHexString(0xFF & bytes[i]).toUpperCase());
+            builder.append(Integer.toHexString(0xFF & bytes[i]).toUpperCase(Locale.ROOT));
         }
         builder.append(']');
         return builder.toString();

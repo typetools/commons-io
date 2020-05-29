@@ -23,10 +23,9 @@ import java.util.List;
 import org.apache.commons.io.IOCase;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
- * Filters filenames for a certain name.
+ * Filters file names for a certain name.
  * <p>
  * For example, to print all files and directories in the
  * current directory whose name is <code>Test</code>:
@@ -40,15 +39,14 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * </pre>
  *
  * @since 1.0
- * @version $Id$
+ *
  * @see FileFilterUtils#nameFileFilter(String)
  * @see FileFilterUtils#nameFileFilter(String, IOCase)
  */
-@AnnotatedFor({"nullness"})
 public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = 176844364689077340L;
-    /** The filenames to search for */
+    /** The file names to search for */
     private final String[] names;
     /** Whether the comparison is case sensitive. */
     private final IOCase caseSensitivity;
@@ -87,7 +85,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      * @param names  the names to allow, must not be null
      * @throws IllegalArgumentException if the names array is null
      */
-    public NameFileFilter(final String[] names) {
+    public NameFileFilter(final String... names) {
         this(names, null);
     }
 
@@ -130,16 +128,16 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
         if (names == null) {
             throw new IllegalArgumentException("The list of names must not be null");
         }
-        this.names = names.toArray(new String[names.size()]);
+        this.names = names.toArray(EMPTY_STRING_ARRAY);
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     //-----------------------------------------------------------------------
     /**
-     * Checks to see if the filename matches.
+     * Checks to see if the file name matches.
      *
      * @param file  the File to check
-     * @return true if the filename matches
+     * @return true if the file name matches
      */
     @Override
     public boolean accept(final File file) {
@@ -153,11 +151,11 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Checks to see if the filename matches.
+     * Checks to see if the file name matches.
      *
      * @param dir  the File directory (ignored)
-     * @param name  the filename
-     * @return true if the filename matches
+     * @param name  the file name
+     * @return true if the file name matches
      */
     @Override
     public boolean accept(final File dir, final String name) {

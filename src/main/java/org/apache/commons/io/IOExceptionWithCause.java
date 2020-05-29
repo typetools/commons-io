@@ -20,7 +20,6 @@ package org.apache.commons.io;
 import java.io.IOException;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 /**
  * Subclasses IOException with the {@link Throwable} constructors missing before Java 6.
  *
@@ -28,7 +27,6 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  * @deprecated (since 2.5) use {@link IOException} instead
  */
 @Deprecated
-@AnnotatedFor({"nullness"})
 public class IOExceptionWithCause extends IOException {
 
     /**

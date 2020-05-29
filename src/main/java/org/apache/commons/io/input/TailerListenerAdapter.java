@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io.input;
 
-import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 
 /**
@@ -24,7 +23,6 @@ import org.checkerframework.checker.initialization.qual.UnderInitialization;
  *
  * @since 2.0
  */
-@AnnotatedFor({"nullness"}) 
 public class TailerListenerAdapter implements TailerListener {
 
     /**
@@ -34,6 +32,7 @@ public class TailerListenerAdapter implements TailerListener {
      */
     @Override
     public void init(final @UnderInitialization(java.lang.Object.class) Tailer tailer) {
+        // noop
     }
 
     /**
@@ -41,6 +40,7 @@ public class TailerListenerAdapter implements TailerListener {
      */
     @Override
     public void fileNotFound() {
+        // noop
     }
 
     /**
@@ -51,6 +51,7 @@ public class TailerListenerAdapter implements TailerListener {
      */
     @Override
     public void fileRotated() {
+        // noop
     }
 
     /**
@@ -59,6 +60,7 @@ public class TailerListenerAdapter implements TailerListener {
      */
     @Override
     public void handle(final String line) {
+        // noop
     }
 
     /**
@@ -67,6 +69,7 @@ public class TailerListenerAdapter implements TailerListener {
      */
     @Override
     public void handle(final Exception ex) {
+        // noop
     }
 
     /**
@@ -80,5 +83,6 @@ public class TailerListenerAdapter implements TailerListener {
      * @since 2.5
      */
     public void endOfFileReached() {
+        // noop
     }
 }

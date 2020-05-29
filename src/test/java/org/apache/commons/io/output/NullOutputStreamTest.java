@@ -19,20 +19,15 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 /**
- * Really not a lot to do here, but checking that no
- * Exceptions are thrown.
- *
+ * Really not a lot to do here, but checking that no Exceptions are thrown.
  */
-
 public class NullOutputStreamTest {
 
-    @Test
-    public void testNull() throws IOException {
-        final NullOutputStream nos = new NullOutputStream();
+    private void process(final NullOutputStream nos) throws IOException {
         nos.write("string".getBytes());
         nos.write("some string".getBytes(), 3, 5);
         nos.write(1);
@@ -41,6 +36,20 @@ public class NullOutputStreamTest {
         nos.close();
         nos.write("allowed".getBytes());
         nos.write(255);
+    }
+
+    @Test
+    public void testNewInstance() throws IOException {
+        try (final NullOutputStream nos = NullOutputStream.NULL_OUTPUT_STREAM) {
+            process(nos);
+        }
+    }
+
+    @Test
+    public void testSingleton() throws IOException {
+        try (final NullOutputStream nos = NullOutputStream.NULL_OUTPUT_STREAM) {
+            process(nos);
+        }
     }
 
 }

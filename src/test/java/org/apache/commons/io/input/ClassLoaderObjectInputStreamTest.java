@@ -16,9 +16,9 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -39,7 +39,7 @@ public class ClassLoaderObjectInputStreamTest {
      */
 
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void testExpected() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -49,15 +49,15 @@ public class ClassLoaderObjectInputStreamTest {
         oos.writeObject(input);
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        final ClassLoaderObjectInputStream clois =
-                new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
-        final Object result = clois.readObject();
+        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
+                bais)) {
+            final Object result = clois.readObject();
 
-        assertEquals(input, result);
-        clois.close();
+            assertEquals(input, result);
+        }
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void testLong() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -67,15 +67,15 @@ public class ClassLoaderObjectInputStreamTest {
         oos.writeObject(input);
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        final ClassLoaderObjectInputStream clois =
-                new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
-        final Object result = clois.readObject();
+        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
+                bais)) {
+            final Object result = clois.readObject();
 
-        assertEquals(input, result);
-        clois.close();
+            assertEquals(input, result);
+        }
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void testPrimitiveLong() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -86,15 +86,15 @@ public class ClassLoaderObjectInputStreamTest {
         oos.close();
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        final ClassLoaderObjectInputStream clois =
-                new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
-        final long result = clois.readLong();
+        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
+                bais)) {
+            final long result = clois.readLong();
 
-        assertEquals(input, result);
-        clois.close();
+            assertEquals(input, result);
+        }
     }
 
-    private static enum E {A, B, C}
+    private enum E {A, B, C}
 
     private static class Test implements Serializable {
         private static final long serialVersionUID = 1L;
@@ -117,9 +117,8 @@ public class ClassLoaderObjectInputStreamTest {
                 return (this.i == tother.i)
                         & (this.e == tother.e)
                         & equalObject(tother.o);
-            } else {
-                return false;
             }
+            return false;
         }
 
         private boolean equalObject(final Object other) {
@@ -135,7 +134,7 @@ public class ClassLoaderObjectInputStreamTest {
         }
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void testObject1() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -146,15 +145,15 @@ public class ClassLoaderObjectInputStreamTest {
         oos.close();
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        final ClassLoaderObjectInputStream clois =
-                new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
-        final Object result = clois.readObject();
+        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
+                bais)) {
+            final Object result = clois.readObject();
 
-        assertEquals(input, result);
-        clois.close();
+            assertEquals(input, result);
+        }
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void testObject2() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -165,15 +164,15 @@ public class ClassLoaderObjectInputStreamTest {
         oos.close();
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        final ClassLoaderObjectInputStream clois =
-                new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
-        final Object result = clois.readObject();
+        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
+                bais)) {
+            final Object result = clois.readObject();
 
-        assertEquals(input, result);
-        clois.close();
+            assertEquals(input, result);
+        }
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void testResolveProxyClass() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -181,15 +180,15 @@ public class ClassLoaderObjectInputStreamTest {
         oos.writeObject(Boolean.FALSE);
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
 
-        final ClassLoaderObjectInputStream clois =
-                new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
-        final String[] interfaces = new String[]{Comparable.class.getName()};
-        final Class<?> result = clois.resolveProxyClass(interfaces);
-        assertTrue("Assignable", Comparable.class.isAssignableFrom(result));
-        clois.close();
+        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
+                bais)) {
+            final String[] interfaces = new String[] { Comparable.class.getName() };
+            final Class<?> result = clois.resolveProxyClass(interfaces);
+            assertTrue(Comparable.class.isAssignableFrom(result), "Assignable");
+        }
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void testResolveProxyClassWithMultipleInterfaces() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -197,16 +196,15 @@ public class ClassLoaderObjectInputStreamTest {
         oos.writeObject(Boolean.FALSE);
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
 
-        final ClassLoaderObjectInputStream clois =
-                new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
-        final String[] interfaces = new String[]{Comparable.class.getName(),
-                                                 Serializable.class.getName(),
-                                                 Runnable.class.getName()};
-        final Class<?> result = clois.resolveProxyClass(interfaces);
-        assertTrue("Assignable", Comparable.class.isAssignableFrom(result));
-        assertTrue("Assignable", Runnable.class.isAssignableFrom(result));
-        assertTrue("Assignable", Serializable.class.isAssignableFrom(result));
-        assertFalse("Not Assignable", Flushable.class.isAssignableFrom(result));
-        clois.close();
+        try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
+                bais)) {
+            final String[] interfaces = new String[] { Comparable.class.getName(), Serializable.class.getName(),
+                    Runnable.class.getName() };
+            final Class<?> result = clois.resolveProxyClass(interfaces);
+            assertTrue(Comparable.class.isAssignableFrom(result), "Assignable");
+            assertTrue(Runnable.class.isAssignableFrom(result), "Assignable");
+            assertTrue(Serializable.class.isAssignableFrom(result), "Assignable");
+            assertFalse(Flushable.class.isAssignableFrom(result), "Not Assignable");
+        }
     }
 }

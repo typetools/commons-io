@@ -49,7 +49,7 @@ import java.io.Serializable;
  * </pre>
  *
  * @since 1.3
- * @version $Id$
+ *
  */
 public class EmptyFileFilter extends AbstractFileFilter implements Serializable {
 
@@ -79,9 +79,8 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
         if (file.isDirectory()) {
             final File[] files = file.listFiles();
             return files == null || files.length == 0;
-        } else {
-            return file.length() == 0;
         }
+        return file.length() == 0;
     }
 
 }

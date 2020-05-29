@@ -20,7 +20,6 @@ import java.io.Serializable;
 import java.io.Writer;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.AnnotatedFor;
 
 /**
  * {@link Writer} implementation that outputs to a {@link StringBuilder}.
@@ -33,7 +32,6 @@ import org.checkerframework.framework.qual.AnnotatedFor;
  *
  * @since 2.0
  */
-@AnnotatedFor({"nullness"})
 public class StringBuilderWriter extends Writer implements Serializable {
 
     private static final long serialVersionUID = -146927496096066153L;
