@@ -716,7 +716,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs
      * @since 2.8.0
      */
-    public static long consume(final InputStream input)
+    public static long consume(final @Nullable InputStream input)
             throws IOException {
         return copyLarge(input, NullOutputStream.NULL_OUTPUT_STREAM, SKIP_BYTE_BUFFER);
     }

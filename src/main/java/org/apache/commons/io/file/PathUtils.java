@@ -378,7 +378,7 @@ public final class PathUtils {
      * @param options the array to test
      * @return true if the given options contain {@link StandardDeleteOption#OVERRIDE_READ_ONLY}.
      */
-    private static boolean overrideReadOnly(final DeleteOption[] options) {
+    private static boolean overrideReadOnly(final DeleteOption @Nullable [] options) {
         if (options == null) {
             return false;
         }
@@ -565,7 +565,7 @@ public final class PathUtils {
      * @throws IOException if an I/O error occurs.
      * @since 2.8.0
      */
-    public static List<AclEntry> getAclEntryList(final Path sourcePath) throws IOException {
+    public static @Nullable List<AclEntry> getAclEntryList(final Path sourcePath) throws IOException {
         final AclFileAttributeView fileAttributeView = Files.getFileAttributeView(sourcePath,
             AclFileAttributeView.class);
         return fileAttributeView == null ? null : fileAttributeView.getAcl();

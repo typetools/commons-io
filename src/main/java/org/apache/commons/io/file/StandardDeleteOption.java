@@ -17,6 +17,8 @@
 
 package org.apache.commons.io.file;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Defines the standard delete options.
  *
@@ -37,7 +39,7 @@ public enum StandardDeleteOption implements DeleteOption {
      * @param options the array to test
      * @return true if the given options contain {@link StandardDeleteOption#OVERRIDE_READ_ONLY}.
      */
-    public static boolean overrideReadOnly(final DeleteOption[] options) {
+    public static boolean overrideReadOnly(final DeleteOption @Nullable [] options) {
         if (options == null || options.length == 0) {
             return false;
         }
