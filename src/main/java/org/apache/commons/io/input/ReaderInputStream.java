@@ -74,8 +74,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * read operation will block or not, it is not possible to provide a meaningful
  * implementation of the {@link InputStream#available()} method. A call to this method
  * will always return 0. Also, this class doesn't support {@link InputStream#mark(int)}.
+ * </p>
  * <p>
  * Instances of {@link ReaderInputStream} are not thread safe.
+ * </p>
  *
  * @see org.apache.commons.io.output.WriterOutputStream
  *

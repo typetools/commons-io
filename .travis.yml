@@ -15,11 +15,14 @@
 
 language: java
 
+cache:
+  directories:
+    - $HOME/.m2
+
 jdk:
   - openjdk8
 ## JDK 11 requires different buildfile logic, so test on just one JDK for now.
 #  - openjdk11
-#  - openjdk13
 #  - openjdk14
 #  - openjdk-ea
 #  - oraclejdk11
@@ -32,11 +35,12 @@ jdk:
 #       env: JACOCO_SKIP=true
 
 ## Original script from upstream commons-io project
+# # --no-transfer-progress requires Maven 3.6.1+. Otherwise use --batch-mode
 # script:
-#   - mvn
-#
+#   - mvn -V --no-transfer-progress
+# 
 # after_success:
-#   - mvn clean cobertura:cobertura coveralls:report -Ptravis-cobertura
+#   - mvn -V --no-transfer-progress clean cobertura:cobertura coveralls:report -Ptravis-cobertura
 
 install: mvn dependency:resolve
 script: ./.travis-build.sh
