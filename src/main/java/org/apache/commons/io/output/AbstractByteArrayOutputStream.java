@@ -19,7 +19,6 @@ package org.apache.commons.io.output;
 import org.apache.commons.io.input.ClosedInputStream;
 
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.InputStream;
 import java.io.IOException;

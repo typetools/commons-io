@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io;
 
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;

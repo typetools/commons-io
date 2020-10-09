@@ -267,7 +267,8 @@ public class LockableFileWriter extends Writer {
      * @return The initialized writer
      * @throws IOException if an error occurs
      */
-    private Writer initWriter(@UnderInitialization(java.io.Writer.class) LockableFileWriter this, final File file, final @Nullable Charset charset, final boolean append) throws IOException {
+    private Writer initWriter(@UnderInitialization(java.io.Writer.class) LockableFileWriter this,
+                              final File file, final @Nullable Charset charset, final boolean append) throws IOException {
         final boolean fileExistedAlready = file.exists();
         try {
             return new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath(), append),

@@ -25,10 +25,8 @@ import java.io.OutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.framework.qual.EnsuresQualifierIf;
 
@@ -232,7 +230,8 @@ public class DeferredFileOutputStream
         final FileOutputStream fos = new FileOutputStream(outputFile);
         try {
             // Can't do @RequiresNonNull("memoryOutputStream") because superclass has no such requirement.
-            assert memoryOutputStream != null : "@AssumeAssertion(nullness): thresholdReached() is called at most once and nothing else sets memoryOutputStream to null";
+            assert memoryOutputStream != null
+                    : "@AssumeAssertion(nullness): thresholdReached() is called at most once and nothing else sets memoryOutputStream to null";
         
             memoryOutputStream.writeTo(fos);
         } catch (final IOException e){

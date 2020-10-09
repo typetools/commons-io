@@ -433,7 +433,8 @@ public class XmlStreamReader extends Reader {
      * @return the encoding to be used
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String doRawStream(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final BOMInputStream bom, final BOMInputStream pis, final boolean lenient)
+    private String doRawStream(@UnderInitialization(java.io.Reader.class) XmlStreamReader this,
+                               final BOMInputStream bom, final BOMInputStream pis, final boolean lenient)
             throws IOException {
         final String bomEnc      = bom.getBOMCharsetName();
         final String xmlGuessEnc = pis.getBOMCharsetName();
@@ -459,7 +460,8 @@ public class XmlStreamReader extends Reader {
      * @return the encoding to be used
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String processHttpStream(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final BOMInputStream bom, final BOMInputStream pis, final @Nullable String httpContentType,
+    private String processHttpStream(@UnderInitialization(java.io.Reader.class) XmlStreamReader this,
+                                     final BOMInputStream bom, final BOMInputStream pis, final @Nullable String httpContentType,
         final boolean lenient) throws IOException {
         final String bomEnc = bom.getBOMCharsetName();
         final String xmlGuessEnc = pis.getBOMCharsetName();
@@ -514,7 +516,8 @@ public class XmlStreamReader extends Reader {
      * @return the raw encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    String calculateRawEncoding(@UnderInitialization(java.io.Reader.class) XmlStreamReader this, final @Nullable String bomEnc, final @Nullable String xmlGuessEnc,
+    String calculateRawEncoding(@UnderInitialization(java.io.Reader.class) XmlStreamReader this,
+                                final @Nullable String bomEnc, final @Nullable String xmlGuessEnc,
             final @Nullable String xmlEnc) throws IOException {
 
         // BOM is Null
