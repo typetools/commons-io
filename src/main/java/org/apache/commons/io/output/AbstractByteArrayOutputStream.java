@@ -422,7 +422,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
      * @see java.io.ByteArrayOutputStream#toString(String)
      * @since 2.5
      */
-    public String toString(final @NonNull Charset charset) {
+    public String toString(final Charset charset) {
         return new String(toByteArray(), charset);
     }
 

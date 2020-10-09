@@ -291,7 +291,8 @@ public class BOMInputStream extends ProxyInputStream {
      * @return true if the bytes match the bom, otherwise false
      */
     @RequiresNonNull("firstBytes")
-    @Pure private boolean matches(final ByteOrderMark bom) {
+    @Pure
+    private boolean matches(final ByteOrderMark bom) {
         // if (bom.length() != fbLength) {
         // return false;
         // }

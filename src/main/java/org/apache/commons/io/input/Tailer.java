@@ -28,8 +28,6 @@ import java.nio.charset.Charset;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 /**
  * Simple implementation of the unix "tail -f" functionality.
  *
@@ -252,7 +250,7 @@ public class Tailer implements Runnable {
      * @param reOpen if true, close and reopen the file between reading chunks
      * @param bufSize Buffer size
      */
-    public Tailer(final File file, final @NonNull Charset charset, final TailerListener listener, final long delayMillis,
+    public Tailer(final File file, final Charset charset, final TailerListener listener, final long delayMillis,
                   final boolean end, final boolean reOpen
             , final int bufSize) {
         this.file = file;
@@ -312,7 +310,7 @@ public class Tailer implements Runnable {
      * @param bufSize buffer size.
      * @return The new tailer
      */
-    public static Tailer create(final File file, final @NonNull Charset charset, final TailerListener listener,
+    public static Tailer create(final File file, final Charset charset, final TailerListener listener,
                                 final long delayMillis, final boolean end, final boolean reOpen
             ,final int bufSize) {
         final Tailer tailer = new Tailer(file, charset, listener, delayMillis, end, reOpen, bufSize);

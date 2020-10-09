@@ -53,7 +53,6 @@ public class DeferredFileOutputStream
      * The output stream to which data will be written prior to the threshold
      * being reached.
      */
-    // Starts out non-null
     private @Nullable ByteArrayOutputStream memoryOutputStream;
 
 

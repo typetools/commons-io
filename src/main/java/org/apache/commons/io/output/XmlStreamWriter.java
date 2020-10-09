@@ -49,6 +49,7 @@ public class XmlStreamWriter extends Writer {
     private final OutputStream out;
 
     private final String defaultEncoding;
+
     // xmlPrologWriter can be null, after encoding is chosen and writer and encoding are non-null.
     // At least one of xmlPrologWriter and writer is non-null; this is enforced by detectEncoding().
     private @Nullable StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);

@@ -26,8 +26,6 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 /**
  * {@link OutputStream} implementation that transforms a byte stream to a
  * character stream using a specified charset encoding and writes the resulting
@@ -140,7 +138,7 @@ public class WriterOutputStream extends OutputStream {
      *                         output buffer will only be flushed when it overflows or when
      *                         {@link #flush()} or {@link #close()} is called.
      */
-    public WriterOutputStream(final Writer writer, final @NonNull Charset charset, final int bufferSize,
+    public WriterOutputStream(final Writer writer, final Charset charset, final int bufferSize,
                               final boolean writeImmediately) {
         this(writer,
              charset.newDecoder()
@@ -159,7 +157,7 @@ public class WriterOutputStream extends OutputStream {
      * @param writer the target {@link Writer}
      * @param charset the charset encoding
      */
-    public WriterOutputStream(final Writer writer, final @NonNull Charset charset) {
+    public WriterOutputStream(final Writer writer, final Charset charset) {
         this(writer, charset, BUFFER_SIZE, false);
     }
 
@@ -317,7 +315,7 @@ public class WriterOutputStream extends OutputStream {
      *
      * @param charset the charset to check the support for
      */
-    private static void checkIbmJdkWithBrokenUTF16(final @NonNull Charset charset){
+    private static void checkIbmJdkWithBrokenUTF16(final Charset charset){
         if (!"UTF-16".equals(charset.name())) {
             return;
         }

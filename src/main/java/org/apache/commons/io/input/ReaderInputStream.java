@@ -31,7 +31,6 @@ import java.util.Objects;
 
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * {@link InputStream} implementation that reads a character stream from a {@link Reader}
@@ -140,7 +139,7 @@ public class ReaderInputStream extends InputStream {
      * @param charset the charset encoding
      * @param bufferSize the size of the input buffer in number of characters
      */
-    public ReaderInputStream(final Reader reader, final @NonNull Charset charset, final int bufferSize) {
+    public ReaderInputStream(final Reader reader, final Charset charset, final int bufferSize) {
         this(reader,
              charset.newEncoder()
                     .onMalformedInput(CodingErrorAction.REPLACE)
@@ -155,7 +154,7 @@ public class ReaderInputStream extends InputStream {
      * @param reader the target {@link Reader}
      * @param charset the charset encoding
      */
-    public ReaderInputStream(final Reader reader, final @NonNull Charset charset) {
+    public ReaderInputStream(final Reader reader, final Charset charset) {
         this(reader, charset, DEFAULT_BUFFER_SIZE);
     }
 

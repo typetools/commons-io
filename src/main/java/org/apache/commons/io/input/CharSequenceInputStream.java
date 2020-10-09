@@ -30,8 +30,6 @@ import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 import java.util.Objects;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 /**
  * {@link InputStream} implementation that can read from String, StringBuffer,
  * StringBuilder or CharBuffer.
@@ -61,7 +59,7 @@ public class CharSequenceInputStream extends InputStream {
      * @param bufferSize the buffer size to use.
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character
      */
-    public CharSequenceInputStream(final CharSequence cs, final @NonNull Charset charset, final int bufferSize) {
+    public CharSequenceInputStream(final CharSequence cs, final Charset charset, final int bufferSize) {
         super();
         this.encoder = charset.newEncoder()
             .onMalformedInput(CodingErrorAction.REPLACE)
@@ -99,7 +97,7 @@ public class CharSequenceInputStream extends InputStream {
      * @param charset the character set name to use
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character
      */
-    public CharSequenceInputStream(final CharSequence cs, final @NonNull Charset charset) {
+    public CharSequenceInputStream(final CharSequence cs, final Charset charset) {
         this(cs, charset, BUFFER_SIZE);
     }
 
