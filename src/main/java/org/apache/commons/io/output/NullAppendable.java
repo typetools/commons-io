@@ -17,6 +17,8 @@
 
 package org.apache.commons.io.output;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.IOException;
 
 /**
@@ -45,12 +47,12 @@ public class NullAppendable implements Appendable {
     }
 
     @Override
-    public Appendable append(final CharSequence csq) throws IOException {
+    public Appendable append(final @Nullable CharSequence csq) throws IOException {
         return this;
     }
 
     @Override
-    public Appendable append(final CharSequence csq, final int start, final int end) throws IOException {
+    public Appendable append(final @Nullable CharSequence csq, final int start, final int end) throws IOException {
         return this;
     }
 
