@@ -15,12 +15,14 @@ This creates file
 To update to a newer version of the upstream library
 ----------------------------------------------------
 
+Create a branch and do work thre.
+
 At https://github.com/apache/commons-io/releases ,
 find the commit corresponding to a public release.
 
-Commons IO version 2.7 is commit 6efbccc88318d15c0f5fdcfa0b87e3dc980dca22
+Commons IO version 2.8 is commit fa59009aaabcf8671a8d741993ef355f42b95ccd
 
-On a branch, pull in that commit:
+Pull in that commit:
 ```
 git pull https://github.com/apache/commons-io <commitid>
 ```
@@ -29,11 +31,18 @@ Update the version number throughout this file.
 
 Use the latest Checker Framework version by changing `pom.xml`.
 
-Search the codebase for all uses of "@since 2.7" and annotate those methods/classes.
+Search the codebase for all uses of "@since 2.8" and annotate those methods/classes.
+
+Ensure that it builds:
+```
+mvn -B -Dmaven.test.skip=true package
+```
+
+Make a pull request for the branch.
 
 When merging the branch, create a merge commit (don't squash-and-merge).
 
-In my clone of Apache's fork (used for local comparisons), pull in version 2.7:
+In my clone of Apache's fork (used for local comparisons), pull in version 2.8:
 ```
 git fetch origin
 git checkout <commitid>
@@ -50,7 +59,7 @@ This must be done on a CSE machine, which has access to the necessary passwords.
 #  * in file pom.xml (if different from upstream)
 #  * environment variable PACKAGE below
 
-PACKAGE=commons-io-2.7 && \
+PACKAGE=commons-io-2.8 && \
 mvn -B -Dmaven.test.skip=true package && \
 mvn source:jar && \
 mvn javadoc:javadoc && (cd target/site/apidocs && jar -cf ${PACKAGE}-javadoc.jar org)
