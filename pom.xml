@@ -534,34 +534,39 @@ file comparators, endian transformation classes, and much more.
           <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.8.1</version>
-            <configuration>
-              <fork>true</fork> <!-- Must fork or else JVM arguments are ignored. -->
-              <source>1.8</source>
-              <target>1.8</target>
-              <compilerArguments>
-                <Xmaxerrs>10000</Xmaxerrs>
-                <Xmaxwarns>10000</Xmaxwarns>
-              </compilerArguments>
-              <!-- Without showWarnings and verbose, maven-compiler-plugin may not show output. -->
-              <showWarnings>true</showWarnings>
-              <verbose>true</verbose>
-              <annotationProcessorPaths>
-                <path>
-                  <groupId>org.checkerframework</groupId>
-                  <artifactId>checker</artifactId>
-                  <version>3.7.0</version>
-                </path>
-              </annotationProcessorPaths>
-              <annotationProcessors>
-                <!-- Add all the checkers you want to enable here -->
-                <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
-              </annotationProcessors>
-              <compilerArgs>
-                <arg>-J-Xbootclasspath/p:${errorProneJavac}</arg>
-                <!-- <arg>-Awarns</arg> --> <!-- -Awarns turns type-checking errors into warnings. -->
-                <arg>-Alint=trustArrayLenZero</arg>
-              </compilerArgs>
-            </configuration>
+            <executions>
+              <execution>
+                <id>default-compile</id>
+		<configuration>
+		  <fork>true</fork> <!-- Must fork or else JVM arguments are ignored. -->
+		  <source>1.8</source>
+		  <target>1.8</target>
+		  <compilerArguments>
+		    <Xmaxerrs>10000</Xmaxerrs>
+		    <Xmaxwarns>10000</Xmaxwarns>
+		  </compilerArguments>
+		  <!-- Without showWarnings and verbose, maven-compiler-plugin may not show output. -->
+		  <showWarnings>true</showWarnings>
+		  <verbose>true</verbose>
+		  <annotationProcessorPaths>
+		    <path>
+		      <groupId>org.checkerframework</groupId>
+		      <artifactId>checker</artifactId>
+		      <version>3.7.0</version>
+		    </path>
+		  </annotationProcessorPaths>
+		  <annotationProcessors>
+		    <!-- Add all the checkers you want to enable here -->
+		    <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
+		  </annotationProcessors>
+		  <compilerArgs>
+		    <arg>-J-Xbootclasspath/p:${errorProneJavac}</arg>
+		    <!-- <arg>-Awarns</arg> --> <!-- -Awarns turns type-checking errors into warnings. -->
+		    <arg>-Alint=trustArrayLenZero</arg>
+		  </compilerArgs>
+		</configuration>
+              </execution>
+            </executions>
           </plugin>
         </plugins>
         </build>
