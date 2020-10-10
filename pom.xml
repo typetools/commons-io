@@ -271,16 +271,6 @@ file comparators, endian transformation classes, and much more.
       <artifactId>javac</artifactId>
       <version>9+181-r4173-1</version>
     </dependency>
-
-
-    <!-- This is an indirect dependency, but 1.19 is broken (https://github.com/mojohaus/animal-sniffer/issues/76) and 1.20 with the fix has not been released. -->
-    <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/animal-sniffer-maven-plugin -->
-    <dependency>
-      <groupId>org.codehaus.mojo</groupId>
-      <artifactId>animal-sniffer-maven-plugin</artifactId>
-      <version>1.18</version>
-    </dependency>
-
   </dependencies>
 
   <properties>
