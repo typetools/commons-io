@@ -278,7 +278,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.codehaus.mojo</groupId>
       <artifactId>animal-sniffer-maven-plugin</artifactId>
-      <version>1.18</version>
+      <version>1.19</version>
     </dependency>
 
   </dependencies>
