@@ -198,7 +198,7 @@ public class TailerTest {
     public void testTailer() throws Exception {
 
         // Create & start the Tailer
-        final long delayMillis = 50;
+        final long delayMillis = 100;
         final File file = new File(temporaryFolder, "tailer1-test.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
