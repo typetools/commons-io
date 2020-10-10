@@ -168,6 +168,16 @@ public class CharSequenceReader extends Reader implements Serializable {
     }
 
     /**
+     * Tells whether this stream is ready to be read.
+     *
+     * @return {@code true} if more characters from the character sequence are available, or {@code false} otherwise.
+     */
+    @Override
+    public boolean ready() {
+        return idx < end();
+    }
+
+    /**
      * Mark the current position.
      *
      * @param readAheadLimit ignored
@@ -274,7 +284,7 @@ public class CharSequenceReader extends Reader implements Serializable {
                     "Number of characters to skip is less than zero: " + n);
         }
         if (idx >= end()) {
-            return EOF;
+            return 0;
         }
         final int dest = (int)Math.min(end(), idx + n);
         final int count = dest - idx;
@@ -290,7 +300,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      */
     @Override
     public String toString() {
-        CharSequence subSequence = charSequence.subSequence(start(), end());
+        final CharSequence subSequence = charSequence.subSequence(start(), end());
         return subSequence.toString();
     }
 }

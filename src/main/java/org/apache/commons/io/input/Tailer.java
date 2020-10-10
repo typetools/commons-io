@@ -28,8 +28,6 @@ import java.nio.charset.Charset;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 /**
  * Simple implementation of the unix "tail -f" functionality.
  *
@@ -107,16 +105,19 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * </pre>
  *
  * <h2>4. Interrupting a Tailer</h2>
- * <p>You can interrupt the thread a tailer is running on by calling {@link Thread#interrupt()}.</p>
+ * <p>You can interrupt the thread a tailer is running on by calling {@link Thread#interrupt()}.
+ * </p>
  * <pre>
  *      thread.interrupt();
  * </pre>
- * <p>If you interrupt a tailer, the tailer listener is called with the {@link InterruptedException}.</p>
- *
- * <p>The file is read using the default charset; this can be overridden if necessary</p>
+ * <p>
+ * If you interrupt a tailer, the tailer listener is called with the {@link InterruptedException}.
+ * </p>
+ * <p>
+ * The file is read using the default charset; this can be overridden if necessary.
+ * </p>
  * @see TailerListener
  * @see TailerListenerAdapter
- *
  * @since 2.0
  * @since 2.5 Updated behavior and documentation for {@link Thread#interrupt()}
  */
@@ -132,7 +133,7 @@ public class Tailer implements Runnable {
     /**
      * Buffer on top of RandomAccessFile.
      */
-    private final byte inbuf[];
+    private final byte[] inbuf;
 
     /**
      * The file which will be tailed.
@@ -249,7 +250,7 @@ public class Tailer implements Runnable {
      * @param reOpen if true, close and reopen the file between reading chunks
      * @param bufSize Buffer size
      */
-    public Tailer(final File file, final @NonNull Charset charset, final TailerListener listener, final long delayMillis,
+    public Tailer(final File file, final Charset charset, final TailerListener listener, final long delayMillis,
                   final boolean end, final boolean reOpen
             , final int bufSize) {
         this.file = file;
@@ -309,7 +310,7 @@ public class Tailer implements Runnable {
      * @param bufSize buffer size.
      * @return The new tailer
      */
-    public static Tailer create(final File file, final @NonNull Charset charset, final TailerListener listener,
+    public static Tailer create(final File file, final Charset charset, final TailerListener listener,
                                 final long delayMillis, final boolean end, final boolean reOpen
             ,final int bufSize) {
         final Tailer tailer = new Tailer(file, charset, listener, delayMillis, end, reOpen, bufSize);
@@ -426,7 +427,8 @@ public class Tailer implements Runnable {
                 }
             }
             while (getRun()) {
-                assert reader != null : "@AssumeAssertion(nullness):  first while loop terminates if reader is non-null or the Tailer thread stops; if thread stops, it is never restarted and this while loop is not executed";
+                assert reader != null : "@AssumeAssertion(nullness):  first while loop terminates if reader is non-null"
+                        + " or the Tailer thread stops; if thread stops, it is never restarted and this while loop is not executed";
 
                 final boolean newer = FileUtils.isFileNewer(file, last); // IO-279, must be done first
                 // Check the file length to see if it was rotated

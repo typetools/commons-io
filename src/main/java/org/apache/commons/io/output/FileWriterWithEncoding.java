@@ -29,8 +29,6 @@ import java.util.Objects;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 /**
  * Writer of files that allows the encoding to be set.
  * <p>
@@ -65,7 +63,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final String fileName, final @NonNull String charsetName) throws IOException {
+    public FileWriterWithEncoding(final String fileName, final String charsetName) throws IOException {
         this(new File(fileName), charsetName, false);
     }
 
@@ -78,7 +76,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final String fileName, final @NonNull String charsetName, final boolean append)
+    public FileWriterWithEncoding(final String fileName, final String charsetName, final boolean append)
             throws IOException {
         this(new File(fileName), charsetName, append);
     }
@@ -91,7 +89,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final String fileName, final @NonNull Charset charset) throws IOException {
+    public FileWriterWithEncoding(final String fileName, final Charset charset) throws IOException {
         this(new File(fileName), charset, false);
     }
 
@@ -104,7 +102,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final String fileName, final @NonNull Charset charset, final boolean append)
+    public FileWriterWithEncoding(final String fileName, final Charset charset, final boolean append)
             throws IOException {
         this(new File(fileName), charset, append);
     }
@@ -143,7 +141,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final File file, final @NonNull String charsetName) throws IOException {
+    public FileWriterWithEncoding(final File file, final String charsetName) throws IOException {
         this(file, charsetName, false);
     }
 
@@ -156,7 +154,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final File file, final @NonNull String charsetName, final boolean append) throws IOException {
+    public FileWriterWithEncoding(final File file, final String charsetName, final boolean append) throws IOException {
         super();
         this.out = initWriter(file, charsetName, append);
     }
@@ -169,7 +167,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final File file, final @NonNull Charset charset) throws IOException {
+    public FileWriterWithEncoding(final File file, final Charset charset) throws IOException {
         this(file, charset, false);
     }
 
@@ -182,7 +180,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final File file, final @NonNull Charset encoding, final boolean append) throws IOException {
+    public FileWriterWithEncoding(final File file, final Charset encoding, final boolean append) throws IOException {
         super();
         this.out = initWriter(file, encoding, append);
     }
@@ -222,7 +220,7 @@ public class FileWriterWithEncoding extends Writer {
      * @param file  the file to be accessed
      * @param encoding  the encoding to use - may be Charset, CharsetEncoder or String
      * @param append  true to append
-     * @return the initialised writer
+     * @return the initialized writer
      * @throws NullPointerException if the file or encoding is null
      * @throws IOException if an error occurs
      */

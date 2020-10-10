@@ -19,7 +19,6 @@ package org.apache.commons.io.output;
 import org.apache.commons.io.input.ClosedInputStream;
 
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.InputStream;
 import java.io.IOException;
@@ -348,7 +347,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
          *
          * @return the InputStream subclass.
          */
-        T construct(final byte buf[], final int offset, final int length);
+        T construct(final byte[] buf, final int offset, final int length);
     }
 
     /**
@@ -372,7 +371,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
         if (remaining == 0) {
             return EMPTY_BYTE_ARRAY;
         }
-        final byte newbuf[] = new byte[remaining];
+        final byte[] newbuf = new byte[remaining];
         int pos = 0;
         for (final byte[] buf : buffers) {
             final int c = Math.min(buf.length, remaining);
@@ -422,7 +421,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
      * @see java.io.ByteArrayOutputStream#toString(String)
      * @since 2.5
      */
-    public String toString(final @NonNull Charset charset) {
+    public String toString(final Charset charset) {
         return new String(toByteArray(), charset);
     }
 

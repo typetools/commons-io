@@ -121,8 +121,6 @@ public enum FileSystem {
      */
     private static final boolean IS_OS_WINDOWS = getOsMatchesName(OS_NAME_WINDOWS_PREFIX);
 
-    private static final @Nullable String OS_NAME = getSystemProperty("os.name");
-
     /**
      * Gets the current file system.
      *
@@ -149,7 +147,7 @@ public enum FileSystem {
      * @return true if matches, or false if not or can't determine
      */
     private static boolean getOsMatchesName(final String osNamePrefix) {
-        return isOsNameMatch(OS_NAME, osNamePrefix);
+        return isOsNameMatch(getSystemProperty("os.name"), osNamePrefix);
     }
 
     /**

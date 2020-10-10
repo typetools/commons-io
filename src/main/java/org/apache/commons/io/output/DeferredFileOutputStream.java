@@ -25,10 +25,8 @@ import java.io.OutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.framework.qual.EnsuresQualifierIf;
 
@@ -53,7 +51,6 @@ public class DeferredFileOutputStream
      * The output stream to which data will be written prior to the threshold
      * being reached.
      */
-    // Starts out non-null
     private @Nullable ByteArrayOutputStream memoryOutputStream;
 
 
@@ -233,7 +230,8 @@ public class DeferredFileOutputStream
         final FileOutputStream fos = new FileOutputStream(outputFile);
         try {
             // Can't do @RequiresNonNull("memoryOutputStream") because superclass has no such requirement.
-            assert memoryOutputStream != null : "@AssumeAssertion(nullness): thresholdReached() is called at most once and nothing else sets memoryOutputStream to null";
+            assert memoryOutputStream != null
+                    : "@AssumeAssertion(nullness): thresholdReached() is called at most once and nothing else sets memoryOutputStream to null";
         
             memoryOutputStream.writeTo(fos);
         } catch (final IOException e){
@@ -344,7 +342,7 @@ public class DeferredFileOutputStream
     public void writeTo(final OutputStream out) throws IOException
     {
         // we may only need to check if this is closed if we are working with a file
-        // but we should force the habit of closing wether we are working with
+        // but we should force the habit of closing whether we are working with
         // a file or memory.
         if (!closed) {
             throw new IOException("Stream not closed");

@@ -1,4 +1,4 @@
-        /*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -264,10 +264,11 @@ public class LockableFileWriter extends Writer {
      * @param file  the file to be accessed
      * @param charset  the charset to use
      * @param append  true to append
-     * @return The initialised writer
+     * @return The initialized writer
      * @throws IOException if an error occurs
      */
-    private Writer initWriter(@UnderInitialization(java.io.Writer.class) LockableFileWriter this, final File file, final @Nullable Charset charset, final boolean append) throws IOException {
+    private Writer initWriter(@UnderInitialization(java.io.Writer.class) LockableFileWriter this,
+                              final File file, final @Nullable Charset charset, final boolean append) throws IOException {
         final boolean fileExistedAlready = file.exists();
         try {
             return new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath(), append),

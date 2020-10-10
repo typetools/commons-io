@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 
 /**
@@ -89,7 +88,8 @@ public class OrFileFilter
      * {@inheritDoc}
      */
     @Override
-    public void addFileFilter(@UnknownInitialization(org.apache.commons.io.filefilter.ConditionalFileFilter.class) OrFileFilter this, final IOFileFilter ioFileFilter) {
+    public void addFileFilter(@UnknownInitialization(org.apache.commons.io.filefilter.ConditionalFileFilter.class) OrFileFilter this,
+                              final IOFileFilter ioFileFilter) {
         // Can't do @RequiresNonNull("this.fileFilters") because superclass has no such requirement.
         assert this.fileFilters!=null : "@AssumeAssertion(nullness): when called from constructor, fileFilters is assigned an empty list";
         this.fileFilters.add(ioFileFilter);

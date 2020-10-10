@@ -31,7 +31,6 @@ import java.util.Objects;
 
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * {@link InputStream} implementation that reads a character stream from a {@link Reader}
@@ -74,8 +73,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * read operation will block or not, it is not possible to provide a meaningful
  * implementation of the {@link InputStream#available()} method. A call to this method
  * will always return 0. Also, this class doesn't support {@link InputStream#mark(int)}.
+ * </p>
  * <p>
  * Instances of {@link ReaderInputStream} are not thread safe.
+ * </p>
  *
  * @see org.apache.commons.io.output.WriterOutputStream
  *
@@ -138,7 +139,7 @@ public class ReaderInputStream extends InputStream {
      * @param charset the charset encoding
      * @param bufferSize the size of the input buffer in number of characters
      */
-    public ReaderInputStream(final Reader reader, final @NonNull Charset charset, final int bufferSize) {
+    public ReaderInputStream(final Reader reader, final Charset charset, final int bufferSize) {
         this(reader,
              charset.newEncoder()
                     .onMalformedInput(CodingErrorAction.REPLACE)
@@ -153,7 +154,7 @@ public class ReaderInputStream extends InputStream {
      * @param reader the target {@link Reader}
      * @param charset the charset encoding
      */
-    public ReaderInputStream(final Reader reader, final @NonNull Charset charset) {
+    public ReaderInputStream(final Reader reader, final Charset charset) {
         this(reader, charset, DEFAULT_BUFFER_SIZE);
     }
 

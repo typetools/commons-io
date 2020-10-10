@@ -103,7 +103,8 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      * @return a String representation
      */
     @Override
-    @Pure public String toString() {
+    @Pure
+    public String toString() {
         @SuppressWarnings("nullness:dereference.of.nullable") // exactly one of fileFilter and filenameFilter is non-null
         final String delegate = fileFilter != null ? fileFilter.toString() : filenameFilter.toString();
         return super.toString() + "(" + delegate + ")";
