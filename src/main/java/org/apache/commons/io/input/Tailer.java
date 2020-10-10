@@ -434,6 +434,7 @@ public class Tailer implements Runnable {
                 // Check the file length to see if it was rotated
                 final long length = file.length();
                 if (length < position) {
+                    // System.out.printf("File was rotated: file=%s length=%s position=%s%n", file, length, position);
                     // File was rotated
                     listener.fileRotated();
                     // Reopen the reader after rotation ensuring that the old file is closed iff we re-open it
@@ -449,6 +450,7 @@ public class Tailer implements Runnable {
                         }
                         position = 0;
                     } catch (final FileNotFoundException e) {
+                        // System.out.printf("FileNotFoundException: " + e.getMessage());
                         // in this case we continue to use the previous reader and position values
                         listener.fileNotFound();
                         Thread.sleep(delayMillis);
