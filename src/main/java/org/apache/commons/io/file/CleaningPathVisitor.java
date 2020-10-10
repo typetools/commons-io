@@ -97,7 +97,7 @@ public class CleaningPathVisitor extends CountingPathVisitor {
     }
 
     @Override
-    public boolean equals(final Object obj) {
+    public boolean equals(final @Nullable Object obj) {
         if (this == obj) {
             return true;
         }

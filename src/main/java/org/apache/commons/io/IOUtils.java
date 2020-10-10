@@ -336,7 +336,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs.
      * @since 2.7
      */
-    public static void close(final @Nullable Closeable closeable, final IOConsumer<IOException> consumer) throws IOException {
+    public static void close(final @Nullable Closeable closeable, final @Nullable IOConsumer<IOException> consumer) throws IOException {
         if (closeable != null) {
             try {
                 closeable.close();
@@ -400,7 +400,7 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final Closeable closeable) {
+    public static void closeQuietly(final @Nullable Closeable closeable) {
         closeQuietly(closeable, (Consumer<IOException>) null);
     }
 
@@ -468,7 +468,7 @@ public class IOUtils {
      * @param consumer Consumes the IOException thrown by {@link Closeable#close()}.
      * @since 2.7
      */
-    public static void closeQuietly(final Closeable closeable, final Consumer<IOException> consumer) {
+    public static void closeQuietly(final @Nullable Closeable closeable, final @Nullable Consumer<IOException> consumer) {
         if (closeable != null) {
             try {
                 closeable.close();
@@ -876,7 +876,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs
      * @since 2.5
      */
-    public static long copy(final InputStream input, final OutputStream output, final int bufferSize)
+    public static long copy(final @Nullable InputStream input, final OutputStream output, final int bufferSize)
             throws IOException {
         return copyLarge(input, output, new byte[bufferSize]);
     }
@@ -1133,7 +1133,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs
      * @since 1.3
      */
-    public static long copyLarge(final InputStream input, final OutputStream output)
+    public static long copyLarge(final @Nullable InputStream input, final OutputStream output)
             throws IOException {
         return copy(input, output, DEFAULT_BUFFER_SIZE);
     }
@@ -1153,7 +1153,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs
      * @since 2.2
      */
-    public static long copyLarge(final InputStream input, final OutputStream output, final byte[] buffer)
+    public static long copyLarge(final @Nullable InputStream input, final OutputStream output, final byte[] buffer)
         throws IOException {
         long count = 0;
         if (input != null) {

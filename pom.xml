@@ -271,6 +271,16 @@ file comparators, endian transformation classes, and much more.
       <artifactId>javac</artifactId>
       <version>9+181-r4173-1</version>
     </dependency>
+
+
+    <!-- This is an indirect dependency, but 1.19 is broken (https://github.com/mojohaus/animal-sniffer/issues/76) and 1.20 with the fix has not been released. -->
+    <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/animal-sniffer-maven-plugin -->
+    <dependency>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>animal-sniffer-maven-plugin</artifactId>
+      <version>1.18</version>
+    </dependency>
+
   </dependencies>
 
   <properties>
@@ -350,47 +360,6 @@ file comparators, endian transformation classes, and much more.
               </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-        <configuration>
-          <fork>true</fork>
-          <!-- Must fork or else JVM arguments are ignored. -->
-          <!--If using JDK 8, add source and target. -->
-          <source>1.8</source>
-          <target>1.8</target>
-          <!-- If using JDK 11, remove source and target and uncomment "release" below. -->
-          <!-- <release>11</release> -->
-          <compilerArguments>
-            <Xmaxerrs>10000</Xmaxerrs>
-            <Xmaxwarns>10000</Xmaxwarns>
-          </compilerArguments>
-          <!-- Without showWarnings and verbose, maven-compiler-plugin may not show output. -->
-          <showWarnings>true</showWarnings>
-          <verbose>true</verbose>
-          <annotationProcessorPaths>
-            <path>
-              <groupId>org.checkerframework</groupId>
-              <artifactId>checker</artifactId>
-              <version>3.7.0</version>
-            </path>
-          </annotationProcessorPaths>
-          <annotationProcessors>
-            <!-- Add all the checkers you want to enable here -->
-            <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
-          </annotationProcessors>
-          <compilerArgs>
-            <!-- If using JDK 8, use only the argument immediately below. -->
-            <arg>-J-Xbootclasspath/p:${errorProneJavac}</arg>
-            <!-- If using JDK 11, remove the argument above, remove the
-                 space in the one below, and uncomment it. -->
-            <!-- <arg>-J- -add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg> -->
-            <!-- Optionally, -Awarns turns type-checking errors into warnings. -->
-            <arg>-Awarns</arg>
-	    <arg>-Alint=trustArrayLenZero</arg>
-          </compilerArgs>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -552,6 +521,106 @@ file comparators, endian transformation classes, and much more.
       <properties>
         <!-- coverall version 4.3.0 does not work with java 9, see https://github.com/trautonen/coveralls-maven-plugin/issues/112 -->
         <coveralls.skip>true</coveralls.skip>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>checkerframework-java8</id>
+      <activation>
+        <jdk>1.8</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version>
+            <executions>
+              <execution>
+                <id>default-compile</id>
+		<configuration>
+		  <fork>true</fork> <!-- Must fork or else JVM arguments are ignored. -->
+		  <source>1.8</source>
+		  <target>1.8</target>
+		  <compilerArguments>
+		    <Xmaxerrs>10000</Xmaxerrs>
+		    <Xmaxwarns>10000</Xmaxwarns>
+		  </compilerArguments>
+		  <!-- Without showWarnings and verbose, maven-compiler-plugin may not show output. -->
+		  <showWarnings>true</showWarnings>
+		  <verbose>true</verbose>
+		  <annotationProcessorPaths>
+		    <path>
+		      <groupId>org.checkerframework</groupId>
+		      <artifactId>checker</artifactId>
+		      <version>3.7.0</version>
+		    </path>
+		  </annotationProcessorPaths>
+		  <annotationProcessors>
+		    <!-- Add all the checkers you want to enable here -->
+		    <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
+		  </annotationProcessors>
+		  <compilerArgs>
+		    <arg>-J-Xbootclasspath/p:${errorProneJavac}</arg>
+		    <!-- <arg>-Awarns</arg> --> <!-- -Awarns turns type-checking errors into warnings. -->
+		    <arg>-Alint=trustArrayLenZero</arg>
+		  </compilerArgs>
+		</configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+        </build>
+    </profile>
+
+    <profile>
+      <id>checkerframework-java11</id>
+      <activation>
+        <jdk>11</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version>
+            <executions>
+              <execution>
+                <id>default-compile</id>
+                <configuration>
+                  <fork>true</fork> <!-- Must fork or else JVM arguments are ignored. -->
+                  <release>11</release>
+                  <compilerArguments>
+                    <Xmaxerrs>10000</Xmaxerrs>
+                    <Xmaxwarns>10000</Xmaxwarns>
+                  </compilerArguments>
+                  <!-- Without showWarnings and verbose, maven-compiler-plugin may not show output. -->
+                  <showWarnings>true</showWarnings>
+                  <verbose>true</verbose>
+                  <annotationProcessorPaths>
+                    <path>
+                      <groupId>org.checkerframework</groupId>
+                      <artifactId>checker</artifactId>
+                      <version>3.7.0</version>
+                    </path>
+                  </annotationProcessorPaths>
+                  <annotationProcessors>
+                    <!-- Add all the checkers you want to enable here -->
+                    <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
+                  </annotationProcessors>
+                  <compilerArgs>
+                    <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
+                    <!-- <arg>-Awarns</arg> --> <!-- -Awarns turns type-checking errors into warnings. -->
+                    <arg>-Alint=trustArrayLenZero</arg>
+                  </compilerArgs>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+      <properties>
+        <!-- Temporary until animal-sniffer-maven-plugin is released with https://github.com/mojohaus/animal-sniffer/pull/91.
+             Version 1.19 is broken:  https://github.com/mojohaus/animal-sniffer/issues/76. -->
+        <animal.sniffer.skip>true</animal.sniffer.skip>
       </properties>
     </profile>
   </profiles>

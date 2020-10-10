@@ -35,8 +35,10 @@ import java.util.List;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+
 /**
  * Reads lines in a file reversely (similar to a BufferedReader, but starting at
  * the last line). Useful for e.g. searching in log files.
@@ -50,7 +52,7 @@ public class ReversedLinesFileReader implements Closeable {
 
         private final byte[] data;
 
-        private byte[] leftOver;
+        private byte @Nullable [] leftOver;
 
         private int currentLastBytePos;
 
@@ -62,7 +64,7 @@ public class ReversedLinesFileReader implements Closeable {
          * @param leftOverOfLastFilePart remainder
          * @throws IOException if there is a problem reading the file
          */
-        private FilePart(final long no, final int length, final byte[] leftOverOfLastFilePart) throws IOException {
+        private FilePart(final long no, final int length, final byte @Nullable [] leftOverOfLastFilePart) throws IOException {
             this.no = no;
             final int dataLength = length + (leftOverOfLastFilePart != null ? leftOverOfLastFilePart.length : 0);
             this.data = new byte[dataLength];
@@ -126,7 +128,7 @@ public class ReversedLinesFileReader implements Closeable {
          * @return the line or null
          * @throws IOException if there is an error reading from the file
          */
-        private String readLine() throws IOException {
+        private @Nullable String readLine() throws IOException {
 
             String line = null;
             int newLineMatchByteCount;
@@ -186,7 +188,7 @@ public class ReversedLinesFileReader implements Closeable {
          * @return the new FilePart or null
          * @throws IOException if there was a problem reading the file
          */
-        private FilePart rollOver() throws IOException {
+        private @Nullable FilePart rollOver() throws IOException {
 
             if (currentLastBytePos > -1) {
                 throw new IllegalStateException("Current currentLastCharPos unexpectedly positive... "
@@ -303,6 +305,7 @@ public class ReversedLinesFileReader implements Closeable {
      * @throws IOException if an I/O error occurs
      * @since 2.7
      */
+    @EnsuresNonNull("currentFilePart")
     public ReversedLinesFileReader(final Path file, final int blockSize, final @Nullable Charset charset) throws IOException {
         this.blockSize = blockSize;
         this.encoding = Charsets.toCharset(charset);
@@ -436,12 +439,14 @@ public class ReversedLinesFileReader implements Closeable {
      * @throws IOException if an I/O error occurs
      * @since 2.8.0
      */
+    @RequiresNonNull("currentFilePart")
     public List<String> readLines(final int lineCount) throws IOException {
         if (lineCount < 0) {
             throw new IllegalArgumentException("lineCount < 0");
         }
         final ArrayList<String> arrayList = new ArrayList<>(lineCount);
         for (int i = 0; i < lineCount; i++) {
+            @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // if previous line was non-null, then currentFilePart is non-null
             final String line = readLine();
             if (line == null) {
                 return arrayList;
@@ -463,6 +468,7 @@ public class ReversedLinesFileReader implements Closeable {
      * @throws IOException if an I/O error occurs
      * @since 2.8.0
      */
+    @RequiresNonNull("currentFilePart")
     public String toString(final int lineCount) throws IOException {
         final List<String> lines = readLines(lineCount);
         Collections.reverse(lines);
