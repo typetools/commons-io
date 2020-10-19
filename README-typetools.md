@@ -20,7 +20,7 @@ Create a branch and do work thre.
 At https://github.com/apache/commons-io/releases ,
 find the commit corresponding to a public release.
 
-Commons IO version 2.8 is commit fa59009aaabcf8671a8d741993ef355f42b95ccd
+Commons IO version 2.8.0 is commit fa59009aaabcf8671a8d741993ef355f42b95ccd
 
 Pull in that commit:
 ```
@@ -31,7 +31,7 @@ Update the version number throughout this file.
 
 Use the latest Checker Framework version by changing `pom.xml`.
 
-Search the codebase for all uses of "@since 2.8" and annotate those methods/classes.
+Search the codebase for all uses of "@since 2.8.0" and annotate those methods/classes.
 
 Ensure that it builds:
 ```
@@ -42,7 +42,7 @@ Make a pull request for the branch.
 
 When merging the branch, create a merge commit (don't squash-and-merge).
 
-In my clone of Apache's fork (used for local comparisons), pull in version 2.8:
+In my clone of Apache's fork (used for local comparisons), pull in version 2.8.0:
 ```
 git fetch origin
 git checkout <commitid>
@@ -56,10 +56,12 @@ This must be done on a CSE machine, which has access to the necessary passwords.
 
 # Set the version number:
 #  * in file cfMavenCentral.xml
-#  * in file pom.xml (if different from upstream)
+#  * in file pom.xml (if different from upstream; change in 3 places)
 #  * environment variable PACKAGE below
 
-PACKAGE=commons-io-2.8 && \
+# JAVA_HOME must be a JDK 8 JDK.
+
+PACKAGE=commons-io-2.8.0.1 && \
 mvn -B -Dmaven.test.skip=true package && \
 mvn source:jar && \
 mvn javadoc:javadoc && (cd target/site/apidocs && jar -cf ${PACKAGE}-javadoc.jar org)
