@@ -385,7 +385,7 @@ public class BOMInputStream extends ProxyInputStream {
      *             if an I/O error occurs
      */
     @Override
-    @SuppressWarnings("nullness:assignment.type.incompatible") // reset method resets @MonotonicNonNull variable
+    @SuppressWarnings("nullness:assignment") // reset method resets @MonotonicNonNull variable
     public synchronized void reset() throws IOException {
         fbIndex = markFbIndex;
         if (markedAtStart) {

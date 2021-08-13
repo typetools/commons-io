@@ -1205,7 +1205,7 @@ public class FilenameUtils {
      * @return true if the fileNames are equal, null equals null
      * @since 1.3
      */
-    @SuppressWarnings("nullness:argument.type.incompatible") // method may throw NullPointerException, see pull request for a fix
+    @SuppressWarnings("nullness:argument") // method may throw NullPointerException, see pull request for a fix
     public static boolean equals(
             @Nullable String fileName1, @Nullable String fileName2,
             final boolean normalized, @Nullable IOCase caseSensitivity) {

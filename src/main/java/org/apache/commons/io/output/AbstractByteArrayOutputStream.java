@@ -16,9 +16,11 @@
  */
 package org.apache.commons.io.output;
 
-import org.apache.commons.io.input.ClosedInputStream;
-
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+
+import org.apache.commons.io.input.ClosedInputStream;
 
 import java.io.InputStream;
 import java.io.IOException;
@@ -60,7 +62,6 @@ import static org.apache.commons.io.IOUtils.EOF;
  *
  * @since 2.7
  */
-@SuppressWarnings("nullness:initialization.fields.uninitialized")  // currentBuffer is initialized by subclasses calling needNewBuffer()
 public abstract class AbstractByteArrayOutputStream extends OutputStream {
 
     static final int DEFAULT_SIZE = 1024;
@@ -76,6 +77,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     private int filledBufferSum;
     /** The current buffer. */
     // non-null under the assumption that subclass constructors call needNewBuffer.
+    @SuppressWarnings("initialization.field.uninitialized")  // currentBuffer is initialized by subclasses calling needNewBuffer()
     private byte [] currentBuffer;
     /** The total count of bytes written. */
     protected int count;
@@ -88,6 +90,8 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
      *
      * @param newcount  the size of the buffer if one is created
      */
+    @RequiresNonNull("buffers")
+    @EnsuresNonNull("currentBuffer")
     protected void needNewBuffer(@UnknownInitialization(java.io.OutputStream.class) AbstractByteArrayOutputStream this, final int newcount) {
         if (currentBufferIndex < buffers.size() - 1) {
             assert currentBuffer != null : "@AssumeAssertion(nullness): dependent on array indices";
@@ -237,7 +241,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     /**
      * @see java.io.ByteArrayOutputStream#reset()
      */
-    @SuppressWarnings("nullness:assignment.type.incompatible") // currentBuffer is set to null, but is immediately set to non-null by needNewBuffer().
+    @SuppressWarnings("nullness:assignment") // currentBuffer is set to null, but is immediately set to non-null by needNewBuffer().
     protected void resetImpl() {
         count = 0;
         filledBufferSum = 0;

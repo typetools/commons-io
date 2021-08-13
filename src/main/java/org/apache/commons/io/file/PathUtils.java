@@ -229,6 +229,7 @@ public final class PathUtils {
      * @throws IOException if an I/O error occurs
      * @see Files#copy(Path, Path, CopyOption...)
      */
+    @SuppressWarnings("nullness:argument")  // getFileName() returns non-null for any actual file
     public static Path copyFileToDirectory(final Path sourceFile, final Path targetDirectory,
         final CopyOption... copyOptions) throws IOException {
         return Files.copy(sourceFile, targetDirectory.resolve(sourceFile.getFileName()), copyOptions);

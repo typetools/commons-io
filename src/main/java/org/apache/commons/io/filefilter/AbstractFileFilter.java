@@ -37,7 +37,7 @@ public abstract class AbstractFileFilter implements IOFileFilter {
      * @return true if this file matches the test
      */
     @Override
-    @SuppressWarnings("nullness:argument.type.incompatible")
+    @SuppressWarnings("nullness:argument")
     // See bug report at https://issues.apache.org/jira/browse/IO-540
     public boolean accept(final File file) {
         // File.getParentFile() can return null, and null is not documented

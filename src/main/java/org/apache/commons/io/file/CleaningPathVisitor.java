@@ -91,7 +91,7 @@ public class CleaningPathVisitor extends CountingPathVisitor {
      * @param path the path to test.
      * @return true to process the given path, false if not.
      */
-    @SuppressWarnings("nullness:argument.type.incompatible")  // abuse of Objects.toString to avoid deleting the root
+    @SuppressWarnings("nullness:argument")  // abuse of Objects.toString to avoid deleting the root
     private boolean accept(final Path path) {
         return Arrays.binarySearch(skip, Objects.toString(path.getFileName(), null)) < 0;
     }

@@ -2802,7 +2802,7 @@ public class FileUtils {
      * @throws IllegalArgumentException if any file is incorrectly encoded
      * @since 1.1
      */
-    @SuppressWarnings("nullness:assignment.type.incompatible") // preconditions to toFile are checked here, so it returns a non-null value
+    @SuppressWarnings("nullness:assignment") // preconditions to toFile are checked here, so it returns a non-null value
     public static File @PolyNull [] toFiles(final @Nullable URL @PolyNull ... urls) {
         if (urls == null || urls.length == 0) {
             return EMPTY_FILE_ARRAY;

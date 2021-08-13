@@ -446,7 +446,7 @@ public class ReversedLinesFileReader implements Closeable {
         }
         final ArrayList<String> arrayList = new ArrayList<>(lineCount);
         for (int i = 0; i < lineCount; i++) {
-            @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // if previous line was non-null, then currentFilePart is non-null
+            @SuppressWarnings("nullness:contracts.precondition") // if previous line was non-null, then currentFilePart is non-null
             final String line = readLine();
             if (line == null) {
                 return arrayList;

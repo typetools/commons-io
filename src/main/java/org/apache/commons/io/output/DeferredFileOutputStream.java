@@ -261,7 +261,7 @@ public class DeferredFileOutputStream
         return !isThresholdExceeded();
     }
 
-    @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // application invariant; see note immediately below
+    @SuppressWarnings("contracts.conditional.postcondition") // application invariant; see note immediately below
     // Note: a call to checkThreshold() can violate these properties by
     // switching the stream from in memory to on disk, without changing the
     // values that isInMemory() and isThresholdExceeded() depend upon.

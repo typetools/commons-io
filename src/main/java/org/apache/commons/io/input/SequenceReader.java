@@ -88,8 +88,8 @@ public class SequenceReader extends Reader {
      * @see java.io.Reader#read(char[], int, int)
      */
     @SuppressWarnings({
-        "nullness:contracts.precondition.not.satisfied", // reader.read() does not unset this.readers
-        "nullness:contracts.precondition.override.invalid" // extra @RequiresNonNull
+        "nullness:contracts.precondition", // reader.read() does not unset this.readers
+        "nullness:contracts.precondition.override" // extra @RequiresNonNull
     })
     @RequiresNonNull("this.readers")
     @Override
@@ -112,8 +112,8 @@ public class SequenceReader extends Reader {
      * @see java.io.Reader#read()
      */
     @SuppressWarnings({
-        "nullness:contracts.precondition.not.satisfied", // reader.read() does not unset this.readers
-        "nullness:contracts.precondition.override.invalid" // extra @RequiresNonNull
+        "nullness:contracts.precondition", // reader.read() does not unset this.readers
+        "nullness:contracts.precondition.override" // extra @RequiresNonNull
     })
     @RequiresNonNull({"this.readers", "this.reader"})
     @Override
