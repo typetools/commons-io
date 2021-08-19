@@ -18,7 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -109,7 +109,7 @@ public class CharSequenceInputStreamTest {
 
     private void testCharsetMismatchInfiniteLoop(final String csName) throws IOException {
         // Input is UTF-8 bytes: 0xE0 0xB2 0xA0
-        final char[] inputChars = new char[] { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
+        final char[] inputChars = { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
         final Charset charset = Charset.forName(csName); // infinite loop for US-ASCII, UTF-8 OK
         try (InputStream stream = new CharSequenceInputStream(new String(inputChars), charset, 512)) {
             while (stream.read() != -1) {
@@ -132,7 +132,7 @@ public class CharSequenceInputStreamTest {
 
         for (int i = 0; i < readFirst; i++) {
             final int ch = is.read();
-            assertFalse(ch == -1);
+            assertNotEquals(-1, ch);
         }
 
         is.mark(dataSize);
@@ -374,10 +374,9 @@ public class CharSequenceInputStreamTest {
         final String input = "test";
         try (InputStream r = new CharSequenceInputStream(input, csName)) {
             int available = checkAvail(r, input.length());
-            byte buff[] = new byte[available];
             assertEquals(available - 1, r.skip(available - 1)); // skip all but one
             available = checkAvail(r, 1);
-            buff = new byte[available];
+            final byte[] buff = new byte[available];
             assertEquals(available, r.read(buff, 0, available));
         }
     }

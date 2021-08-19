@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -36,17 +37,17 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * </p>
  *
  * <ul>
- * <li><code>US-ASCII</code><br>
+ * <li>{@code US-ASCII}<br>
  * Seven-bit ASCII, a.k.a. ISO646-US, a.k.a. the Basic Latin block of the Unicode character set.</li>
- * <li><code>ISO-8859-1</code><br>
+ * <li>{@code ISO-8859-1}<br>
  * ISO Latin Alphabet No. 1, a.k.a. ISO-LATIN-1.</li>
- * <li><code>UTF-8</code><br>
+ * <li>{@code UTF-8}<br>
  * Eight-bit Unicode Transformation Format.</li>
- * <li><code>UTF-16BE</code><br>
+ * <li>{@code UTF-16BE}<br>
  * Sixteen-bit Unicode Transformation Format, big-endian byte order.</li>
- * <li><code>UTF-16LE</code><br>
+ * <li>{@code UTF-16LE}<br>
  * Sixteen-bit Unicode Transformation Format, little-endian byte order.</li>
- * <li><code>UTF-16</code><br>
+ * <li>{@code UTF-16}<br>
  * Sixteen-bit Unicode Transformation Format, byte order specified by a mandatory initial byte-order mark (either order
  * accepted on input, big-endian used on output.)</li>
  * </ul>
@@ -104,13 +105,11 @@ public class Charsets {
     /**
      * Returns a Charset for the named charset. If the name is null, return the default Charset.
      *
-     * @param charsetName
-     *            The name of the requested charset, may be null.
-     * @return a Charset for the named charset
-     * @throws java.nio.charset.UnsupportedCharsetException
-     *             If the named charset is unavailable
+     * @param charsetName The name of the requested charset, may be null.
+     * @return a Charset for the named charset.
+     * @throws UnsupportedCharsetException If the named charset is unavailable (unchecked exception).
      */
-    public static Charset toCharset(final @Nullable String charsetName) {
+    public static Charset toCharset(final @Nullable String charsetName) throws UnsupportedCharsetException {
         return charsetName == null ? Charset.defaultCharset() : Charset.forName(charsetName);
     }
 

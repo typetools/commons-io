@@ -36,11 +36,13 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * This class is used to wrap a stream that includes an encoded {@link ByteOrderMark} as its first bytes.
- *
+ * <p>
  * This class detects these bytes and, if required, can automatically skip them and return the subsequent byte as the
  * first byte in the stream.
- *
+ * </p>
+ * <p>
  * The {@link ByteOrderMark} implementation has the following pre-defined BOMs:
+ * </p>
  * <ul>
  * <li>UTF-8 - {@link ByteOrderMark#UTF_8}</li>
  * <li>UTF-16BE - {@link ByteOrderMark#UTF_16LE}</li>
@@ -48,7 +50,6 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  * <li>UTF-32BE - {@link ByteOrderMark#UTF_32LE}</li>
  * <li>UTF-32LE - {@link ByteOrderMark#UTF_32BE}</li>
  * </ul>
- *
  *
  * <h2>Example 1 - Detect and exclude a UTF-8 BOM</h2>
  *
@@ -227,13 +228,11 @@ public class BOMInputStream extends ProxyInputStream {
             }
             // match BOM in firstBytes
             byteOrderMark = find();
-            if (byteOrderMark != null) {
-                if (!include) {
-                    if (byteOrderMark.length() < firstBytes.length) {
-                        fbIndex = byteOrderMark.length();
-                    } else {
-                        fbLength = 0;
-                    }
+            if ((byteOrderMark != null) && !include) {
+                if (byteOrderMark.length() < firstBytes.length) {
+                    fbIndex = byteOrderMark.length();
+                } else {
+                    fbLength = 0;
                 }
             }
         }
@@ -255,7 +254,7 @@ public class BOMInputStream extends ProxyInputStream {
 
     /**
      * This method reads and either preserves or skips the first bytes in the stream. It behaves like the single-byte
-     * <code>read()</code> method, either returning a valid byte or -1 to indicate that the initial bytes have been
+     * {@code read()} method, either returning a valid byte or -1 to indicate that the initial bytes have been
      * processed already.
      *
      * @return the byte read (excluding BOM) or -1 if the end of stream
@@ -310,7 +309,7 @@ public class BOMInputStream extends ProxyInputStream {
     // ----------------------------------------------------------------------------
 
     /**
-     * Invokes the delegate's <code>read()</code> method, detecting and optionally skipping BOM.
+     * Invokes the delegate's {@code read()} method, detecting and optionally skipping BOM.
      *
      * @return the byte read (excluding BOM) or -1 if the end of stream
      * @throws IOException
@@ -323,7 +322,7 @@ public class BOMInputStream extends ProxyInputStream {
     }
 
     /**
-     * Invokes the delegate's <code>read(byte[], int, int)</code> method, detecting and optionally skipping BOM.
+     * Invokes the delegate's {@code read(byte[], int, int)} method, detecting and optionally skipping BOM.
      *
      * @param buf
      *            the buffer to read the bytes into
@@ -352,7 +351,7 @@ public class BOMInputStream extends ProxyInputStream {
     }
 
     /**
-     * Invokes the delegate's <code>read(byte[])</code> method, detecting and optionally skipping BOM.
+     * Invokes the delegate's {@code read(byte[])} method, detecting and optionally skipping BOM.
      *
      * @param buf
      *            the buffer to read the bytes into
@@ -366,7 +365,7 @@ public class BOMInputStream extends ProxyInputStream {
     }
 
     /**
-     * Invokes the delegate's <code>mark(int)</code> method.
+     * Invokes the delegate's {@code mark(int)} method.
      *
      * @param readlimit
      *            read ahead limit
@@ -379,7 +378,7 @@ public class BOMInputStream extends ProxyInputStream {
     }
 
     /**
-     * Invokes the delegate's <code>reset()</code> method.
+     * Invokes the delegate's {@code reset()} method.
      *
      * @throws IOException
      *             if an I/O error occurs
@@ -396,7 +395,7 @@ public class BOMInputStream extends ProxyInputStream {
     }
 
     /**
-     * Invokes the delegate's <code>skip(long)</code> method, detecting and optionally skipping BOM.
+     * Invokes the delegate's {@code skip(long)} method, detecting and optionally skipping BOM.
      *
      * @param n
      *            the number of bytes to skip

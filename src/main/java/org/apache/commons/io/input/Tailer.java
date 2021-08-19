@@ -16,7 +16,9 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.CR;
 import static org.apache.commons.io.IOUtils.EOF;
+import static org.apache.commons.io.IOUtils.LF;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -257,7 +259,7 @@ public class Tailer implements Runnable {
         this.delayMillis = delayMillis;
         this.end = end;
 
-        this.inbuf = new byte[bufSize];
+        this.inbuf = IOUtils.byteArray(bufSize);
 
         // Save and prepare the listener
         this.listener = listener;
@@ -422,7 +424,7 @@ public class Tailer implements Runnable {
                 } else {
                     // The current position in the file
                     position = end ? file.length() : 0;
-                    last = file.lastModified();
+                    last = FileUtils.lastModified(file);
                     reader.seek(position);
                 }
             }
@@ -445,7 +447,7 @@ public class Tailer implements Runnable {
                         // Finish scanning the old file and then we'll start with the new one
                         try {
                             readLines(save);
-                        }  catch (final IOException ioe) {
+                        } catch (final IOException ioe) {
                             listener.handle(ioe);
                         }
                         position = 0;
@@ -462,7 +464,7 @@ public class Tailer implements Runnable {
                 if (length > position) {
                     // The file has more content than it did last time
                     position = readLines(reader);
-                    last = file.lastModified();
+                    last = FileUtils.lastModified(file);
                 } else if (newer) {
                     /*
                      * This can happen if the file is truncated or overwritten with the exact same length of
@@ -473,7 +475,7 @@ public class Tailer implements Runnable {
 
                     // Now we can read new lines
                     position = readLines(reader);
-                    last = file.lastModified();
+                    last = FileUtils.lastModified(file);
                 }
                 if (reOpen && reader != null) {
                     reader.close();
@@ -494,8 +496,7 @@ public class Tailer implements Runnable {
                 if (reader != null) {
                     reader.close();
                 }
-            }
-            catch (final IOException e) {
+            } catch (final IOException e) {
                 listener.handle(e);
             }
             stop();
@@ -525,27 +526,27 @@ public class Tailer implements Runnable {
             while (getRun() && ((num = reader.read(inbuf)) != EOF)) {
                 for (int i = 0; i < num; i++) {
                     final byte ch = inbuf[i];
-                    switch ( ch ) {
-                        case '\n':
-                            seenCR = false; // swallow CR before LF
+                    switch (ch) {
+                    case LF:
+                        seenCR = false; // swallow CR before LF
+                        listener.handle(new String(lineBuf.toByteArray(), charset));
+                        lineBuf.reset();
+                        rePos = pos + i + 1;
+                        break;
+                    case CR:
+                        if (seenCR) {
+                            lineBuf.write(CR);
+                        }
+                        seenCR = true;
+                        break;
+                    default:
+                        if (seenCR) {
+                            seenCR = false; // swallow final CR
                             listener.handle(new String(lineBuf.toByteArray(), charset));
                             lineBuf.reset();
                             rePos = pos + i + 1;
-                            break;
-                        case '\r':
-                            if (seenCR) {
-                                lineBuf.write('\r');
-                            }
-                            seenCR = true;
-                            break;
-                        default:
-                            if (seenCR) {
-                                seenCR = false; // swallow final CR
-                                listener.handle(new String(lineBuf.toByteArray(), charset));
-                                lineBuf.reset();
-                                rePos = pos + i + 1;
-                            }
-                            lineBuf.write(ch);
+                        }
+                        lineBuf.write(ch);
                     }
                 }
                 pos = reader.getFilePointer();

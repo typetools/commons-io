@@ -24,7 +24,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <version>2.8.0.1</version>
+  <version>2.11.0</version>
   <name>Apache Commons IO</name>
 
   <inceptionYear>2002</inceptionYear>
@@ -52,7 +52,7 @@ file comparators, endian transformation classes, and much more.
     <connection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</developerConnection>
     <url>https://gitbox.apache.org/repos/asf?p=commons-io.git</url>
-    <tag>commons-io-2.8.0.1</tag>
+    <tag>rel/commons-io-2.11.0</tag>
   </scm>
 
   <developers>
@@ -159,11 +159,19 @@ file comparators, endian transformation classes, and much more.
       </roles>
     </developer>
     <developer>
-      <name>Gary Gregory</name>
       <id>ggregory</id>
-      <email>ggregory@apache.org</email>
-      <url>http://www.garygregory.com</url>
-      <timezone>-5</timezone>
+      <name>Gary Gregory</name>
+      <email>ggregory at apache.org</email>
+      <url>https://www.garygregory.com</url>
+      <organization>The Apache Software Foundation</organization>
+      <organizationUrl>https://www.apache.org/</organizationUrl>      
+      <roles>
+        <role>PMC Member</role>
+      </roles>
+      <timezone>America/New_York</timezone>
+      <properties>
+        <picUrl>https://people.apache.org/~ggregory/img/garydgregory80.png</picUrl>
+      </properties>
     </developer>
     <developer>
       <name>Kristian Rosenvold</name>
@@ -229,35 +237,58 @@ file comparators, endian transformation classes, and much more.
     </contributor>
   </contributors>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>5.7.2</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  
   <dependencies>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>5.6.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit-pioneer</groupId>
       <artifactId>junit-pioneer</artifactId>
-      <version>0.9.0</version>
+      <version>1.4.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>3.5.9</version>
+      <artifactId>mockito-inline</artifactId>
+      <version>3.11.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.jimfs</groupId>
       <artifactId>jimfs</artifactId>
-      <version>1.1</version>
+      <version>1.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.11</version>
+      <version>3.12.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-core</artifactId>
+      <version>${jmh.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-generator-annprocess</artifactId>
+      <version>${jmh.version}</version>
       <scope>test</scope>
     </dependency>
     <!-- Annotations from the Checker Framework: nullness, interning, locking, ... -->
@@ -278,9 +309,9 @@ file comparators, endian transformation classes, and much more.
     <maven.compiler.target>1.8</maven.compiler.target>
     <commons.componentid>io</commons.componentid>
     <commons.module.name>org.apache.commons.io</commons.module.name>
-    <commons.rc.version>RC2</commons.rc.version>
-    <commons.bc.version>2.7</commons.bc.version>
-    <commons.release.version>2.8.0.1</commons.release.version>
+    <commons.rc.version>RC1</commons.rc.version>
+    <commons.bc.version>2.10.0</commons.bc.version>
+    <commons.release.version>2.11.0</commons.release.version>
     <commons.release.desc>(requires Java 8)</commons.release.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
@@ -299,14 +330,21 @@ file comparators, endian transformation classes, and much more.
         org.apache.commons.io.output;
         org.apache.commons.io.*;version=${project.version};-noimport:=true
     </commons.osgi.export>
+    <commons.osgi.import>
+        <!-- IO-734 - Make the sun.* references from BufferedFileChannelInputStream optional -->
+        sun.nio.ch;resolution:=optional,
+        sun.misc;resolution:=optional,
+        *
+    </commons.osgi.import>
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
-    <checkstyle.plugin.version>3.1.1</checkstyle.plugin.version>
-    <commons.jacoco.version>0.8.5</commons.jacoco.version>
-    <commons.surefire.version>2.22.2</commons.surefire.version>
-    <commons.japicmp.version>0.14.3</commons.japicmp.version>
-    <spotbugs.plugin.version>4.0.4</spotbugs.plugin.version>
-    <spotbugs.impl.version>4.1.2</spotbugs.impl.version>    
+    <checkstyle.plugin.version>3.1.2</checkstyle.plugin.version>
+    <commons.jacoco.version>0.8.7</commons.jacoco.version>
+    <commons.surefire.version>3.0.0-M5</commons.surefire.version>
+    <commons.japicmp.version>0.15.3</commons.japicmp.version>
+    <spotbugs.plugin.version>4.2.3</spotbugs.plugin.version>
+    <spotbugs.impl.version>4.3.0</spotbugs.impl.version>
+    <jmh.version>1.32</jmh.version>    
     <japicmp.skip>false</japicmp.skip>
     <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
@@ -324,6 +362,7 @@ file comparators, endian transformation classes, and much more.
         <plugin>
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
+          <version>0.13</version>
           <configuration>
             <consoleOutput>true</consoleOutput>
             <excludes>
@@ -336,6 +375,22 @@ file comparators, endian transformation classes, and much more.
             </excludes>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${checkstyle.plugin.version}</version>
+          <configuration>
+            <configLocation>${basedir}/checkstyle.xml</configLocation>
+            <enableRulesSummary>false</enableRulesSummary>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>8.44</version>
+            </dependency>
+          </dependencies>
+        </plugin>      
       </plugins>
     </pluginManagement>
     <plugins>
@@ -348,6 +403,26 @@ file comparators, endian transformation classes, and much more.
               <goals>
                   <goal>properties</goal>
               </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>3.0.0-M3</version>
+        <executions>
+          <execution>
+            <id>enforce-maven</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>3.0.5</version>
+                </requireMavenVersion>
+              </rules>    
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -405,11 +480,6 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${checkstyle.plugin.version}</version>
-        <configuration>
-          <configLocation>${basedir}/checkstyle.xml</configLocation>
-          <enableRulesSummary>false</enableRulesSummary>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -435,6 +505,10 @@ file comparators, endian transformation classes, and much more.
           <excludeFilterFile>${basedir}/spotbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>com.github.siom79.japicmp</groupId>
+        <artifactId>japicmp-maven-plugin</artifactId>
+      </plugin>
     </plugins>
   </build>
 
@@ -443,11 +517,6 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${checkstyle.plugin.version}</version>
-        <configuration>
-          <configLocation>${basedir}/checkstyle.xml</configLocation>
-          <enableRulesSummary>false</enableRulesSummary>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>com.github.spotbugs</groupId>
@@ -457,6 +526,10 @@ file comparators, endian transformation classes, and much more.
           <excludeFilterFile>${basedir}/spotbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>com.github.siom79.japicmp</groupId>
+        <artifactId>japicmp-maven-plugin</artifactId>
+      </plugin>    
     </plugins>
   </reporting>
   <profiles>
@@ -472,6 +545,7 @@ file comparators, endian transformation classes, and much more.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-antrun-plugin</artifactId>
+            <version>3.0.0</version>
             <executions>
               <execution>
                 <id>prepare-checkout</id>
@@ -587,7 +661,6 @@ file comparators, endian transformation classes, and much more.
             <configuration>
               <fork>true</fork>
               <compilerArgs combine.children="append">
-                <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
                 <arg>-J-Xbootclasspath/p:${settings.localRepository}/com/google/errorprone/javac/${javac.version}/javac-${javac.version}.jar</arg>
               </compilerArgs>
             </configuration>
@@ -620,6 +693,46 @@ file comparators, endian transformation classes, and much more.
              Version 1.19 is broken:  https://github.com/mojohaus/animal-sniffer/issues/76. -->
         <animal.sniffer.skip>true</animal.sniffer.skip>
       </properties>
+    </profile>
+
+    <profile>
+      <id>benchmark</id>
+      <properties>
+        <skipTests>true</skipTests>
+        <benchmark>org.apache</benchmark>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+              <execution>
+                <id>benchmark</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <classpathScope>test</classpathScope>
+                  <executable>java</executable>
+                  <arguments>
+                    <argument>-classpath</argument>
+                    <classpath/>
+                    <argument>org.openjdk.jmh.Main</argument>
+                    <argument>-rf</argument>
+                    <argument>json</argument>
+                    <argument>-rff</argument>
+                    <argument>target/jmh-result.${benchmark}.json</argument>
+                    <argument>${benchmark}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>

@@ -45,6 +45,340 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
+    <release version="2.11.0" date="2021-07-09" description="Java 8 required.">
+      <!-- FIX -->
+      <action issue="IO-741" dev="ggregory" type="fix" due-to="Zach Sherman">
+        FileUtils.listFiles does not list matching files if File parameter is a symbolic link.
+      </action>
+      <action issue="IO-724" dev="ggregory" type="fix" due-to="liran2000">
+        FileUtils#deleteDirectory(File) exception Javadoc inaccurate update #245.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Arturo Bernal">
+        Minor changes #243.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Arturo Bernal">
+        Replace construction of FileInputStream and FileOutputStream objects with Files NIO APIs. #221.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Fix IndexOutOfBoundsException in IOExceptionList constructors.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Remove IOException from the method signatures that no longer throw IOException.
+        This maintains binary compatibility but not source compatibility.
+        - FilenameUtils
+            directoryContains(String, String)
+        - BoundedReader
+            BoundedReader(java.io.Reader, int)
+        - IOUtils
+            lineIterator(java.io.InputStream, Charset)
+            lineIterator(java.io.InputStream, String)
+            toByteArray(String)
+            toInputStream(CharSequence, String)
+            toInputStream(String, String)
+            toString(byte[])
+            toString(byte[], String)
+      </action>
+      <!-- ADD -->
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Add SymbolicLinkFileFilter.
+      </action>
+      <action dev="ggregory" type="update" due-to="trncate">
+        Add test to make sure the setter of AndFileFilter works correctly #244.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Add XmlStreamReader(Path).
+      </action>
+      <!-- UPDATE -->
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump mockito-inline from 3.11.0 to 3.11.2 #247. 
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump jmh.version from 1.27 to 1.32 #237.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump spotbugs from 4.2.3 to 4.3.0 #249.
+      </action>
+    </release>
+    <!-- The release date is the date RC is cut -->
+    <release version="2.10.0" date="2021-06-10" description="Java 8 required.">
+      <!-- FIX -->
+      <action issue="IO-733" dev="ggregory" type="fix" due-to="Jim Sellers, Gary Gregory">
+        RegexFileFilter uses the path and file name instead of just the file name.
+      </action>
+      <action issue="IO-734" dev="ggregory" type="fix" due-to="Eric Norman">
+        The OSGi manifest now contains sun.* import packages #239.
+      </action>
+      <action issue="IO-585" dev="ggregory" type="fix" due-to="Adam McClenaghan">
+        Sanitize double slash after prefix #79.
+      </action>
+      <!-- ADD -->
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use RegexFileFilter.toString().
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use RegexFileFilter.RegexFileFilter(Pattern, Function&lt;Path&gt;, String>)
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use IOCase.isCaseSensitive(IOCase).
+      </action>
+      <!-- UPDATES -->
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump actions/cache from 2.1.5 to 2.1.6 #238.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump junit-pioneer from 1.4.1 to 1.4.2 #240.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump checkstyle from 8.42 to 8.44 #241, #248.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump mockito-inline from 3.10.0 to 3.11.0 #242. 
+      </action>
+    </release>
+    <release version="2.9.0" date="2021-05-22" description="Java 8 required.">
+      <!-- FIX -->
+      <action issue="IO-686" dev="ggregory" type="fix" due-to="Alan Moffat, Gary Gregory">
+        IOUtils.toByteArray(InputStream) Javadoc does not match code.
+      </action>
+      <action issue="IO-689" dev="aherbert" type="fix" due-to="Uwe Schindler">
+        FileUtils: Remove Instant->ZonedDateTime->Instant round-trip.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Michael Ernst, Gary Gregory">
+        Make FilenameUtils.equals() not throw an exception #154.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Jan Peter Stotz, Bernd Eckenfels, Gary Gregory">
+        Un-deprecate IOUtils.closeQuietly() methods.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Michiel Kalkman">
+        FileUtils#copyDirectory(File, File, FileFilter, preserveFileDate) clean up #163.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        AccumulatorPathVisitor does not track directories properly.
+      </action>
+      <action issue="IO-597" dev="ggregory" type="fix" due-to="Gary Gregory, Arvind, Rob Spoor">
+        FileUtils.iterateFiles runs out of memory when executed for a directory with large number of files.
+        Re-implement FileUtils' iterateFiles(), iterateFilesAndDirs(), listFiles(), listFilesAndDirs() to use NIO
+        file tree walking instead of IO file listings to avoid memory consumption issues on large file trees.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        FileUtils.forceDelete(File) actually forces deletion of read-only files as it did in version 2.6.
+      </action>
+      <action issue="IO-692" dev="ebourg" type="fix" due-to="Matthew Rooney, Emmanuel Bourg">
+        PathUtils.deleteFile() no longer throws a NoSuchFileException when applied on a symbolic link pointing
+        to a file that doesn't exist.
+      </action>
+      <action issue="IO-694" dev="ggregory" type="fix" due-to="Tan Yee Fan, Gary Gregory">
+        Behavior change in FileUtils.copyDirectory() file last modified timestamp preservation. Match Javadoc to code.
+      </action>
+      <action issue="IO-600" dev="ggregory" type="fix" due-to="Abhyankar Chaubey, Gary Gregory">
+        Fix getPrefixLength method for Linux filename #179.
+      </action>
+      <action issue="IO-699" dev="ggregory" type="fix" due-to="tza, Gary Gregory">
+        Wrong logging in FileUtils.setLastModified.
+      </action>
+      <action issue="IO-686" dev="ggregory" type="fix" due-to="Alan Moffat, Sebb, Gary Gregory">
+        IOUtils.toByteArray(InputStream) Javadoc does not match code.
+      </action>
+      <action issue="IO-688" dev="ggregory" type="fix" due-to="Michael Ernst, Gary Gregory">
+        CopyUtils deprecation message gives wrong version.
+      </action>
+      <action issue="IO-701" dev="ggregory" type="fix" due-to="Gary Gregory">
+        Make PathUtils.setReadOnly deal with LinuxDosFileAttributeView #186.
+      </action>
+      <action issue="IO-702" dev="ggregory" type="fix" due-to="Boris Unckel, Gary Gregory">
+        FileUtils.forceDelete does not delete invalid links. #187.
+      </action>
+      <action issue="IO-690" dev="ggregory" type="fix" due-to="Chris Heisterkamp, Gary Gregory">
+        IOUtils.toByteArray(null) no longer throws a NullPointerException.
+      </action>
+      <action issue="IO-705" dev="ggregory" type="fix" due-to="Hao Zhong, Gary Gregory">
+        MarkShieldInputStream#reset should throw UnsupportedOperationException.
+      </action>
+      <action issue="IO-705" dev="ggregory" type="fix" due-to="Hao Zhong, Gary Gregory">
+        LockableFileWriter.close() should fail when the lock file cannot be deleted.
+      </action>
+      <action issue="IO-705" dev="ggregory" type="fix" due-to="Hao Zhong, Gary Gregory">
+        Fix infinite loops in ObservableInputStream read(*) when an exception is caught but not re-thrown.
+      </action>
+      <action issue="IO-719" dev="ggregory" type="fix" due-to="Andrew Shcheglov, Gary Gregory">
+        Fixed error of copying directories between different file systems #203.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Felix Rilling">
+        Fix Typos in JavaDoc, Comments and Tests #201.
+      </action>
+      <action issue="IO-718" dev="ggregory" type="fix" due-to="Robert Cooper, Gary Gregory">
+        FileUtils.checksumCRC32 and FileUtils.checksum are not thread safe.
+      </action>
+      <action issue="IO-720" dev="ggregory" type="fix" due-to="XenoAmess">
+        Fix error about usage of DirectBuffer in JRE 16/17 #205.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Rob Spoor, Gary Gregory">
+        Prevent infinite loop with AbstractCharacterFilterReader if EOF is filtered out #226.
+      </action>
+      <action issue="IO-429" dev="ggregory" type="fix" due-to="Ivan Leskin, Ivan Leskin">
+        Check for long streams in IOUtils.toByteArray #175.
+      </action>
+      <!-- ADD -->
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add FileSystemProviders class.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Let org.apache.commons.io.filefilter classes work with java.nio.file.Files.walk* APIs.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Let org.apache.commons.io.filefilter classes work with java.nio.file.Files#newDirectoryStream(Path, DirectoryStream.Filter).
+      </action>
+      <action issue="IO-510" dev="ggregory" type="add" due-to="Gary Gregory, Apache Spark, David Mollitor">
+        Add and adapt ReadAheadInputStream and BufferedFileChannelInputStream from Apache Spark.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add PathUtils.createParentDirectories(Path, FileAttribute...).
+      </action>
+      <action dev="ggregory" type="add" due-to="Rob Spoor, Gary Gregory">
+        Add factory methods to CloseShieldInputStream, CloseShieldReader, CloseShieldOutputStream, CloseShieldWriter, #173.
+      </action>
+      <action dev="ggregory" type="add" due-to="maxxedev, Gary Gregory">
+        Add QueueInputStream and QueueOutputStream as simpler alternatives to PipedInputStream and PipedOutputStream #171.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add StandardLineSeparator.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Replace magic numbers with constants with the new IOUtils.CR and LF.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add FileSystem#supportsDriveLetter().
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add FileUtils.delete(File).
+      </action>
+      <action issue="IO-700" dev="ggregory" type="add" due-to="Gary Gregory">
+        Add FileUtils.moveFile(File, File, CopyOption...) #185.
+      </action>
+      <action issue="IO-700" dev="ggregory" type="add" due-to="Gary Gregory">
+        Add FileUtils.isEmptyDirectory(File).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add FileUtils.lastModified[Unchecked](File) to workaround https://bugs.openjdk.java.net/browse/JDK-8177809.
+      </action>
+      <action issue="IO-709" dev="ggregory" type="add" due-to="Boris Unckel, Gary Gregory">
+        Add null safe variants of isDirectory and isRegularFile.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use IOExceptionList(String, List).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use ObservableInputStream.ObservableInputStream(InputStream, Observer...).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Make ObservableInputStream.getObservers() public.
+      </action>
+      <action  issue="IO-706" dev="ggregory" type="add" due-to="Gary Gregory">
+        Add TimestampedObserver.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use IOUtils.byteArray(*).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Make public and reuse IOUtils.EMPTY_BYTE_ARRAY.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add IOUtils.copy(URL, File).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add copy(URL, OutputStream).
+      </action>
+      <action issue="IO-651" dev="ggregory" type="add" due-to="jmark109, Gary Gregory">
+        Add DeferredFileOutputStream.toInputStream() #206.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add CharacterSetFilterReader.CharacterSetFilterReader(Reader, Integer...).
+      </action>
+      <action dev="ggregory" type="add" due-to="Rob Spoor, Gary Gregory">
+        Add AbstractCharacterFilterReader(Reader, IntPredicate), #227.
+        Add CharacterFilterReader(Reader, IntPredicate), #227.
+        Add CharacterFilterReaderIntPredicateTest, #227.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add IOConsumer.noop().
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add constructor ThresholdingOutputStream(int, IOConsumer, IOFunction) and make the class concrete.
+      </action>
+      <action dev="ggregory" type="add" due-to="nstdspace, Gary Gregory">
+        Add constructor accepting collection of file alteration observers #236.
+      </action>
+      <!-- UPDATES -->
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Update junit-jupiter from 5.6.2 to 5.7.0 #153.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Update mockito-core from 3.5.9 to 3.10.0, #152, #155, #157, #166, #167, #169, #182.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump mockito-inline from 3.7.0 to 3.10.0 #188, #207, #230.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Update commons.jacoco.version 0.8.5 to 0.8.7, fixes Java 15 builds and up.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Update spotbugs from 4.1.2 to 4.2.2, 4.2.3, #158, #164, #165, #180, #199, #213, #224.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump spotbugs-maven-plugin from 4.0.4 to 4.2.3, #161, #172, #223.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory, Dependabot">
+        Update org.junit-pioneer:junit-pioneer 0.9.0 -> 1.4,1, #159, #162, #170, #189, #191, #210, #229.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Update actions/checkout from v2.3.2 to v2.3.4, #156, #168.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot, Gary Gregory">
+        Bump actions/setup-java from v1.4.2 to v2 #160.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Update maven-surefire-plugin from 2.22.2 to 3.0.0-M5.
+      </action>
+      <action dev="ggregory" type="update" due-to="Arturo Bernal">
+        Minor improvements, #176, 177, #190.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Update commons.japicmp.version 0.14.4 -> 0.15.3.
+      </action>
+      <action dev="ggregory" type="update" due-to="Michiel Kalkman">
+        Tiny performance improvement in FileUtils#moveDirectoryToDirectory() #174.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump checkstyle from 8.38 to 8.42 #689, #209, #225.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump maven-checkstyle-plugin from 3.1.1 to 3.1.2 #198.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump jimfs from 1.1 to 1.2 #183.
+      </action>
+      <action dev="ggregory" type="update" due-to="XenoAmess, Gary Gregory">
+        Improve performance of IOUtils.contentEquals(InputStream, InputStream).
+      </action>
+      <action dev="ggregory" type="update" due-to="XenoAmess, Gary Gregory">
+        Improve performance of IOUtils.contentEquals(Reader, Reader).
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump actions/cache from v2 to v2.1.5 #202, #228.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump junit-bom from 5.7.0 to 5.7.2 #200, #232.
+      </action>
+      <action type="update" dev="ggregory" due-to="Gary Gregory">
+        Update from Apache Commons Lang 3.11 to 3.12.0.
+      </action>
+      <action type="update" dev="ggregory" due-to="Arturo Bernal">
+        Minor improvements #233.
+      </action>
+      <action type="update" dev="ggregory" due-to="Arturo Bernal">
+        Simplify Assertions in tests #234.
+      </action>
+    </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.8.0" date="2020-09-05" description="Java 8 required.">
       <action dev="ggregory" type="add" due-to="Gary Gregory">
@@ -153,7 +487,7 @@ The <action> type attribute can be add,update,fix,remove.
         Update actions/checkout from v1 to v2.3.1 #126.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
-        Update junit-pioneer from 0.6.0 to 0.8.0, #127, #135.
+        Update junit-pioneer from 0.6.0 to 0.9.0, #127, #135, #138.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Update mockito-core from 3.3.3 to 3.5.9 #128, #133, #145, #149, #151.
@@ -162,13 +496,13 @@ The <action> type attribute can be add,update,fix,remove.
         Update spotbugs from 4.0.6 to 4.1.1 #134.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Update junit-pioneer from 0.8.0 to 0.9.0 #138.
-      </action>
-      <action dev="ggregory" type="update" due-to="Dependabot">
         Update actions/checkout from v2.3.1 to v2.3.2 #140.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update actions/setup-java from v1.4.0 to v1.4.2 #141, #148.
+      </action>
+      <action type="update" dev="ggregory" due-to="Gary Gregory">
+        Update com.github.siom79.japicmp:japicmp-maven-plugin 0.14.3 -> 0.14.4.
       </action>
     </release>
     <!-- The release date is the date RC is cut -->

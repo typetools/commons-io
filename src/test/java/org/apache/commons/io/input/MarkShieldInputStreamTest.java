@@ -16,12 +16,15 @@
  */
 package org.apache.commons.io.input;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 public class MarkShieldInputStreamTest {
 
@@ -78,7 +81,7 @@ public class MarkShieldInputStreamTest {
         // test wrapping an underlying stream which does NOT support marking
         try (final MarkShieldInputStream msis = new MarkShieldInputStream(
                 new NullInputStream(64, false, false))) {
-            assertThrows(IOException.class, () -> msis.reset());
+            assertThrows(UnsupportedOperationException.class, () -> msis.reset());
         }
     }
 
@@ -87,7 +90,7 @@ public class MarkShieldInputStreamTest {
         // test wrapping an underlying stream which supports marking
         try (final MarkShieldInputStream msis = new MarkShieldInputStream(
                 new NullInputStream(64, true, false))) {
-            assertThrows(IOException.class, () -> msis.reset());
+            assertThrows(UnsupportedOperationException.class, () -> msis.reset());
         }
     }
 

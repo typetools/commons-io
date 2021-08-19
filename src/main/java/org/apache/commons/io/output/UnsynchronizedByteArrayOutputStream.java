@@ -55,7 +55,8 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     public void write(final byte[] b, final int off, final int len) {
         if ((off < 0) || (off > b.length) || (len < 0) || ((off + len) > b.length) || ((off + len) < 0)) {
             throw new IndexOutOfBoundsException(String.format("offset=%,d, length=%,d", off, len));
-        } else if (len == 0) {
+        }
+        if (len == 0) {
             return;
         }
         writeImpl(b, off, len);
@@ -90,7 +91,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     }
 
     /**
-     * Fetches entire contents of an <code>InputStream</code> and represent same data as result InputStream.
+     * Fetches entire contents of an {@code InputStream} and represent same data as result InputStream.
      * <p>
      * This method is useful where,
      * </p>
@@ -100,18 +101,18 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * <li>It has network timeout associated.</li>
      * </ul>
      * It can be used in favor of {@link #toByteArray()}, since it avoids unnecessary allocation and copy of byte[].<br>
-     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
+     * This method buffers the input internally, so there is no need to use a {@code BufferedInputStream}.
      *
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     public static InputStream toBufferedInputStream(final InputStream input) throws IOException {
         return toBufferedInputStream(input, DEFAULT_SIZE);
     }
 
     /**
-     * Fetches entire contents of an <code>InputStream</code> and represent same data as result InputStream.
+     * Fetches entire contents of an {@code InputStream} and represent same data as result InputStream.
      * <p>
      * This method is useful where,
      * </p>
@@ -121,12 +122,12 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * <li>It has network timeout associated.</li>
      * </ul>
      * It can be used in favor of {@link #toByteArray()}, since it avoids unnecessary allocation and copy of byte[].<br>
-     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
+     * This method buffers the input internally, so there is no need to use a {@code BufferedInputStream}.
      *
      * @param input Stream to be fully buffered.
      * @param size the initial buffer size
      * @return A fully buffered stream.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     public static InputStream toBufferedInputStream(final InputStream input, final int size) throws IOException {
         // It does not matter if a ByteArrayOutputStream is not closed as close() is a no-op

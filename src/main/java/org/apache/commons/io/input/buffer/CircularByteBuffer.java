@@ -36,10 +36,10 @@ public class CircularByteBuffer {
     /**
      * Creates a new instance with the given buffer size.
      *
-     * @param pSize the size of buffer to create
+     * @param size the size of buffer to create
      */
-    public CircularByteBuffer(final int pSize) {
-        buffer = new byte[pSize];
+    public CircularByteBuffer(final int size) {
+        buffer = IOUtils.byteArray(size);
         startOffset = 0;
         endOffset = 0;
         currentNumberOfBytes = 0;
@@ -80,14 +80,14 @@ public class CircularByteBuffer {
      * @param targetOffset The offset, where to store bytes in the byte array.
      * @param length The number of bytes to return.
      * @throws NullPointerException     The byte array {@code pBuffer} is null.
-     * @throws IllegalArgumentException Either of {@code pOffset}, or {@code pLength} is negative,
-     *                                  or the length of the byte array {@code pBuffer} is too small.
+     * @throws IllegalArgumentException Either of {@code pOffset}, or {@code length} is negative,
+     *                                  or the length of the byte array {@code targetBuffer} is too small.
      * @throws IllegalStateException    The buffer doesn't hold the given number
      *                                  of bytes. Use {@link #getCurrentNumberOfBytes()} to prevent this
      *                                  exception.
      */
     public void read(final byte[] targetBuffer, final int targetOffset, final int length) {
-        Objects.requireNonNull(targetBuffer);
+        Objects.requireNonNull(targetBuffer, "targetBuffer");
         if (targetOffset < 0 || targetOffset >= targetBuffer.length) {
             throw new IllegalArgumentException("Invalid offset: " + targetOffset);
         }
@@ -143,8 +143,8 @@ public class CircularByteBuffer {
      * @param length length to compare
      * @return True, if the next invocations of {@link #read()} will return the
      * bytes at offsets {@code pOffset}+0, {@code pOffset}+1, ...,
-     * {@code pOffset}+{@code pLength}-1 of byte array {@code pBuffer}.
-     * @throws IllegalArgumentException Either of {@code pOffset}, or {@code pLength} is negative.
+     * {@code pOffset}+{@code length}-1 of byte array {@code pBuffer}.
+     * @throws IllegalArgumentException Either of {@code pOffset}, or {@code length} is negative.
      * @throws NullPointerException     The byte array {@code pBuffer} is null.
      */
     public boolean peek(final byte[] sourceBuffer, final int offset, final int length) {
@@ -180,7 +180,7 @@ public class CircularByteBuffer {
      * @param length length to copy
      * @throws IllegalStateException    The buffer doesn't have sufficient space. Use
      *                                  {@link #getSpace()} to prevent this exception.
-     * @throws IllegalArgumentException Either of {@code pOffset}, or {@code pLength} is negative.
+     * @throws IllegalArgumentException Either of {@code offset}, or {@code length} is negative.
      * @throws NullPointerException     The byte array {@code pBuffer} is null.
      */
     public void add(final byte[] targetBuffer, final int offset, final int length) {

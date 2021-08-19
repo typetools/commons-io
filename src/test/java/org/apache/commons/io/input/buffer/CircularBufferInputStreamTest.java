@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 
 public class CircularBufferInputStreamTest {
 	private final Random rnd = new Random(1530960934483L); // System.currentTimeMillis(), when this test was written.
-	                                                       // Always using the same seed should ensure a reproducable test.
+	                                                       // Always using the same seed should ensure a reproducible test.
 
 	@Test
 	public void testRandomRead() throws Exception {
@@ -58,16 +58,16 @@ public class CircularBufferInputStreamTest {
 				final int res = cbis.read(readBuffer, 0, rnd.nextInt(readBuffer.length+1));
 				if (res == -1) {
 					throw new IllegalStateException("Unexpected EOF at offset " + offset);
-				} else if (res == 0) {
-					throw new IllegalStateException("Unexpected zero-byte-result at offset " + offset);
-				} else {
-					for (int i = 0;  i < res;  i++) {
-						if (inputBuffer[offset] != readBuffer[i]) {
-							throw new IllegalStateException("Expected " + inputBuffer[offset] + " at offset " + offset + ", got " + readBuffer[i]);
-						}
-						++offset;
-					}
 				}
+        if (res == 0) {
+					throw new IllegalStateException("Unexpected zero-byte-result at offset " + offset);
+				}
+        for (int i = 0;  i < res;  i++) {
+            if (inputBuffer[offset] != readBuffer[i]) {
+                throw new IllegalStateException("Expected " + inputBuffer[offset] + " at offset " + offset + ", got " + readBuffer[i]);
+            }
+            ++offset;
+        }
 				break;
 			}
 			default:
@@ -79,10 +79,10 @@ public class CircularBufferInputStreamTest {
 
 	@Test
   public void testIO683() throws IOException {
-		final byte[] buffer = new byte[]{0,1,-2,-2,-1,4};
+		final byte[] buffer = {0,1,-2,-2,-1,4};
 		try (
 			final ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
-			final CircularBufferInputStream cbis = new CircularBufferInputStream(bais);
+			final CircularBufferInputStream cbis = new CircularBufferInputStream(bais)
 		){
 			int b;
 			int i = 0;

@@ -22,6 +22,7 @@ import java.nio.file.CopyOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.ProviderMismatchException;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.Objects;
@@ -36,8 +37,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * @since 2.7
  */
 public class CopyDirectoryVisitor extends CountingPathVisitor {
-
-    private static final CopyOption[] EMPTY_COPY_OPTIONS = new CopyOption[0];
 
     private final CopyOption[] copyOptions;
     private final Path sourceDirectory;
@@ -56,7 +55,26 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
         super(pathCounter);
         this.sourceDirectory = sourceDirectory;
         this.targetDirectory = targetDirectory;
-        this.copyOptions = copyOptions == null ? EMPTY_COPY_OPTIONS : copyOptions.clone();
+        this.copyOptions = copyOptions == null ? PathUtils.EMPTY_COPY_OPTIONS : copyOptions.clone();
+    }
+
+    /**
+     * Constructs a new visitor that deletes files except for the files and directories explicitly given.
+     *
+     * @param pathCounter How to count visits.
+     * @param fileFilter How to filter file paths.
+     * @param dirFilter How to filter directory paths.
+     * @param sourceDirectory The source directory
+     * @param targetDirectory The target directory
+     * @param copyOptions Specifies how the copying should be done.
+     * @since 2.9.0
+     */
+    public CopyDirectoryVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter,
+        final Path sourceDirectory, final Path targetDirectory, final CopyOption... copyOptions) {
+        super(pathCounter, fileFilter, dirFilter);
+        this.sourceDirectory = sourceDirectory;
+        this.targetDirectory = targetDirectory;
+        this.copyOptions = copyOptions == null ? PathUtils.EMPTY_COPY_OPTIONS : copyOptions.clone();
     }
 
     /**
@@ -84,7 +102,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
         }
         final CopyDirectoryVisitor other = (CopyDirectoryVisitor) obj;
         return Arrays.equals(copyOptions, other.copyOptions) && Objects.equals(sourceDirectory, other.sourceDirectory)
-                && Objects.equals(targetDirectory, other.targetDirectory);
+            && Objects.equals(targetDirectory, other.targetDirectory);
     }
 
     /**
@@ -129,16 +147,29 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     @Override
     public FileVisitResult preVisitDirectory(final Path directory, final BasicFileAttributes attributes)
         throws IOException {
-        final Path newTargetDir = targetDirectory.resolve(sourceDirectory.relativize(directory));
+        final Path newTargetDir = resolveRelativeAsString(directory);
         if (Files.notExists(newTargetDir)) {
             Files.createDirectory(newTargetDir);
         }
         return super.preVisitDirectory(directory, attributes);
     }
 
+    /**
+     * Relativizes against {@code sourceDirectory}, then resolves against {@code targetDirectory}.
+     *
+     * We have to call {@link Path#toString()} relative value because we cannot use paths belonging to different
+     * FileSystems in the Path methods, usually this leads to {@link ProviderMismatchException}.
+     *
+     * @param directory the directory to relativize.
+     * @return a new path, relativized against sourceDirectory, then resolved against targetDirectory.
+     */
+    private Path resolveRelativeAsString(final Path directory) {
+        return targetDirectory.resolve(sourceDirectory.relativize(directory).toString());
+    }
+
     @Override
     public FileVisitResult visitFile(final Path sourceFile, final BasicFileAttributes attributes) throws IOException {
-        final Path targetFile = targetDirectory.resolve(sourceDirectory.relativize(sourceFile));
+        final Path targetFile = resolveRelativeAsString(sourceFile);
         copy(sourceFile, targetFile);
         return super.visitFile(targetFile, attributes);
     }

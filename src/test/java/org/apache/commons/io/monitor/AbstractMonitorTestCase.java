@@ -18,10 +18,12 @@ package org.apache.commons.io.monitor;
 
 import static org.apache.commons.io.test.TestUtils.sleepQuietly;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -46,10 +48,10 @@ public abstract class AbstractMonitorTestCase {
     protected File testDir;
 
     /** Time in milliseconds to pause in tests */
-    protected long pauseTime = 100L;
+    protected final long pauseTime = 100L;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         final IOFileFilter files = FileFilterUtils.fileFileFilter();
         final IOFileFilter javaSuffix = FileFilterUtils.suffixFileFilter(".java");
         final IOFileFilter fileFilter = FileFilterUtils.and(files, javaSuffix);
@@ -127,13 +129,15 @@ public abstract class AbstractMonitorTestCase {
      *
      * @param file The file to touch
      * @return The file
+     * @throws IOException if an I/O error occurs.
      */
-    protected File touch(File file) {
-        final long lastModified = file.exists() ? file.lastModified() : 0;
+    protected File touch(File file) throws IOException {
+        final long lastModified = file.exists() ? FileUtils.lastModified(file) : 0;
         try {
             FileUtils.touch(file);
+            assertTrue(file.exists());
             file = new File(file.getParent(), file.getName());
-            while (lastModified == file.lastModified()) {
+            while (lastModified == FileUtils.lastModified(file)) {
                 sleepQuietly(pauseTime);
                 FileUtils.touch(file);
                 file = new File(file.getParent(), file.getName());

@@ -27,13 +27,14 @@ import java.io.InputStream;
  * do an alternate processing with the stream. Note that the original
  * InputStream given to the XmlStreamReader cannot be used as that one has been
  * already read.
+ * </p>
  *
  */
 public class XmlStreamReaderException extends org.apache.commons.io.input.XmlStreamReaderException {
 
     private static final long serialVersionUID = 1L;
 
-    private final InputStream is;
+    private final InputStream inputStream;
 
     /**
      * Creates an exception instance if the charset encoding could not be
@@ -64,12 +65,12 @@ public class XmlStreamReaderException extends org.apache.commons.io.input.XmlStr
      * @param bomEnc BOM encoding.
      * @param xmlGuessEnc XML guess encoding.
      * @param xmlEnc XML prolog encoding.
-     * @param is the unconsumed InputStream.
+     * @param inputStream the unconsumed InputStream.
      */
     public XmlStreamReaderException(final String msg, final String ctMime, final String ctEnc,
-            final String bomEnc, final String xmlGuessEnc, final String xmlEnc, final InputStream is) {
+            final String bomEnc, final String xmlGuessEnc, final String xmlEnc, final InputStream inputStream) {
         super(msg, ctMime, ctEnc, bomEnc, xmlGuessEnc, xmlEnc);
-        this.is = is;
+        this.inputStream = inputStream;
     }
 
     /**
@@ -79,6 +80,6 @@ public class XmlStreamReaderException extends org.apache.commons.io.input.XmlStr
      * @return the unconsumed InputStream.
      */
     public InputStream getInputStream() {
-        return is;
+        return inputStream;
     }
 }

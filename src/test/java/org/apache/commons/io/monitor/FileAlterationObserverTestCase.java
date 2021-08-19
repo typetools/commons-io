@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.commons.io.FileUtils;
@@ -73,9 +74,8 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
     @Test
     public void testToString() {
         final File file = new File("/foo");
-        FileAlterationObserver observer = null;
 
-        observer = new FileAlterationObserver(file);
+        FileAlterationObserver observer = new FileAlterationObserver(file);
         assertEquals("FileAlterationObserver[file='" + file.getPath() +  "', listeners=0]",
                 observer.toString());
 
@@ -147,10 +147,10 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() creating
-     * @throws Exception
+     * @throws IOException if an I/O error occurs.
      */
     @Test
-    public void testFileCreate() throws Exception {
+    public void testFileCreate() throws IOException {
         checkAndNotify();
         checkCollectionsEmpty("A");
         File testDirA = new File(testDir, "test-dir-A");
@@ -207,10 +207,10 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() creating
-     * @throws Exception
+     * @throws IOException if an I/O error occurs.
      */
     @Test
-    public void testFileUpdate() throws Exception {
+    public void testFileUpdate() throws IOException {
         checkAndNotify();
         checkCollectionsEmpty("A");
         File testDirA = new File(testDir, "test-dir-A");
@@ -264,10 +264,10 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() deleting
-     * @throws Exception
+     * @throws IOException if an I/O error occurs.
      */
     @Test
-    public void testFileDelete() throws Exception {
+    public void testFileDelete() throws IOException {
         checkAndNotify();
         checkCollectionsEmpty("A");
         File testDirA = new File(testDir, "test-dir-A");
@@ -324,10 +324,10 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() method
-     * @throws Exception
+     * @throws IOException if an I/O error occurs.
      */
     @Test
-    public void testObserveSingleFile() throws Exception {
+    public void testObserveSingleFile() throws IOException {
         final File testDirA = new File(testDir, "test-dir-A");
         File testDirAFile1 = new File(testDirA, "A-file1.java");
         testDirA.mkdir();
@@ -377,10 +377,8 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Call {@link FileAlterationObserver#checkAndNotify()}.
-     *
-     * @throws Exception if an error occurs
      */
-    protected void checkAndNotify() throws Exception {
+    protected void checkAndNotify() {
         observer.checkAndNotify();
     }
 }

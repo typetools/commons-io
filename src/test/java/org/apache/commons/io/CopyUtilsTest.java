@@ -16,8 +16,8 @@
  */
 package org.apache.commons.io;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -25,7 +25,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.Arrays;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.test.TestUtils;
@@ -71,20 +71,20 @@ public class CopyUtilsTest {
         CopyUtils.copy(inData, out);
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
     public void copy_byteArrayToWriter() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-        final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
+        final Writer writer = new java.io.OutputStreamWriter(out, StandardCharsets.US_ASCII);
 
         CopyUtils.copy(inData, writer);
         writer.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -109,7 +109,7 @@ public class CopyUtilsTest {
 
         assertEquals(0, in.available(), "Not all bytes were read");
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
         assertEquals(inData.length, count);
     }
 
@@ -121,14 +121,14 @@ public class CopyUtilsTest {
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-        final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
+        final Writer writer = new java.io.OutputStreamWriter(out, StandardCharsets.US_ASCII);
 
         CopyUtils.copy(in, writer);
         writer.flush();
 
         assertEquals(0, in.available(), "Not all bytes were read");
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -145,7 +145,7 @@ public class CopyUtilsTest {
     public void testCopy_readerToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
-        final Reader reader = new java.io.InputStreamReader(in, "US-ASCII");
+        final Reader reader = new java.io.InputStreamReader(in, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
@@ -159,7 +159,7 @@ public class CopyUtilsTest {
 
         // Note: rely on the method to flush
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
@@ -167,22 +167,22 @@ public class CopyUtilsTest {
     public void copy_readerToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
-        final Reader reader = new java.io.InputStreamReader(in, "US-ASCII");
+        final Reader reader = new java.io.InputStreamReader(in, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-        final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
+        final Writer writer = new java.io.OutputStreamWriter(out, StandardCharsets.US_ASCII);
 
         final int count = CopyUtils.copy(reader, writer);
         writer.flush();
         assertEquals(inData.length, count, "The number of characters returned by copy is wrong");
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
     public void copy_stringToOutputStream() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
@@ -196,22 +196,22 @@ public class CopyUtilsTest {
         // note: we don't flush here; this IOUtils method does it for us
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
     public void copy_stringToWriter() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-        final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
+        final Writer writer = new java.io.OutputStreamWriter(out, StandardCharsets.US_ASCII);
 
         CopyUtils.copy(str, writer);
         writer.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
 } // CopyUtilsTest

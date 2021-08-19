@@ -17,7 +17,6 @@
 package org.apache.commons.io;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,8 +45,8 @@ import org.checkerframework.common.value.qual.ArrayLen;
  * Most methods on this class are designed to work the same on both Unix and Windows.
  * Those that don't include 'System', 'Unix' or 'Windows' in their name.
  * <p>
- * Most methods recognise both separators (forward and back), and both
- * sets of prefixes. See the javadoc of each method for details.
+ * Most methods recognize both separators (forward and back), and both
+ * sets of prefixes. See the Javadoc of each method for details.
  * <p>
  * This class defines six components within a file name
  * (example C:\dev\project\file.txt):
@@ -91,7 +90,7 @@ import org.checkerframework.common.value.qual.ArrayLen;
  */
 public class FilenameUtils {
 
-    private static final String @ArrayLen(0) [] EMPTY_STRING_ARRAY = new String[0];
+    private static final String @ArrayLen(0) [] EMPTY_STRING_ARRAY = {};
 
     private static final String EMPTY_STRING = "";
 
@@ -140,10 +139,8 @@ public class FilenameUtils {
      * Instances should NOT be constructed in standard programming.
      */
     public FilenameUtils() {
-        super();
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Determines if Windows file system is in use.
      *
@@ -153,7 +150,6 @@ public class FilenameUtils {
         return SYSTEM_SEPARATOR == WINDOWS_SEPARATOR;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Checks if the character is a separator.
      *
@@ -164,7 +160,6 @@ public class FilenameUtils {
         return ch == UNIX_SEPARATOR || ch == WINDOWS_SEPARATOR;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Normalizes a path, removing double and single dot path steps.
      * <p>
@@ -257,7 +252,6 @@ public class FilenameUtils {
         return doNormalize(fileName, separator, true);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Normalizes a path, removing double and single dot path steps,
      * and removing any final directory separator.
@@ -364,7 +358,7 @@ public class FilenameUtils {
             return null;
         }
 
-        failIfNullBytePresent(fileName);
+        requireNonNullChars(fileName);
 
         int size = fileName.length();
         if (size == 0) {
@@ -394,7 +388,9 @@ public class FilenameUtils {
         }
 
         // adjoining slashes
-        for (int i = prefix + 1; i < size; i++) {
+        // If we get here, prefix can only be 0 or greater, size 1 or greater
+        // If prefix is 0, set loop start to 1 to prevent index errors
+        for (int i = (prefix != 0) ? prefix : 1; i < size; i++) {
             if (array[i] == separator && array[i - 1] == separator) {
                 System.arraycopy(array, i, array, i - 1, size - i);
                 size--;
@@ -455,7 +451,6 @@ public class FilenameUtils {
         return new String(array, 0, size - 1);  // lose trailing separator
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Concatenates a fileName to a base path using normal command line style rules.
      * <p>
@@ -465,9 +460,9 @@ public class FilenameUtils {
      * <p>
      * The first argument is the base path, the second is the path to concatenate.
      * The returned path is always normalized via {@link #normalize(String)},
-     * thus <code>..</code> is handled.
+     * thus {@code ..} is handled.
      * <p>
-     * If <code>pathToAdd</code> is absolute (has an absolute prefix), then
+     * If {@code pathToAdd} is absolute (has an absolute prefix), then
      * it will be normalized and returned.
      * Otherwise, the paths will be joined, normalized and returned.
      * <p>
@@ -536,18 +531,11 @@ public class FilenameUtils {
      * @param canonicalChild
      *            the file to consider as the child.
      * @return true is the candidate leaf is under by the specified composite. False otherwise.
-     * @throws IOException
-     *             if an IO error occurs while checking the files.
      * @since 2.2
      * @see FileUtils#directoryContains(File, File)
      */
-    public static boolean directoryContains(final String canonicalParent, final String canonicalChild)
-            throws IOException {
-
-        // Fail fast against NullPointerException
-        if (canonicalParent == null) {
-            throw new IllegalArgumentException("Directory must not be null");
-        }
+    public static boolean directoryContains(final String canonicalParent, final String canonicalChild) {
+        Objects.requireNonNull(canonicalParent, "canonicalParent");
 
         if (canonicalChild == null) {
             return false;
@@ -560,7 +548,6 @@ public class FilenameUtils {
         return IOCase.SYSTEM.checkStartsWith(canonicalChild, canonicalParent);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Converts all separators to the Unix separator of forward slash.
      *
@@ -600,9 +587,8 @@ public class FilenameUtils {
         return isSystemWindows() ? separatorsToWindows(path) : separatorsToUnix(path);
     }
 
-    //-----------------------------------------------------------------------
     /**
-     * Returns the length of the fileName prefix, such as <code>C:/</code> or <code>~/</code>.
+     * Returns the length of the fileName prefix, such as {@code C:/} or {@code ~/}.
      * <p>
      * This method will handle a file in either Unix or Windows format.
      * <p>
@@ -611,22 +597,23 @@ public class FilenameUtils {
      * than the length of the input string.
      * <pre>
      * Windows:
-     * a\b\c.txt           --&gt; ""          --&gt; relative
-     * \a\b\c.txt          --&gt; "\"         --&gt; current drive absolute
-     * C:a\b\c.txt         --&gt; "C:"        --&gt; drive relative
-     * C:\a\b\c.txt        --&gt; "C:\"       --&gt; absolute
-     * \\server\a\b\c.txt  --&gt; "\\server\" --&gt; UNC
-     * \\\a\b\c.txt        --&gt;  error, length = -1
+     * a\b\c.txt           --&gt; 0           --&gt; relative
+     * \a\b\c.txt          --&gt; 1           --&gt; current drive absolute
+     * C:a\b\c.txt         --&gt; 2           --&gt; drive relative
+     * C:\a\b\c.txt        --&gt; 3           --&gt; absolute
+     * \\server\a\b\c.txt  --&gt; 9           --&gt; UNC
+     * \\\a\b\c.txt        --&gt; -1          --&gt; error
      *
      * Unix:
-     * a/b/c.txt           --&gt; ""          --&gt; relative
-     * /a/b/c.txt          --&gt; "/"         --&gt; absolute
-     * ~/a/b/c.txt         --&gt; "~/"        --&gt; current user
-     * ~                   --&gt; "~/"        --&gt; current user (slash added)
-     * ~user/a/b/c.txt     --&gt; "~user/"    --&gt; named user
-     * ~user               --&gt; "~user/"    --&gt; named user (slash added)
-     * //server/a/b/c.txt  --&gt; "//server/"
-     * ///a/b/c.txt        --&gt; error, length = -1
+     * a/b/c.txt           --&gt; 0           --&gt; relative
+     * /a/b/c.txt          --&gt; 1           --&gt; absolute
+     * ~/a/b/c.txt         --&gt; 2           --&gt; current user
+     * ~                   --&gt; 2           --&gt; current user (slash added)
+     * ~user/a/b/c.txt     --&gt; 6           --&gt; named user
+     * ~user               --&gt; 6           --&gt; named user (slash added)
+     * //server/a/b/c.txt  --&gt; 9
+     * ///a/b/c.txt        --&gt; -1          --&gt; error
+     * C:                  --&gt; 0           --&gt; valid filename as only null byte and / are reserved characters
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
@@ -671,29 +658,33 @@ public class FilenameUtils {
         if (ch1 == ':') {
             ch0 = Character.toUpperCase(ch0);
             if (ch0 >= 'A' && ch0 <= 'Z') {
-                if (len == 2 || isSeparator(fileName.charAt(2)) == false) {
+                if (len == 2 && !FileSystem.getCurrent().supportsDriveLetter()) {
+                    return 0;
+                }
+                if (len == 2 || !isSeparator(fileName.charAt(2))) {
                     return 2;
                 }
                 return 3;
-            } else if (ch0 == UNIX_SEPARATOR) {
+            }
+            if (ch0 == UNIX_SEPARATOR) {
                 return 1;
             }
             return NOT_FOUND;
 
-        } else if (isSeparator(ch0) && isSeparator(ch1)) {
-            int posUnix = fileName.indexOf(UNIX_SEPARATOR, 2);
-            int posWin = fileName.indexOf(WINDOWS_SEPARATOR, 2);
-            if (posUnix == NOT_FOUND && posWin == NOT_FOUND || posUnix == 2 || posWin == 2) {
-                return NOT_FOUND;
-            }
-            posUnix = posUnix == NOT_FOUND ? posWin : posUnix;
-            posWin = posWin == NOT_FOUND ? posUnix : posWin;
-            final int pos = Math.min(posUnix, posWin) + 1;
-            final String hostnamePart = fileName.substring(2, pos - 1);
-            return isValidHostName(hostnamePart) ? pos : NOT_FOUND;
-        } else {
+        }
+        if (!isSeparator(ch0) || !isSeparator(ch1)) {
             return isSeparator(ch0) ? 1 : 0;
         }
+        int posUnix = fileName.indexOf(UNIX_SEPARATOR, 2);
+        int posWin = fileName.indexOf(WINDOWS_SEPARATOR, 2);
+        if (posUnix == NOT_FOUND && posWin == NOT_FOUND || posUnix == 2 || posWin == 2) {
+            return NOT_FOUND;
+        }
+        posUnix = posUnix == NOT_FOUND ? posWin : posUnix;
+        posWin = posWin == NOT_FOUND ? posUnix : posWin;
+        final int pos = Math.min(posUnix, posWin) + 1;
+        final String hostnamePart = fileName.substring(2, pos - 1);
+        return isValidHostName(hostnamePart) ? pos : NOT_FOUND;
     }
 
     /**
@@ -755,10 +746,9 @@ public class FilenameUtils {
         return lastSeparator > extensionPos ? NOT_FOUND : extensionPos;
     }
 
-    //-----------------------------------------------------------------------
     /**
-     * Gets the prefix from a full fileName, such as <code>C:/</code>
-     * or <code>~/</code>.
+     * Gets the prefix from a full fileName, such as {@code C:/}
+     * or {@code ~/}.
      * <p>
      * This method will handle a file in either Unix or Windows format.
      * The prefix includes the first slash in the full fileName where applicable.
@@ -794,11 +784,11 @@ public class FilenameUtils {
             return null;
         }
         if (len > fileName.length()) {
-            failIfNullBytePresent(fileName + UNIX_SEPARATOR);
+            requireNonNullChars(fileName + UNIX_SEPARATOR);
             return fileName + UNIX_SEPARATOR;
         }
         final String path = fileName.substring(0, len);
-        failIfNullBytePresent(path);
+        requireNonNullChars(path);
         return path;
     }
 
@@ -878,7 +868,7 @@ public class FilenameUtils {
             return EMPTY_STRING;
         }
         final String path = fileName.substring(prefix, endIndex);
-        failIfNullBytePresent(path);
+        requireNonNullChars(path);
         return path;
     }
 
@@ -995,24 +985,22 @@ public class FilenameUtils {
         if (fileName == null) {
             return null;
         }
-        failIfNullBytePresent(fileName);
+        requireNonNullChars(fileName);
         final int index = indexOfLastSeparator(fileName);
         return fileName.substring(index + 1);
     }
 
     /**
-     * Check the input for null bytes, a sign of unsanitized data being passed to to file level functions.
+     * Checks the input for null bytes, a sign of unsanitized data being passed to to file level functions.
      *
      * This may be used for poison byte attacks.
+     *
      * @param path the path to check
      */
-    private static void failIfNullBytePresent(final String path) {
-        final int len = path.length();
-        for (int i = 0; i < len; i++) {
-            if (path.charAt(i) == 0) {
-                throw new IllegalArgumentException("Null byte present in file/path name. There are no " +
-                        "known legitimate use cases for such data, but several injection attacks may use it");
-            }
+    private static void requireNonNullChars(final String path) {
+        if (path.indexOf(0) >= 0) {
+            throw new IllegalArgumentException("Null byte present in file/path name. There are no "
+                + "known legitimate use cases for such data, but several injection attacks may use it");
         }
     }
 
@@ -1099,7 +1087,6 @@ public class FilenameUtils {
         return Math.max(offset1, offset2) + 1;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Removes the extension from a fileName.
      * <p>
@@ -1121,7 +1108,7 @@ public class FilenameUtils {
         if (fileName == null) {
             return null;
         }
-        failIfNullBytePresent(fileName);
+        requireNonNullChars(fileName);
 
         final int index = indexOfExtension(fileName);
         if (index == NOT_FOUND) {
@@ -1130,7 +1117,6 @@ public class FilenameUtils {
         return fileName.substring(0, index);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Checks whether two fileNames are equal exactly.
      * <p>
@@ -1161,7 +1147,6 @@ public class FilenameUtils {
         return equals(fileName1, fileName2, false, IOCase.SYSTEM);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Checks whether two fileNames are equal after both have been normalized.
      * <p>
@@ -1215,9 +1200,13 @@ public class FilenameUtils {
         }
         if (normalized) {
             fileName1 = normalize(fileName1);
+            if (fileName1 == null) {
+                return false;
+            }
             fileName2 = normalize(fileName2);
-            Objects.requireNonNull(fileName1, "Error normalizing one or both of the file names");
-            Objects.requireNonNull(fileName2, "Error normalizing one or both of the file names");
+            if (fileName2 == null) {
+                return false;
+            }
         }
         if (caseSensitivity == null) {
             caseSensitivity = IOCase.SENSITIVE;
@@ -1225,7 +1214,6 @@ public class FilenameUtils {
         return caseSensitivity.checkEquals(fileName1, fileName2);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Checks whether the extension of the fileName is that specified.
      * <p>
@@ -1242,7 +1230,7 @@ public class FilenameUtils {
         if (fileName == null) {
             return false;
         }
-        failIfNullBytePresent(fileName);
+        requireNonNullChars(fileName);
 
         if (extension == null || extension.isEmpty()) {
             return indexOfExtension(fileName) == NOT_FOUND;
@@ -1267,7 +1255,7 @@ public class FilenameUtils {
         if (fileName == null) {
             return false;
         }
-        failIfNullBytePresent(fileName);
+        requireNonNullChars(fileName);
 
         if (extensions == null || extensions.length == 0) {
             return indexOfExtension(fileName) == NOT_FOUND;
@@ -1297,7 +1285,7 @@ public class FilenameUtils {
         if (fileName == null) {
             return false;
         }
-        failIfNullBytePresent(fileName);
+        requireNonNullChars(fileName);
 
         if (extensions == null || extensions.isEmpty()) {
             return indexOfExtension(fileName) == NOT_FOUND;
@@ -1311,7 +1299,6 @@ public class FilenameUtils {
         return false;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Checks a fileName to see if it matches the specified wildcard matcher,
      * always testing case-sensitive.
@@ -1434,12 +1421,10 @@ public class FilenameUtils {
                         if (repeat >= 0) {
                             backtrack.push(new int[] {wcsIdx, repeat});
                         }
-                    } else {
+                    } else if (!caseSensitivity.checkRegionMatches(fileName, textIdx, wcs[wcsIdx])) {
                         // matching from current position
-                        if (!caseSensitivity.checkRegionMatches(fileName, textIdx, wcs[wcsIdx])) {
-                            // couldnt match token
-                            break;
-                        }
+                        // couldn't match token
+                        break;
                     }
 
                     // matched text token, move text index to end of matched token
@@ -1593,7 +1578,7 @@ public class FilenameUtils {
         int emptyOctets = 0; // consecutive empty chunks
         for (int index = 0; index < octets.length; index++) {
             final String octet = octets[index];
-            if (octet.length() == 0) {
+            if (octet.isEmpty()) {
                 emptyOctets++;
                 if (emptyOctets > 1) {
                     return false;
@@ -1611,7 +1596,7 @@ public class FilenameUtils {
                 if (octet.length() > IPV6_MAX_HEX_DIGITS_PER_GROUP) {
                     return false;
                 }
-                int octetInt = 0;
+                final int octetInt;
                 try {
                     octetInt = Integer.parseInt(octet, BASE_16);
                 } catch (final NumberFormatException e) {
@@ -1639,7 +1624,7 @@ public class FilenameUtils {
     private static boolean isRFC3986HostName(final String name) {
         final String[] parts = name.split("\\.", -1);
         for (int i = 0; i < parts.length; i++) {
-            if (parts[i].length() == 0) {
+            if (parts[i].isEmpty()) {
                 // trailing dot is legal, otherwise we've hit a .. sequence
                 return i == parts.length - 1;
             }

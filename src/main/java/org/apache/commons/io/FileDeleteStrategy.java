@@ -48,7 +48,7 @@ public class FileDeleteStrategy {
         /**
          * Deletes the file object.
          * <p>
-         * This implementation uses <code>FileUtils.forceDelete()</code>
+         * This implementation uses {@code FileUtils.forceDelete()}
          * if the file exists.
          * </p>
          *
@@ -100,14 +100,14 @@ public class FileDeleteStrategy {
      * @throws IOException if an error occurs during file deletion
      */
     public void delete(final File fileToDelete) throws IOException {
-        if (fileToDelete.exists() && doDelete(fileToDelete) == false) {
+        if (fileToDelete.exists() && !doDelete(fileToDelete)) {
             throw new IOException("Deletion failed: " + fileToDelete);
         }
     }
 
     /**
      * Deletes the file object, which may be a file or a directory.
-     * All <code>IOException</code>s are caught and false returned instead.
+     * All {@code IOException}s are caught and false returned instead.
      * If the file does not exist or is null, true is returned.
      * <p>
      * Subclass writers should override {@link #doDelete(File)}, not this method.
@@ -117,7 +117,7 @@ public class FileDeleteStrategy {
      * @return true if the file was deleted, or there was no such file
      */
     public boolean deleteQuietly(final @Nullable File fileToDelete) {
-        if (fileToDelete == null || fileToDelete.exists() == false) {
+        if (fileToDelete == null || !fileToDelete.exists()) {
             return true;
         }
         try {
@@ -131,22 +131,23 @@ public class FileDeleteStrategy {
      * Actually deletes the file object, which may be a file or a directory.
      * <p>
      * This method is designed for subclasses to override.
-     * The implementation may return either false or an <code>IOException</code>
+     * The implementation may return either false or an {@code IOException}
      * when deletion fails. The {@link #delete(File)} and {@link #deleteQuietly(File)}
      * methods will handle either response appropriately.
      * A check has been made to ensure that the file will exist.
      * </p>
      * <p>
-     * This implementation uses {@link File#delete()}.
+     * This implementation uses {@link FileUtils#delete(File)}.
      * </p>
      *
-     * @param fileToDelete  the file to delete, exists, not null
+     * @param file  the file to delete, exists, not null
      * @return true if the file was deleted
      * @throws NullPointerException if the file is null
      * @throws IOException if an error occurs during file deletion
      */
-    protected boolean doDelete(final File fileToDelete) throws IOException {
-        return fileToDelete.delete();
+    protected boolean doDelete(final File file) throws IOException {
+        FileUtils.delete(file);
+        return true;
     }
 
     /**

@@ -28,11 +28,10 @@ import org.junit.jupiter.api.Test;
 public class ClosedOutputStreamTest {
 
     /**
-     * Test the <code>write(b)</code> method.
-     * @throws Exception
+     * Test the {@code write(b)} method.
      */
     @Test
-    public void testWrite() throws Exception {
+    public void testWrite() {
         try (ClosedOutputStream cos = new ClosedOutputStream()) {
             cos.write('x');
             fail("write(b)");
@@ -42,11 +41,10 @@ public class ClosedOutputStreamTest {
     }
 
     /**
-     * Test the <code>flush()</code> method.
-     * @throws Exception
+     * Test the {@code flush()} method.
      */
     @Test
-    public void testFlush() throws Exception {
+    public void testFlush() {
         try (ClosedOutputStream cos = new ClosedOutputStream()) {
             cos.flush();
             fail("flush()");

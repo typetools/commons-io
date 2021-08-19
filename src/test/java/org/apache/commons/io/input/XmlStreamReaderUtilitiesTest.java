@@ -31,21 +31,21 @@ import org.junit.jupiter.api.Test;
  */
 public class XmlStreamReaderUtilitiesTest {
 
-    private static String RAWMGS1 = "encoding mismatch";
-    private static String RAWMGS2 = "unknown BOM";
-    private static String HTTPMGS1 = "BOM must be NULL";
-    private static String HTTPMGS2 = "encoding mismatch";
-    private static String HTTPMGS3 = "Invalid MIME";
+    private static final String RAWMGS1 = "encoding mismatch";
+    private static final String RAWMGS2 = "unknown BOM";
+    private static final String HTTPMGS1 = "BOM must be NULL";
+    private static final String HTTPMGS2 = "encoding mismatch";
+    private static final String HTTPMGS3 = "Invalid MIME";
 
-    private static String APPXML         = "application/xml";
-    private static String APPXML_UTF8    = "application/xml;charset=UTF-8";
-    private static String APPXML_UTF16   = "application/xml;charset=UTF-16";
-    private static String APPXML_UTF32   = "application/xml;charset=UTF-32";
-    private static String APPXML_UTF16BE = "application/xml;charset=UTF-16BE";
-    private static String APPXML_UTF16LE = "application/xml;charset=UTF-16LE";
-    private static String APPXML_UTF32BE = "application/xml;charset=UTF-32BE";
-    private static String APPXML_UTF32LE = "application/xml;charset=UTF-32LE";
-    private static String TXTXML = "text/xml";
+    private static final String APPXML         = "application/xml";
+    private static final String APPXML_UTF8    = "application/xml;charset=UTF-8";
+    private static final String APPXML_UTF16   = "application/xml;charset=UTF-16";
+    private static final String APPXML_UTF32   = "application/xml;charset=UTF-32";
+    private static final String APPXML_UTF16BE = "application/xml;charset=UTF-16BE";
+    private static final String APPXML_UTF16LE = "application/xml;charset=UTF-16LE";
+    private static final String APPXML_UTF32BE = "application/xml;charset=UTF-32BE";
+    private static final String APPXML_UTF32LE = "application/xml;charset=UTF-32LE";
+    private static final String TXTXML = "text/xml";
 
     @Test
     public void testContentTypeEncoding() {
@@ -171,7 +171,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     @Test
-    public void testCalculateRawEncodingAdditonalUTF16() throws IOException {
+    public void testCalculateRawEncodingAdditionalUTF16() throws IOException {
         //                           BOM         Guess       XML         Default
         checkRawError(RAWMGS1,       "UTF-16BE", "UTF-16",   null,       null);
         checkRawEncoding("UTF-16BE", "UTF-16BE", null,       "UTF-16",   null);
@@ -186,7 +186,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     @Test
-    public void testCalculateRawEncodingAdditonalUTF32() throws IOException {
+    public void testCalculateRawEncodingAdditionalUTF32() throws IOException {
         //                           BOM         Guess       XML         Default
         checkRawError(RAWMGS1,       "UTF-32BE", "UTF-32",   null,       null);
         checkRawEncoding("UTF-32BE", "UTF-32BE", null,       "UTF-32",   null);

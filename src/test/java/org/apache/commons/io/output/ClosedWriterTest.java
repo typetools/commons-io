@@ -28,11 +28,10 @@ import org.junit.jupiter.api.Test;
 public class ClosedWriterTest {
 
     /**
-     * Test the <code>write(cbuf, off, len)</code> method.
-     * @throws Exception
+     * Test the {@code write(cbuf, off, len)} method.
      */
     @Test
-    public void testWrite() throws Exception {
+    public void testWrite() {
         try (ClosedWriter cw = new ClosedWriter()) {
             cw.write(new char[0], 0, 0);
             fail("write(cbuf, off, len)");
@@ -42,11 +41,10 @@ public class ClosedWriterTest {
     }
 
     /**
-     * Test the <code>flush()</code> method.
-     * @throws Exception
+     * Test the {@code flush()} method.
      */
     @Test
-    public void testFlush() throws Exception {
+    public void testFlush() {
         try (ClosedWriter cw = new ClosedWriter()) {
             cw.flush();
             fail("flush()");

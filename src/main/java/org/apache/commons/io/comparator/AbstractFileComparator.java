@@ -60,7 +60,7 @@ abstract class AbstractFileComparator implements Comparator<File> {
      */
     public @Nullable List<File> sort(final @Nullable List<File> files) {
         if (files != null) {
-            Collections.sort(files, this);
+            files.sort(this);
         }
         return files;
     }

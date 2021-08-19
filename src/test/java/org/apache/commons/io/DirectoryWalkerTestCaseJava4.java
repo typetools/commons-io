@@ -50,15 +50,15 @@ public class DirectoryWalkerTestCaseJava4 {
     private static final File commonsDir = new File(apacheDir, "commons");
     private static final File ioDir = new File(commonsDir, "io");
     private static final File outputDir = new File(ioDir, "output");
-    private static final File[] dirs = new File[]{orgDir, apacheDir, commonsDir, ioDir, outputDir};
+    private static final File[] dirs = {orgDir, apacheDir, commonsDir, ioDir, outputDir};
 
     // Files
     private static final File filenameUtils = new File(ioDir, "FilenameUtils.java");
     private static final File ioUtils = new File(ioDir, "IOUtils.java");
     private static final File proxyWriter = new File(outputDir, "ProxyWriter.java");
     private static final File nullStream = new File(outputDir, "NullOutputStream.java");
-    private static final File[] ioFiles = new File[]{filenameUtils, ioUtils};
-    private static final File[] outputFiles = new File[]{proxyWriter, nullStream};
+    private static final File[] ioFiles = {filenameUtils, ioUtils};
+    private static final File[] outputFiles = {proxyWriter, nullStream};
 
     // Filters
     private static final IOFileFilter dirsFilter = createNameFilter(dirs);
@@ -70,7 +70,6 @@ public class DirectoryWalkerTestCaseJava4 {
     // Filter to exclude SVN files
     private static final IOFileFilter NOT_SVN = FileFilterUtils.makeSVNAware(null);
 
-    //-----------------------------------------------------------------------
 
     /**
      * Test Filtering
@@ -418,7 +417,6 @@ public class DirectoryWalkerTestCaseJava4 {
         private final boolean suppressCancel;
 
         TestCancelWalker(final String cancelFileName, final boolean suppressCancel) {
-            super();
             this.cancelFileName = cancelFileName;
             this.suppressCancel = suppressCancel;
         }
@@ -477,7 +475,6 @@ public class DirectoryWalkerTestCaseJava4 {
         public List results;
 
         TestMultiThreadCancelWalker(final String cancelFileName, final boolean suppressCancel) {
-            super();
             this.cancelFileName = cancelFileName;
             this.suppressCancel = suppressCancel;
         }

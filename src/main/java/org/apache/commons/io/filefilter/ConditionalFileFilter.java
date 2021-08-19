@@ -24,7 +24,6 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
  * Defines operations for conditional file filters.
  *
  * @since 1.1
- *
  */
 public interface ConditionalFileFilter {
 
@@ -39,7 +38,7 @@ public interface ConditionalFileFilter {
                        IOFileFilter ioFileFilter);
 
     /**
-     * Returns this conditional file filter's list of file filters.
+     * Gets this conditional file filter's list of file filters.
      *
      * @return the file filter list
      * @since 1.1

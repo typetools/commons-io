@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.Executors;
@@ -53,16 +54,38 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
         assertEquals(10000, monitor.getInterval(), "Interval");
     }
 
+    @Test
+    public void testCollectionConstructorShouldDoNothingWithNullCollection() {
+        final Collection<FileAlterationObserver> observers = null;
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
+        assertFalse(monitor.getObservers().iterator().hasNext());
+    }
+
+    @Test
+    public void testCollectionConstructorShouldDoNothingWithNullObservers() {
+        final Collection<FileAlterationObserver> observers = new ArrayList<>(5);
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
+        assertFalse(monitor.getObservers().iterator().hasNext());
+    }
+
+    @Test
+    public void testCollectionConstructor() {
+        observer = new FileAlterationObserver("foo");
+        final Collection<FileAlterationObserver> observers = Arrays.asList(observer);
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
+        final Iterator<FileAlterationObserver> iterator = monitor.getObservers().iterator();
+        assertEquals(observer, iterator.next());
+    }
+
     /**
      * Test add/remove observers.
      */
     @Test
     public void testAddRemoveObservers() {
         FileAlterationObserver[] observers = null;
-        FileAlterationMonitor monitor = null;
 
         // Null Observers
-        monitor = new FileAlterationMonitor(123, observers);
+        FileAlterationMonitor monitor = new FileAlterationMonitor(123, observers);
         assertEquals(123, monitor.getInterval(), "Interval");
         assertFalse(monitor.getObservers().iterator().hasNext(), "Observers[1]");
 

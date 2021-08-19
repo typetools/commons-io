@@ -45,7 +45,7 @@ import org.checkerframework.common.value.qual.ArrayLen;
  */
 public class CompositeFileComparator extends AbstractFileComparator implements Serializable {
 
-    private static final Comparator<?> @ArrayLen(0) [] EMPTY_COMPARATOR_ARRAY = new Comparator<?>[0];
+    private static final Comparator<?> @ArrayLen(0) [] EMPTY_COMPARATOR_ARRAY = {};
     private static final long serialVersionUID = -2224170307287243428L;
     private static final Comparator<?>[] NO_COMPARATORS = {};
     private final Comparator<File>[] delegates;

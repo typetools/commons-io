@@ -17,10 +17,17 @@
 package org.apache.commons.io.filefilter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+/**
+ * Tests {@link AndFileFilter}.
+ */
 public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase {
 
   private static final String DEFAULT_WORKING_PATH = "./AndFileFilterTestCase/";
@@ -113,9 +120,9 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
       filters.add(trueFilters[2]);
       filters.add(trueFilters[3]);
       // test 1 true results
-      final boolean[] trueResults = new boolean[] {true, true, true};
+      final boolean[] trueResults = {true, true, true};
       // test 1 false results
-      final boolean[] falseResults = new boolean[] {false, false, false};
+      final boolean[] falseResults = {false, false, false};
 
       testFilters.add(1, filters);
       testTrueResults.add(1, trueResults);
@@ -135,9 +142,9 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
       filters.add(falseFilters[2]);
       filters.add(falseFilters[3]);
       // test 2 true results
-      final boolean[] trueResults = new boolean[] {false, false, false};
+      final boolean[] trueResults = {false, false, false};
       // test 2 false results
-      final boolean[] falseResults = new boolean[] {true, false, false};
+      final boolean[] falseResults = {true, false, false};
 
       testFilters.add(2, filters);
       testTrueResults.add(2, trueResults);
@@ -157,9 +164,9 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
       filters.add(falseFilters[2]);
       filters.add(falseFilters[3]);
       // test 3 true results
-      final boolean[] trueResults = new boolean[] {true, false, false};
+      final boolean[] trueResults = {true, false, false};
       // test 3 false results
-      final boolean[] falseResults = new boolean[] {true, false, false};
+      final boolean[] falseResults = {true, false, false};
 
       testFilters.add(3, filters);
       testTrueResults.add(3, trueResults);
@@ -179,9 +186,9 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
       filters.add(falseFilters[2]);
       filters.add(falseFilters[3]);
       // test 4 true results
-      final boolean[] trueResults = new boolean[] {true, true, false};
+      final boolean[] trueResults = {true, true, false};
       // test 4 false results
-      final boolean[] falseResults = new boolean[] {true, false, false};
+      final boolean[] falseResults = {true, false, false};
 
       testFilters.add(4, filters);
       testTrueResults.add(4, trueResults);
@@ -201,9 +208,9 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
       filters.add(trueFilters[2]);
       filters.add(trueFilters[3]);
       // test 5 true results
-      final boolean[] trueResults = new boolean[] {false, false, false};
+      final boolean[] trueResults = {false, false, false};
       // test 5 false results
-      final boolean[] falseResults = new boolean[] {true, false, false};
+      final boolean[] falseResults = {true, false, false};
 
       testFilters.add(5, filters);
       testTrueResults.add(5, trueResults);
@@ -222,9 +229,9 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
       filters.add(trueFilters[3]);
       filters.add(falseFilters[3]);
       // test 6 true results
-      final boolean[] trueResults = new boolean[] {true, false, false};
+      final boolean[] trueResults = {true, false, false};
       // test 6 false results
-      final boolean[] falseResults = new boolean[] {true, false, false};
+      final boolean[] falseResults = {true, false, false};
 
       testFilters.add(6, filters);
       testTrueResults.add(6, trueResults);
@@ -243,9 +250,9 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
       filters.add(trueFilters[2]);
       filters.add(trueFilters[3]);
       // test 7 true results
-      final boolean[] trueResults = new boolean[] {false, false, false};
+      final boolean[] trueResults = {false, false, false};
       // test 7 false results
-      final boolean[] falseResults = new boolean[] {true, false, false};
+      final boolean[] falseResults = {true, false, false};
 
       testFilters.add(7, filters);
       testTrueResults.add(7, trueResults);
@@ -262,9 +269,9 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
       filters.add(trueFilters[3]);
       filters.add(falseFilters[1]);
       // test 8 true results
-      final boolean[] trueResults = new boolean[] {true, true, true};
+      final boolean[] trueResults = {true, true, true};
       // test 8 false results
-      final boolean[] falseResults = new boolean[] {true, false, false};
+      final boolean[] falseResults = {true, false, false};
 
       testFilters.add(8, filters);
       testTrueResults.add(8, trueResults);
@@ -280,9 +287,9 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
       filters.add(falseFilters[2]);
       filters.add(falseFilters[3]);
       // test 9 true results
-      final boolean[] trueResults = new boolean[] {false, false, false};
+      final boolean[] trueResults = {false, false, false};
       // test 9 false results
-      final boolean[] falseResults = new boolean[] {true, false, false};
+      final boolean[] falseResults = {true, false, false};
 
       testFilters.add(9, filters);
       testTrueResults.add(9, trueResults);
@@ -290,5 +297,19 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
       testFileResults.add(9, Boolean.FALSE);
       testFilenameResults.add(9, Boolean.FALSE);
     }
+  }
+
+  @Test
+  public void setTestFiltersClearsOld() {
+    // test that new filters correctly clear old filters
+    final List<IOFileFilter> simpleEmptyFileFilter = Collections.singletonList(EmptyFileFilter.EMPTY);
+    final AndFileFilter andFileFilter = new AndFileFilter(simpleEmptyFileFilter);
+    // make sure the filters at this point are the same
+    assertEquals(simpleEmptyFileFilter, andFileFilter.getFileFilters());
+
+    final List<IOFileFilter> simpleNonEmptyFilter = Collections.singletonList(EmptyFileFilter.NOT_EMPTY);
+    // when calling the setter the filters should reference the new filters
+    andFileFilter.setFileFilters(simpleNonEmptyFilter);
+    assertEquals(simpleNonEmptyFilter, andFileFilter.getFileFilters());
   }
 }

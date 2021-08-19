@@ -63,11 +63,12 @@ import java.nio.charset.CodingErrorAction;
  * in the design of the code. This class is typically used in situations where an existing
  * API only accepts an {@link OutputStream} object, but where the stream is known to represent
  * character data that must be decoded for further use.
+ * </p>
  * <p>
  * Instances of {@link WriterOutputStream} are not thread safe.
+ * </p>
  *
  * @see org.apache.commons.io.input.ReaderInputStream
- *
  * @since 2.0
  */
 public class WriterOutputStream extends OutputStream {
@@ -209,7 +210,7 @@ public class WriterOutputStream extends OutputStream {
      * @param b the byte array containing the bytes to write
      * @param off the start offset in the byte array
      * @param len the number of bytes to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(final byte[] b, int off, int len) throws IOException {
@@ -229,7 +230,7 @@ public class WriterOutputStream extends OutputStream {
      * Write bytes from the specified byte array to the stream.
      *
      * @param b the byte array containing the bytes to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(final byte[] b) throws IOException {
@@ -240,18 +241,18 @@ public class WriterOutputStream extends OutputStream {
      * Write a single byte to the stream.
      *
      * @param b the byte to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(final int b) throws IOException {
-        write(new byte[] { (byte)b }, 0, 1);
+        write(new byte[] {(byte) b}, 0, 1);
     }
 
     /**
      * Flush the stream. Any remaining content accumulated in the output buffer
      * will be written to the underlying {@link Writer}. After that
      * {@link Writer#flush()} will be called.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void flush() throws IOException {
@@ -263,7 +264,7 @@ public class WriterOutputStream extends OutputStream {
      * Close the stream. Any remaining content accumulated in the output buffer
      * will be written to the underlying {@link Writer}. After that
      * {@link Writer#close()} will be called.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
@@ -276,7 +277,7 @@ public class WriterOutputStream extends OutputStream {
      * Decode the contents of the input ByteBuffer into a CharBuffer.
      *
      * @param endOfInput indicates end of input
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     private void processInput(final boolean endOfInput) throws IOException {
         // Prepare decoderIn for reading
@@ -301,7 +302,7 @@ public class WriterOutputStream extends OutputStream {
     /**
      * Flush the output.
      *
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     private void flushOutput() throws IOException {
         if (decoderOut.position() > 0) {
@@ -332,14 +333,14 @@ public class WriterOutputStream extends OutputStream {
             try {
                 charsetDecoder2.decode(bb2, cb2, i == (len - 1));
             } catch ( final IllegalArgumentException e){
-                throw new UnsupportedOperationException("UTF-16 requested when runninng on an IBM JDK with broken UTF-16 support. " +
+                throw new UnsupportedOperationException("UTF-16 requested when running on an IBM JDK with broken UTF-16 support. " +
                         "Please find a JDK that supports UTF-16 if you intend to use UF-16 with WriterOutputStream");
             }
             bb2.compact();
         }
         cb2.rewind();
         if (!TEST_STRING_2.equals(cb2.toString())){
-            throw new UnsupportedOperationException("UTF-16 requested when runninng on an IBM JDK with broken UTF-16 support. " +
+            throw new UnsupportedOperationException("UTF-16 requested when running on an IBM JDK with broken UTF-16 support. " +
                     "Please find a JDK that supports UTF-16 if you intend to use UF-16 with WriterOutputStream");
         }
 

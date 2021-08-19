@@ -16,9 +16,12 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.FilterReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.function.IntPredicate;
 
 /**
  * A filter reader that filters out characters where subclasses decide which characters to filter out.
@@ -26,13 +29,43 @@ import java.io.Reader;
 public abstract class AbstractCharacterFilterReader extends FilterReader {
 
     /**
+     * Skips nothing.
+     *
+     * @since 2.9.0
+     */
+    protected static final IntPredicate SKIP_NONE = ch -> false;
+
+    private final IntPredicate skip;
+
+    /**
      * Constructs a new reader.
      *
-     * @param reader
-     *            the reader to filter
+     * @param reader the reader to filter
      */
     protected AbstractCharacterFilterReader(final Reader reader) {
+        this(reader, SKIP_NONE);
+    }
+
+    /**
+     * Constructs a new reader.
+     *
+     * @param reader the reader to filter.
+     * @param skip Skip test.
+     * @since 2.9.0
+     */
+    protected AbstractCharacterFilterReader(final Reader reader, final IntPredicate skip) {
         super(reader);
+        this.skip = skip == null ? SKIP_NONE : skip;
+    }
+
+    /**
+     * Returns true if the given character should be filtered out, false to keep the character.
+     *
+     * @param ch the character to test.
+     * @return true if the given character should be filtered out, false to keep the character.
+     */
+    protected boolean filter(final int ch) {
+        return skip.test(ch);
     }
 
     @Override
@@ -40,24 +73,15 @@ public abstract class AbstractCharacterFilterReader extends FilterReader {
         int ch;
         do {
             ch = in.read();
-        } while (filter(ch));
+        } while (ch != EOF && filter(ch));
         return ch;
     }
-
-    /**
-     * Returns true if the given character should be filtered out, false to keep the character.
-     *
-     * @param ch
-     *            the character to test.
-     * @return true if the given character should be filtered out, false to keep the character.
-     */
-    protected abstract boolean filter(int ch);
 
     @Override
     public int read(final char[] cbuf, final int off, final int len) throws IOException {
         final int read = super.read(cbuf, off, len);
-        if (read == -1) {
-            return -1;
+        if (read == EOF) {
+            return EOF;
         }
         int pos = off - 1;
         for (int readPos = off; readPos < off + read; readPos++) {

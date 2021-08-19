@@ -92,7 +92,7 @@ public class FileUtilsCleanDirectoryTestCase {
             FileUtils.cleanDirectory(top);
             fail("expected IOException");
         } catch (final IOException e) {
-            assertEquals("Failed to list contents of " + top.getAbsolutePath(), e.getMessage());
+            assertEquals("Unknown I/O error listing contents of directory: " + top.getAbsolutePath(), e.getMessage());
         } finally {
             chmod(top, 755, false);
         }
@@ -111,8 +111,8 @@ public class FileUtilsCleanDirectoryTestCase {
             FileUtils.cleanDirectory(top);
             fail("expected IOException");
         } catch (final IOException e) {
-            final IOExceptionList list = (IOExceptionList) e;  
-            assertEquals("Unable to delete file: " + file.getAbsolutePath(), list.getCause(0).getMessage());
+            final IOExceptionList list = (IOExceptionList) e;
+            assertEquals("Cannot delete file: " + file.getAbsolutePath(), list.getCause(0).getMessage());
         } finally {
             chmod(top, 755, false);
         }
@@ -130,7 +130,7 @@ public class FileUtilsCleanDirectoryTestCase {
         args.add(Integer.toString(mode));
         args.add(file.getAbsolutePath());
 
-        Process proc;
+        final Process proc;
 
         try {
             proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));

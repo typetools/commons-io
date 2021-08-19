@@ -31,7 +31,6 @@ import java.util.List;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NameFileFilter;
-import org.apache.commons.io.filefilter.OrFileFilter;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -50,27 +49,26 @@ public class DirectoryWalkerTestCase {
     private static final File commonsDir   = new File(apacheDir, "commons");
     private static final File ioDir        = new File(commonsDir, "io");
     private static final File outputDir    = new File(ioDir, "output");
-    private static final File[] dirs       = new File[] {orgDir, apacheDir, commonsDir, ioDir, outputDir};
+    private static final File[] dirs       = {orgDir, apacheDir, commonsDir, ioDir, outputDir};
 
     // Files
     private static final File filenameUtils = new File(ioDir, "FilenameUtils.java");
     private static final File ioUtils       = new File(ioDir, "IOUtils.java");
     private static final File proxyWriter   = new File(outputDir, "ProxyWriter.java");
     private static final File nullStream    = new File(outputDir, "NullOutputStream.java");
-    private static final File[] ioFiles     = new File[] {filenameUtils, ioUtils};
-    private static final File[] outputFiles = new File[] {proxyWriter, nullStream};
+    private static final File[] ioFiles     = {filenameUtils, ioUtils};
+    private static final File[] outputFiles = {proxyWriter, nullStream};
 
     // Filters
     private static final IOFileFilter dirsFilter        = createNameFilter(dirs);
     private static final IOFileFilter iofilesFilter     = createNameFilter(ioFiles);
     private static final IOFileFilter outputFilesFilter = createNameFilter(outputFiles);
-    private static final IOFileFilter ioDirAndFilesFilter = new OrFileFilter(dirsFilter, iofilesFilter);
-    private static final IOFileFilter dirsAndFilesFilter = new OrFileFilter(ioDirAndFilesFilter, outputFilesFilter);
+    private static final IOFileFilter ioDirAndFilesFilter = dirsFilter.or(iofilesFilter);
+    private static final IOFileFilter dirsAndFilesFilter = ioDirAndFilesFilter.or(outputFilesFilter);
 
     // Filter to exclude SVN files
     private static final IOFileFilter NOT_SVN = FileFilterUtils.makeSVNAware(null);
 
-    //-----------------------------------------------------------------------
 
     /**
      * Test Filtering
@@ -442,7 +440,6 @@ public class DirectoryWalkerTestCase {
         private final boolean suppressCancel;
 
         TestCancelWalker(final String cancelFileName,final boolean suppressCancel) {
-            super();
             this.cancelFileName = cancelFileName;
             this.suppressCancel = suppressCancel;
         }
@@ -493,7 +490,6 @@ public class DirectoryWalkerTestCase {
         public List<File> results;
 
         TestMultiThreadCancelWalker(final String cancelFileName, final boolean suppressCancel) {
-            super();
             this.cancelFileName = cancelFileName;
             this.suppressCancel = suppressCancel;
         }

@@ -20,6 +20,7 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ClosedInputStream;
 
 import java.io.InputStream;
@@ -39,8 +40,8 @@ import static org.apache.commons.io.IOUtils.EOF;
  * is written into a byte array. The buffer automatically grows as data
  * is written to it.
  * <p>
- * The data can be retrieved using <code>toByteArray()</code> and
- * <code>toString()</code>.
+ * The data can be retrieved using {@code toByteArray()} and
+ * {@code toString()}.
  * Closing an {@code AbstractByteArrayOutputStream} has no effect. The methods in
  * this class can be called after the stream has been closed without
  * generating an {@code IOException}.
@@ -65,9 +66,6 @@ import static org.apache.commons.io.IOUtils.EOF;
 public abstract class AbstractByteArrayOutputStream extends OutputStream {
 
     static final int DEFAULT_SIZE = 1024;
-
-    /** A singleton empty byte array. */
-    private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
     /** The list of buffers, which grows and never reduces. */
     private final List<byte[]> buffers = new ArrayList<>();
@@ -102,7 +100,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
             currentBuffer = buffers.get(currentBufferIndex);
         } else {
             //Creating new buffer
-            int newBufferSize;
+            final int newBufferSize;
             if (currentBuffer == null) {
                 newBufferSize = newcount;
                 filledBufferSum = 0;
@@ -114,7 +112,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
             }
 
             currentBufferIndex++;
-            currentBuffer = new byte[newBufferSize];
+            currentBuffer = IOUtils.byteArray(newBufferSize);
             buffers.add(currentBuffer);
         }
     }
@@ -290,7 +288,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
 
     /**
      * Gets the current contents of this byte stream as a Input Stream. The
-     * returned stream is backed by buffers of <code>this</code> stream,
+     * returned stream is backed by buffers of {@code this} stream,
      * avoiding memory allocation and copy, thus saving space and time.<br>
      *
      * @return the current contents of this output stream.
@@ -302,7 +300,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
 
     /**
      * Gets the current contents of this byte stream as a Input Stream. The
-     * returned stream is backed by buffers of <code>this</code> stream,
+     * returned stream is backed by buffers of {@code this} stream,
      * avoiding memory allocation and copy, thus saving space and time.<br>
      *
      * @param <T> the type of the InputStream which makes up
@@ -315,6 +313,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
      * @see #reset()
      * @since 2.7
      */
+    @SuppressWarnings("resource") // The result InputStream MUST be managed by the call site.
     protected <T extends InputStream> InputStream toInputStream(
             final InputStreamConstructor<T> isConstructor) {
         int remaining = count;
@@ -373,9 +372,9 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     protected byte[] toByteArrayImpl() {
         int remaining = count;
         if (remaining == 0) {
-            return EMPTY_BYTE_ARRAY;
+            return IOUtils.EMPTY_BYTE_ARRAY;
         }
-        final byte[] newbuf = new byte[remaining];
+        final byte[] newbuf = IOUtils.byteArray(remaining);
         int pos = 0;
         for (final byte[] buf : buffers) {
             final int c = Math.min(buf.length, remaining);

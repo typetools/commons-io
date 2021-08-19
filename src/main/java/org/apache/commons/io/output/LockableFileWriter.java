@@ -34,20 +34,21 @@ import org.checkerframework.checker.initialization.qual.UnderInitialization;
  * FileWriter that will create and honor lock files to allow simple
  * cross thread file lock handling.
  * <p>
- * This class provides a simple alternative to <code>FileWriter</code>
+ * This class provides a simple alternative to {@code FileWriter}
  * that will use a lock file to prevent duplicate writes.
+ * </p>
  * <p>
- * <b>N.B.</b> the lock file is deleted when {@link #close()} is called
+ * <b>Note:</b> The lock file is deleted when {@link #close()} is called
  * - or if the main file cannot be opened initially.
- * In the (unlikely) event that the lockfile cannot be deleted,
- * this is not reported, and subsequent requests using
- * the same lockfile will fail.
+ * In the (unlikely) event that the lock file cannot be deleted,
+ * an exception is thrown.
+ * </p>
  * <p>
  * By default, the file will be overwritten, but this may be changed to append.
  * The lock directory may be specified, but defaults to the system property
- * <code>java.io.tmpdir</code>.
+ * {@code java.io.tmpdir}.
  * The encoding may also be specified, and defaults to the platform default.
- *
+ * </p>
  */
 public class LockableFileWriter extends Writer {
     // Cannot extend ProxyWriter, as requires writer to be
@@ -58,6 +59,7 @@ public class LockableFileWriter extends Writer {
 
     /** The writer to decorate. */
     private final Writer out;
+
     /** The lock file. */
     private final File lockFile;
 
@@ -178,7 +180,6 @@ public class LockableFileWriter extends Writer {
      */
     public LockableFileWriter(File file, final @Nullable Charset charset, final boolean append,
             @Nullable String lockDir) throws IOException {
-        super();
         // init file to create/append
         file = file.getAbsoluteFile();
         if (file.getParentFile() != null) {
@@ -222,7 +223,6 @@ public class LockableFileWriter extends Writer {
         this(file, Charsets.toCharset(charsetName), append, lockDir);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Tests that we can write to the lock directory.
      *
@@ -258,7 +258,7 @@ public class LockableFileWriter extends Writer {
     }
 
     /**
-     * Initialise the wrapped file writer.
+     * Initializes the wrapped file writer.
      * Ensure that a cleanup occurs if the writer creation fails.
      *
      * @param file  the file to be accessed
@@ -276,65 +276,63 @@ public class LockableFileWriter extends Writer {
 
         } catch (final IOException | RuntimeException ex) {
             FileUtils.deleteQuietly(lockFile);
-            if (fileExistedAlready == false) {
+            if (!fileExistedAlready) {
                 FileUtils.deleteQuietly(file);
             }
             throw ex;
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
-     * Closes the file writer and deletes the lockfile (if possible).
+     * Closes the file writer and deletes the lock file.
      *
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
         try {
             out.close();
         } finally {
-            lockFile.delete();
+            FileUtils.delete(lockFile);
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
-     * Write a character.
-     * @param idx the character to write
-     * @throws IOException if an I/O error occurs
+     * Writes a character.
+     * @param c the character to write
+     * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void write(final int idx) throws IOException {
-        out.write(idx);
+    public void write(final int c) throws IOException {
+        out.write(c);
     }
 
     /**
-     * Write the characters from an array.
-     * @param chr the characters to write
-     * @throws IOException if an I/O error occurs
+     * Writes the characters from an array.
+     * @param cbuf the characters to write
+     * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void write(final char[] chr) throws IOException {
-        out.write(chr);
+    public void write(final char[] cbuf) throws IOException {
+        out.write(cbuf);
     }
 
     /**
-     * Write the specified characters from an array.
-     * @param chr the characters to write
-     * @param st The start offset
-     * @param end The number of characters to write
-     * @throws IOException if an I/O error occurs
+     * Writes the specified characters from an array.
+     * @param cbuf the characters to write
+     * @param off The start offset
+     * @param len The number of characters to write
+     * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void write(final char[] chr, final int st, final int end) throws IOException {
-        out.write(chr, st, end);
+    public void write(final char[] cbuf, final int off, final int len) throws IOException {
+        out.write(cbuf, off, len);
     }
 
     /**
-     * Write the characters from a string.
+     * Writes the characters from a string.
      * @param str the string to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(final String str) throws IOException {
@@ -342,20 +340,20 @@ public class LockableFileWriter extends Writer {
     }
 
     /**
-     * Write the specified characters from a string.
+     * Writes the specified characters from a string.
      * @param str the string to write
-     * @param st The start offset
-     * @param end The number of characters to write
-     * @throws IOException if an I/O error occurs
+     * @param off The start offset
+     * @param len The number of characters to write
+     * @throws IOException if an I/O error occurs.
      */
     @Override
-    public void write(final String str, final int st, final int end) throws IOException {
-        out.write(str, st, end);
+    public void write(final String str, final int off, final int len) throws IOException {
+        out.write(str, off, len);
     }
 
     /**
-     * Flush the stream.
-     * @throws IOException if an I/O error occurs
+     * Flushes the stream.
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void flush() throws IOException {

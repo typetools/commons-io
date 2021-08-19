@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
@@ -36,7 +37,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * @since 2.7
  */
 public class DeletingPathVisitor extends CountingPathVisitor {
-
 
     /**
      * Creates a new instance configured with a BigInteger {@link PathCounters}.
@@ -58,21 +58,39 @@ public class DeletingPathVisitor extends CountingPathVisitor {
 
     private final String[] skip;
     private final boolean overrideReadOnly;
+    private final LinkOption[] linkOptions;
 
     /**
      * Constructs a new visitor that deletes files except for the files and directories explicitly given.
      *
      * @param pathCounter How to count visits.
-     * @param deleteOption options indicating how deletion is handled.
+     * @param deleteOption How deletion is handled.
      * @param skip The files to skip deleting.
      * @since 2.8.0
      */
-    public DeletingPathVisitor(final PathCounters pathCounter, final DeleteOption[] deleteOption, final String @Nullable ... skip) {
+    public DeletingPathVisitor(final PathCounters pathCounter, final DeleteOption[] deleteOption,
+        final String @Nullable ... skip) {
+        this(pathCounter, PathUtils.NOFOLLOW_LINK_OPTION_ARRAY, deleteOption, skip);
+    }
+
+    /**
+     * Constructs a new visitor that deletes files except for the files and directories explicitly given.
+     *
+     * @param pathCounter How to count visits.
+     * @param linkOptions How symbolic links are handled.
+     * @param deleteOption How deletion is handled.
+     * @param skip The files to skip deleting.
+     * @since 2.9.0
+     */
+    public DeletingPathVisitor(final PathCounters pathCounter, final LinkOption[] linkOptions,
+        final DeleteOption[] deleteOption, final String @Nullable ... skip) {
         super(pathCounter);
         final String[] temp = skip != null ? skip.clone() : EMPTY_STRING_ARRAY;
         Arrays.sort(temp);
         this.skip = temp;
         this.overrideReadOnly = StandardDeleteOption.overrideReadOnly(deleteOption);
+        // TODO Files.deleteIfExists() never follows links, so use LinkOption.NOFOLLOW_LINKS in other calls to Files.
+        this.linkOptions = linkOptions == null ? PathUtils.NOFOLLOW_LINK_OPTION_ARRAY : linkOptions.clone();
     }
 
     /**
@@ -137,12 +155,23 @@ public class DeletingPathVisitor extends CountingPathVisitor {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-        // Files.deleteIfExists() never follows links, so use LinkOption.NOFOLLOW_LINKS in other calls to Files.
-        if (accept(file) && Files.exists(file, LinkOption.NOFOLLOW_LINKS)) {
-            if (overrideReadOnly) {
-                PathUtils.setReadOnly(file, false, LinkOption.NOFOLLOW_LINKS);
+        if (accept(file)) {
+            // delete files and valid links, respecting linkOptions
+            if (Files.exists(file, linkOptions)) {
+                if (overrideReadOnly) {
+                    PathUtils.setReadOnly(file, false, linkOptions);
+                }
+                Files.deleteIfExists(file);
             }
-            Files.deleteIfExists(file);
+            // invalid links will survive previous delete, different approach needed:
+            if (Files.isSymbolicLink(file)) {
+                try {
+                    // deleteIfExists does not work for this case
+                    Files.delete(file);
+                } catch (final NoSuchFileException e) {
+                    // ignore
+                }
+            }
         }
         updateFileCounters(file, attrs);
         return FileVisitResult.CONTINUE;

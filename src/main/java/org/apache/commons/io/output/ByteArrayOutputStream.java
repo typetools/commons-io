@@ -59,7 +59,8 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
                 || ((off + len) > b.length)
                 || ((off + len) < 0)) {
             throw new IndexOutOfBoundsException();
-        } else if (len == 0) {
+        }
+        if (len == 0) {
             return;
         }
         synchronized (this) {
@@ -96,7 +97,7 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
     }
 
     /**
-     * Fetches entire contents of an <code>InputStream</code> and represent
+     * Fetches entire contents of an {@code InputStream} and represent
      * same data as result InputStream.
      * <p>
      * This method is useful where,
@@ -110,11 +111,11 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
      * It can be used in favor of {@link #toByteArray()}, since it
      * avoids unnecessary allocation and copy of byte[].<br>
      * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedInputStream</code>.
+     * {@code BufferedInputStream}.
      *
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.0
      */
     public static InputStream toBufferedInputStream(final InputStream input)
@@ -123,7 +124,7 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
     }
 
     /**
-     * Fetches entire contents of an <code>InputStream</code> and represent
+     * Fetches entire contents of an {@code InputStream} and represent
      * same data as result InputStream.
      * <p>
      * This method is useful where,
@@ -137,12 +138,12 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
      * It can be used in favor of {@link #toByteArray()}, since it
      * avoids unnecessary allocation and copy of byte[].<br>
      * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedInputStream</code>.
+     * {@code BufferedInputStream}.
      *
      * @param input Stream to be fully buffered.
      * @param size the initial buffer size
      * @return A fully buffered stream.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.5
      */
     public static InputStream toBufferedInputStream(final InputStream input, final int size)

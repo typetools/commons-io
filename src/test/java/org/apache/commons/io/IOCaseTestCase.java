@@ -38,9 +38,8 @@ public class IOCaseTestCase {
 
     private static final boolean WINDOWS = File.separatorChar == '\\';
 
-    //-----------------------------------------------------------------------
     @Test
-    public void test_forName() throws Exception {
+    public void test_forName() {
         assertEquals(IOCase.SENSITIVE, IOCase.forName("Sensitive"));
         assertEquals(IOCase.INSENSITIVE, IOCase.forName("Insensitive"));
         assertEquals(IOCase.SYSTEM, IOCase.forName("System"));
@@ -62,28 +61,27 @@ public class IOCaseTestCase {
     }
 
     @Test
-    public void test_getName() throws Exception {
+    public void test_getName() {
         assertEquals("Sensitive", IOCase.SENSITIVE.getName());
         assertEquals("Insensitive", IOCase.INSENSITIVE.getName());
         assertEquals("System", IOCase.SYSTEM.getName());
     }
 
     @Test
-    public void test_toString() throws Exception {
+    public void test_toString() {
         assertEquals("Sensitive", IOCase.SENSITIVE.toString());
         assertEquals("Insensitive", IOCase.INSENSITIVE.toString());
         assertEquals("System", IOCase.SYSTEM.toString());
     }
 
     @Test
-    public void test_isCaseSensitive() throws Exception {
+    public void test_isCaseSensitive() {
         assertTrue(IOCase.SENSITIVE.isCaseSensitive());
         assertFalse(IOCase.INSENSITIVE.isCaseSensitive());
         assertEquals(!WINDOWS, IOCase.SYSTEM.isCaseSensitive());
     }
-    //-----------------------------------------------------------------------
     @Test
-    public void test_checkCompare_functionality() throws Exception {
+    public void test_checkCompare_functionality() {
         assertTrue(IOCase.SENSITIVE.checkCompareTo("ABC", "") > 0);
         assertTrue(IOCase.SENSITIVE.checkCompareTo("", "ABC") < 0);
         assertTrue(IOCase.SENSITIVE.checkCompareTo("ABC", "DEF") < 0);
@@ -106,7 +104,7 @@ public class IOCaseTestCase {
     }
 
     @Test
-    public void test_checkCompare_case() throws Exception {
+    public void test_checkCompare_case() {
         assertEquals(0, IOCase.SENSITIVE.checkCompareTo("ABC", "ABC"));
         assertTrue(IOCase.SENSITIVE.checkCompareTo("ABC", "abc") < 0);
         assertTrue(IOCase.SENSITIVE.checkCompareTo("abc", "ABC") > 0);
@@ -121,9 +119,8 @@ public class IOCaseTestCase {
     }
 
 
-    //-----------------------------------------------------------------------
     @Test
-    public void test_checkEquals_functionality() throws Exception {
+    public void test_checkEquals_functionality() {
         assertFalse(IOCase.SENSITIVE.checkEquals("ABC", ""));
         assertFalse(IOCase.SENSITIVE.checkEquals("ABC", "A"));
         assertFalse(IOCase.SENSITIVE.checkEquals("ABC", "AB"));
@@ -149,7 +146,7 @@ public class IOCaseTestCase {
     }
 
     @Test
-    public void test_checkEquals_case() throws Exception {
+    public void test_checkEquals_case() {
         assertTrue(IOCase.SENSITIVE.checkEquals("ABC", "ABC"));
         assertFalse(IOCase.SENSITIVE.checkEquals("ABC", "Abc"));
 
@@ -160,9 +157,8 @@ public class IOCaseTestCase {
         assertEquals(WINDOWS, IOCase.SYSTEM.checkEquals("ABC", "Abc"));
     }
 
-    //-----------------------------------------------------------------------
     @Test
-    public void test_checkStartsWith_functionality() throws Exception {
+    public void test_checkStartsWith_functionality() {
         assertTrue(IOCase.SENSITIVE.checkStartsWith("ABC", ""));
         assertTrue(IOCase.SENSITIVE.checkStartsWith("ABC", "A"));
         assertTrue(IOCase.SENSITIVE.checkStartsWith("ABC", "AB"));
@@ -173,22 +169,13 @@ public class IOCaseTestCase {
         assertFalse(IOCase.SENSITIVE.checkStartsWith("", "ABC"));
         assertTrue(IOCase.SENSITIVE.checkStartsWith("", ""));
 
-        try {
-            IOCase.SENSITIVE.checkStartsWith("ABC", null);
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkStartsWith(null, "ABC");
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkStartsWith(null, null);
-            fail();
-        } catch (final NullPointerException ignore) {}
+        assertFalse(IOCase.SENSITIVE.checkStartsWith("ABC", null));
+        assertFalse(IOCase.SENSITIVE.checkStartsWith(null, "ABC"));
+        assertFalse(IOCase.SENSITIVE.checkStartsWith(null, null));
     }
 
     @Test
-    public void test_checkStartsWith_case() throws Exception {
+    public void test_checkStartsWith_case() {
         assertTrue(IOCase.SENSITIVE.checkStartsWith("ABC", "AB"));
         assertFalse(IOCase.SENSITIVE.checkStartsWith("ABC", "Ab"));
 
@@ -199,9 +186,8 @@ public class IOCaseTestCase {
         assertEquals(WINDOWS, IOCase.SYSTEM.checkStartsWith("ABC", "Ab"));
     }
 
-    //-----------------------------------------------------------------------
     @Test
-    public void test_checkEndsWith_functionality() throws Exception {
+    public void test_checkEndsWith_functionality() {
         assertTrue(IOCase.SENSITIVE.checkEndsWith("ABC", ""));
         assertFalse(IOCase.SENSITIVE.checkEndsWith("ABC", "A"));
         assertFalse(IOCase.SENSITIVE.checkEndsWith("ABC", "AB"));
@@ -212,22 +198,13 @@ public class IOCaseTestCase {
         assertFalse(IOCase.SENSITIVE.checkEndsWith("", "ABC"));
         assertTrue(IOCase.SENSITIVE.checkEndsWith("", ""));
 
-        try {
-            IOCase.SENSITIVE.checkEndsWith("ABC", null);
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkEndsWith(null, "ABC");
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkEndsWith(null, null);
-            fail();
-        } catch (final NullPointerException ignore) {}
+        assertFalse(IOCase.SENSITIVE.checkEndsWith("ABC", null));
+        assertFalse(IOCase.SENSITIVE.checkEndsWith(null, "ABC"));
+        assertFalse(IOCase.SENSITIVE.checkEndsWith(null, null));
     }
 
     @Test
-    public void test_checkEndsWith_case() throws Exception {
+    public void test_checkEndsWith_case() {
         assertTrue(IOCase.SENSITIVE.checkEndsWith("ABC", "BC"));
         assertFalse(IOCase.SENSITIVE.checkEndsWith("ABC", "Bc"));
 
@@ -238,9 +215,8 @@ public class IOCaseTestCase {
         assertEquals(WINDOWS, IOCase.SYSTEM.checkEndsWith("ABC", "Bc"));
     }
 
-    //-----------------------------------------------------------------------
     @Test
-    public void test_checkIndexOf_functionality() throws Exception {
+    public void test_checkIndexOf_functionality() {
 
         // start
         assertEquals(0,   IOCase.SENSITIVE.checkIndexOf("ABCDEFGHIJ", 0, "A"));
@@ -293,7 +269,7 @@ public class IOCaseTestCase {
     }
 
     @Test
-    public void test_checkIndexOf_case() throws Exception {
+    public void test_checkIndexOf_case() {
         assertEquals(1,  IOCase.SENSITIVE.checkIndexOf("ABC", 0, "BC"));
         assertEquals(-1, IOCase.SENSITIVE.checkIndexOf("ABC", 0, "Bc"));
 
@@ -304,9 +280,8 @@ public class IOCaseTestCase {
         assertEquals(WINDOWS ? 1 : -1, IOCase.SYSTEM.checkIndexOf("ABC", 0, "Bc"));
     }
 
-    //-----------------------------------------------------------------------
     @Test
-    public void test_checkRegionMatches_functionality() throws Exception {
+    public void test_checkRegionMatches_functionality() {
         assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, ""));
         assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "A"));
         assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "AB"));
@@ -354,7 +329,7 @@ public class IOCaseTestCase {
     }
 
     @Test
-    public void test_checkRegionMatches_case() throws Exception {
+    public void test_checkRegionMatches_case() {
         assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "AB"));
         assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "Ab"));
 
@@ -365,7 +340,6 @@ public class IOCaseTestCase {
         assertEquals(WINDOWS, IOCase.SYSTEM.checkRegionMatches("ABC", 0, "Ab"));
     }
 
-    //-----------------------------------------------------------------------
     private IOCase serialize(final IOCase value) throws Exception {
         final ByteArrayOutputStream buf = new ByteArrayOutputStream();
         final ObjectOutputStream out = new ObjectOutputStream(buf);

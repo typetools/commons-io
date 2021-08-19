@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
  */
 public class PathUtilsIsEmptyTest {
 
-    private static final Path DIR_SIZE_1 = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1");
+    public static final Path DIR_SIZE_1 = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1");
 
     private static final Path FILE_SIZE_0 = Paths
             .get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0/file-size-0.bin");
@@ -52,7 +52,7 @@ public class PathUtilsIsEmptyTest {
     }
 
     @Test
-    public void testisEmptyDirectory() throws IOException {
+    public void testIsEmptyDirectory() throws IOException {
         final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
         try {
             Assertions.assertTrue(PathUtils.isEmptyDirectory(tempDir));
