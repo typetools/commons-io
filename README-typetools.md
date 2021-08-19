@@ -36,7 +36,7 @@ git pull https://github.com/apache/commons-io <commitid>
 
 Update the version number throughout this file.
 
-Search the codebase for all uses of "@since 2.8.0" and annotate those methods/classes.
+Search the codebase for all uses of "@since 2.11.0" and annotate those methods/classes.
 
 Ensure that it builds:
 ```
@@ -47,7 +47,7 @@ Make a pull request for the branch.
 
 When merging the branch, create a merge commit (don't squash-and-merge).
 
-In my clone of Apache's fork (used for local comparisons), pull in version 2.8.0:
+In my clone of Apache's fork (used for local comparisons), pull in version 2.11.0:
 ```
 git fetch origin
 git checkout <commitid>
@@ -66,7 +66,7 @@ This must be done on a CSE machine, which has access to the necessary passwords.
 
 # JAVA_HOME must be a JDK 8 JDK.
 
-PACKAGE=commons-io-2.8.0.1 && \
+PACKAGE=commons-io-2.11.0 && \
 mvn -B -Dmaven.test.skip=true package && \
 mvn source:jar && \
 mvn javadoc:javadoc && (cd target/site/apidocs && jar -cf ${PACKAGE}-javadoc.jar org)
