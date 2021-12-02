@@ -15,12 +15,21 @@ This creates file
 To update to a newer version of the upstream library
 ----------------------------------------------------
 
-Create a branch and do work thre.
+First, update to use the latest Checker Framework by editing file
+`pom.xml` (3 places, for `checker-qual` and `checker`).
+Ensure that it builds:
+```
+mvn -B -Dmaven.test.skip=true package
+```
+Make a pull request to ensure that type-checking succeeds.
+
+Now, do the upstream library update.
+Create a branch and do work there.
 
 At https://github.com/apache/commons-io/releases ,
 find the commit corresponding to a public release.
 
-Commons IO version 2.8.0 is commit fa59009aaabcf8671a8d741993ef355f42b95ccd
+Commons IO version 2.11.0 is commit 8985de8fe74f6622a419b37a6eed0dbc484dc128
 
 Pull in that commit:
 ```
@@ -28,8 +37,6 @@ git pull https://github.com/apache/commons-io <commitid>
 ```
 
 Update the version number throughout this file.
-
-Use the latest Checker Framework version by changing `pom.xml`.
 
 Search the codebase for all uses of "@since 2.8.0" and annotate those methods/classes.
 
