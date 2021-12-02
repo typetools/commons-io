@@ -17,16 +17,14 @@ To update to a newer version of the upstream library
 
 First, update to use the latest Checker Framework by editing file
 `pom.xml` (3 places, for `checker-qual` and `checker`).
-Make a pull request to ensure that type-checking succeeds.
-
-Create a branch and do work there.
-
-Use the latest Checker Framework version by changing `pom.xml`.
-
 Ensure that it builds:
 ```
 mvn -B -Dmaven.test.skip=true package
 ```
+Make a pull request to ensure that type-checking succeeds.
+
+Now, do the upstream library update.
+Create a branch and do work there.
 
 At https://github.com/apache/commons-io/releases ,
 find the commit corresponding to a public release.
